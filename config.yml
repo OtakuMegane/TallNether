@@ -1,0 +1,22 @@
+# This configures the worlds that will have TallNether enabled and the settings for each
+# Only worlds of the Nether type will be affected
+# Any world you wish enabled *must* be specified in this config
+# The only required setting is having 'enabled' to be set to true
+# All other settings will use default values if nothing is given in the config
+# All worlds not in the config will be ignored
+#
+# Example config
+#
+# worlds:
+#    world1:
+#      enabled: true
+#      farlands: true
+#      lava-sea-level: 40
+#      gravel-soulsand-limit: 92
+#      fire-min-height: 4
+#      fire-max-height: 128
+#      fire-attempts: 15
+#    world2:
+#      enabled: true
+
+worlds:
