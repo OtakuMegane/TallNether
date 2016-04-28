@@ -94,7 +94,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
             e.printStackTrace();
         }
 
-        if (this.plugin.getConfig().getBoolean(this.worldConfig + "farlands")) {
+        if (this.plugin.getConfig().getBoolean(this.worldConfig + "farlands", false)) {
             this.u = new TallNether_NoiseGeneratorOctaves(this.p, 16);
             this.v = new TallNether_NoiseGeneratorOctaves(this.p, 16);
             this.w = new TallNether_NoiseGeneratorOctaves(this.p, 8);
@@ -153,7 +153,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
                                 IBlockData iblockdata = null;
 
                                 if (l1 * 8
-                                        + i2 < this.plugin.getConfig().getInt(this.worldConfig + "lava-sea-level", 32)
+                                        + i2 < this.plugin.getConfig().getInt(this.worldConfig + "lava-sea-level", 40)
                                                 + 1) {
                                     iblockdata = Blocks.LAVA.getBlockData();
                                 }
@@ -212,16 +212,22 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
                                     if (j1 <= 0) {
                                         iblockdata = TallNether_ChunkProviderHell.a;
                                         iblockdata1 = TallNether_ChunkProviderHell.b;
-                                    } else if (l1 >= this.plugin.getConfig()
-                                            .getInt(this.worldConfig + "gravel-soulsand-limit", 128) - 4
-                                            && l1 <= this.plugin.getConfig()
-                                                    .getInt(this.worldConfig + "gravel-soulsand-limit", 128)) {
-                                        iblockdata = TallNether_ChunkProviderHell.b;
-                                        iblockdata1 = TallNether_ChunkProviderHell.b;
+                                    }
+
+                                    if (l1 >= this.plugin.getConfig().getInt(this.worldConfig + "gravel-limit", 128) - 4
+                                            && l1 <= this.plugin.getConfig().getInt(this.worldConfig + "gravel-limit",
+                                                    128)) {
+
                                         if (flag1) {
                                             iblockdata = TallNether_ChunkProviderHell.e;
                                             iblockdata1 = TallNether_ChunkProviderHell.b;
                                         }
+                                    }
+
+                                    if (l1 >= this.plugin.getConfig().getInt(this.worldConfig + "soulsand-limit", 128)
+                                            - 4
+                                            && l1 <= this.plugin.getConfig().getInt(this.worldConfig + "soulsand-limit",
+                                                    128)) {
 
                                         if (flag) {
                                             iblockdata = TallNether_ChunkProviderHell.f;
@@ -360,68 +366,91 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         BlockFalling.instaFall = true;
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
+        int lftries = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-attempts", 16);
         int lfmin = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-min-height", 4);
         int lfmax = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-max-height", 248);
+        int ftries = this.plugin.getConfig().getInt(this.worldConfig + "fire-attempts", 20);
         int fmin = this.plugin.getConfig().getInt(this.worldConfig + "fire-min-height", 4);
         int fmax = this.plugin.getConfig().getInt(this.worldConfig + "fire-max-height", 248);
+        int g1tries = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-attempts", 20);
         int g1min = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-min-height", 4);
         int g1max = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-max-height", 248);
+        int g2tries = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-attempts", 20);
         int g2min = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-min-height", 0);
         int g2max = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-max-height", 256);
+        int mbtries = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-attempts", 3);
         int mbmin = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-min-height", 0);
         int mbmax = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-max-height", 256);
-        int mrmin = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-min-height", 0);
-        int mrmax = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-max-height", 256);
+        int mrtries = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-attempts", 3);
+        int mrmin = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-min-height", 0);
+        int mrmax = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-max-height", 256);
+        int qtries = this.plugin.getConfig().getInt(this.worldConfig + "quartz-attempts", 32);
         int qmin = this.plugin.getConfig().getInt(this.worldConfig + "quartz-min-height", 10);
-        int qmax = this.plugin.getConfig().getInt(this.worldConfig + "quartz-max-height", 236);
-        int hlmin = this.plugin.getConfig().getInt(this.worldConfig + "quartz-min-height", 10);
-        int hlmax = this.plugin.getConfig().getInt(this.worldConfig + "quartz-max-height", 236);
+        int qmax = this.plugin.getConfig().getInt(this.worldConfig + "quartz-max-height", 246);
+        int hltries = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-attempts", 32);
+        int hlmin = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-min-height", 10);
+        int hlmax = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-max-height", 246);
 
         this.H.a(this.n, this.p, chunkcoordintpair);
 
         int k;
 
-        for (k = 0; k < this.plugin.getConfig().getInt(this.worldConfig + "lavafall-attempts", 16); ++k) {
-            this.E.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(lfmax) + lfmin, this.p.nextInt(16) + 8));
+        if (lftries > 0 && lfmax > 0) {
+            for (k = 0; k < lftries; ++k) {
+                this.E.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(lfmax) + lfmin, this.p.nextInt(16) + 8));
+            }
         }
 
-        for (k = 0; k < this.p.nextInt(
-                this.p.nextInt(this.plugin.getConfig().getInt(this.worldConfig + "fire-attempts", 20)) + 1) + 1; ++k) {
-            this.z.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(fmax) + fmin, this.p.nextInt(16) + 8));
+        if (ftries > 0 && fmax > 0) {
+            for (k = 0; k < this.p.nextInt(this.p.nextInt(ftries) + 1) + 1; ++k) {
+                this.z.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(fmax) + fmin, this.p.nextInt(16) + 8));
+            }
         }
 
-        for (k = 0; k < this.p
-                .nextInt(this.p.nextInt(this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-attempts", 20))
-                        + 1); ++k) {
-            this.A.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(g1max) + g1min, this.p.nextInt(16) + 8));
+        if (g1tries > 0 && g1max > 0) {
+            for (k = 0; k < this.p.nextInt(this.p.nextInt(g1tries) + 1); ++k) {
+                this.A.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(g1max) + g1min, this.p.nextInt(16) + 8));
+            }
         }
 
-        for (k = 0; k < this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-attempts", 20); ++k) {
-            this.B.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(g2max) + g2min, this.p.nextInt(16) + 8));
+        if (g2tries > 0 && g2max > 0) {
+            for (k = 0; k < g2tries; ++k) {
+                this.B.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(g2max) + g2min, this.p.nextInt(16) + 8));
+            }
         }
 
-        for (k = 0; k < this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-attempts", 4); ++k) {
-            this.F.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(mbmax) + mbmin, this.p.nextInt(16) + 8));
+        if (mbtries > 0 && mbmax > 0) {
+            for (k = 0; k < mbtries; ++k) {
+                this.F.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(mbmax) + mbmin, this.p.nextInt(16) + 8));
+            }
         }
 
-        for (k = 0; k < this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-attempts", 4); ++k) {
-            this.G.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(mrmax) + mrmin, this.p.nextInt(16) + 8));
+        if (mrtries > 0 && mrmax > 0) {
+
+            for (k = 0; k < mrtries; ++k) {
+                this.G.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(mrmax) + mrmin, this.p.nextInt(16) + 8));
+            }
         }
 
-        for (k = 0; k < this.plugin.getConfig().getInt(this.worldConfig + "quartz-attempts", 32); ++k) {
-            this.C.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16), this.p.nextInt(qmax) + qmin, this.p.nextInt(16)));
+        if (qtries > 0 && qmax > 0) {
+
+            for (k = 0; k < qtries; ++k) {
+                this.C.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16), this.p.nextInt(qmax) + qmin, this.p.nextInt(16)));
+            }
         }
 
-        for (k = 0; k < this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-attempts", 32); ++k) {
-            this.D.generate(this.n, this.p,
-                    blockposition.a(this.p.nextInt(16), this.p.nextInt(hlmax) + hlmin, this.p.nextInt(16)));
+        if (hltries > 0 && hlmax > 0) {
+            for (k = 0; k < hltries; ++k) {
+                this.D.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16), this.p.nextInt(hlmax) + hlmin, this.p.nextInt(16)));
+            }
         }
 
         BlockFalling.instaFall = false;

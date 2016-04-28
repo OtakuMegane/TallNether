@@ -52,7 +52,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
 
             this.d();
             this.a(world, random, plugin.getConfig().getInt(worldConfig + "fortress-min", 64),
-                    plugin.getConfig().getInt(worldConfig + "fortress-max", 140));
+                    plugin.getConfig().getInt(worldConfig + "fortress-max", 90));
         }
     }
 }
