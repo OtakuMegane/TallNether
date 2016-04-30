@@ -1,6 +1,7 @@
 package com.minefit.XerxesTireIron.TallNether;
 
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TallNether extends JavaPlugin implements Listener {
@@ -15,6 +17,7 @@ public class TallNether extends JavaPlugin implements Listener {
     protected String version;
     private Messages messages = new Messages(this);
     private HashMap<String, ManageHell> manageWorlds;
+    private Logger logger = Logger.getLogger("Minecraft");
 
     @Override
     public void onEnable() {
@@ -50,6 +53,12 @@ public class TallNether extends JavaPlugin implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onWorldInit(WorldInitEvent event) {
+        World world = event.getWorld();
+        prepareWorld(world);
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onWorldLoad(WorldLoadEvent event) {
         World world = event.getWorld();
         prepareWorld(world);
     }
