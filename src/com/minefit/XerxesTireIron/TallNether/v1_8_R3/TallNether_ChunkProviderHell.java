@@ -116,7 +116,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
 
     public void a(int i, int j, ChunkSnapshot chunksnapshot) {
         byte b0 = 4;
-        // int k = this.h.F() / 2 + 1;
+        int k = this.h.F() / 2 + 1;
         int l = b0 + 1;
         byte b1 = 33;
         int i1 = b0 + 1;

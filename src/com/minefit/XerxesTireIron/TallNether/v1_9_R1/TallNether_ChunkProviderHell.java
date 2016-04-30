@@ -3,7 +3,6 @@ package com.minefit.XerxesTireIron.TallNether.v1_9_R1;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 
 import com.minefit.XerxesTireIron.TallNether.TallNether;
 
@@ -70,7 +69,6 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
     double[] k;
     double[] l;
     double[] m;
-    private Logger logger = Logger.getLogger("Minecraft");
     private int gravelSoulsandLimit;
 
     public TallNether_ChunkProviderHell(World world, boolean flag, long i, String config, TallNether instance) {
