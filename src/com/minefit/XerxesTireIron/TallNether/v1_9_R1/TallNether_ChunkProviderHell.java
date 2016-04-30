@@ -3,6 +3,7 @@ package com.minefit.XerxesTireIron.TallNether.v1_9_R1;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import com.minefit.XerxesTireIron.TallNether.TallNether;
 
@@ -69,10 +70,13 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
     double[] k;
     double[] l;
     double[] m;
+    private Logger logger = Logger.getLogger("Minecraft");
+    private int gravelSoulsandLimit;
 
     public TallNether_ChunkProviderHell(World world, boolean flag, long i, String config, TallNether instance) {
         this.plugin = instance;
         this.worldConfig = config;
+        this.gravelSoulsandLimit = this.plugin.getConfig().getInt(this.worldConfig + "gravel-soulsand-limit", 128);
         this.C = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
         this.D = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
         this.E = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
@@ -117,7 +121,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
     public void a(int i, int j, ChunkSnapshot chunksnapshot) {
         byte b0 = 4;
-        // int k = this.n.K() / 2 + 1;
+        int k = this.n.K() / 2 + 1;
         int l = b0 + 1;
         byte b1 = 33;
         int i1 = b0 + 1;
@@ -153,7 +157,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
                                 IBlockData iblockdata = null;
 
                                 if (l1 * 8
-                                        + i2 < this.plugin.getConfig().getInt(this.worldConfig + "lava-sea-level", 40)
+                                        + i2 < this.plugin.getConfig().getInt(this.worldConfig + "lava-sea-level", 48)
                                                 + 1) {
                                     iblockdata = Blocks.LAVA.getBlockData();
                                 }
@@ -187,6 +191,12 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
     public void b(int i, int j, ChunkSnapshot chunksnapshot) {
         int k = this.n.K() + 1;
+
+        if(this.gravelSoulsandLimit > 0)
+        {
+            k = this.gravelSoulsandLimit;
+        }
+
         double d0 = 0.03125D;
 
         this.q = this.x.a(this.q, i * 16, j * 16, 0, 16, 16, 1, d0, d0, 1.0D);
@@ -212,22 +222,13 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
                                     if (j1 <= 0) {
                                         iblockdata = TallNether_ChunkProviderHell.a;
                                         iblockdata1 = TallNether_ChunkProviderHell.b;
-                                    }
-
-                                    if (l1 >= this.plugin.getConfig().getInt(this.worldConfig + "gravel-limit", 128) - 4
-                                            && l1 <= this.plugin.getConfig().getInt(this.worldConfig + "gravel-limit",
-                                                    128)) {
-
+                                    } else if (l1 >= k - 4 && l1 <= k) {
+                                        iblockdata = TallNether_ChunkProviderHell.b;
+                                        iblockdata1 = TallNether_ChunkProviderHell.b;
                                         if (flag1) {
                                             iblockdata = TallNether_ChunkProviderHell.e;
                                             iblockdata1 = TallNether_ChunkProviderHell.b;
                                         }
-                                    }
-
-                                    if (l1 >= this.plugin.getConfig().getInt(this.worldConfig + "soulsand-limit", 128)
-                                            - 4
-                                            && l1 <= this.plugin.getConfig().getInt(this.worldConfig + "soulsand-limit",
-                                                    128)) {
 
                                         if (flag) {
                                             iblockdata = TallNether_ChunkProviderHell.f;
@@ -262,7 +263,6 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
     }
 
-    @Override
     public Chunk getOrCreateChunk(int i, int j) {
         this.p.setSeed((long) i * 341873128712L + (long) j * 132897987541L);
         ChunkSnapshot chunksnapshot = new ChunkSnapshot();
@@ -361,35 +361,40 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         return adouble;
     }
 
-    @Override
+    private int setDecoration(String setting, int defaultValue)
+    {
+        return this.plugin.getConfig().getInt(this.worldConfig + setting, defaultValue);
+    }
+
     public void recreateStructures(int i, int j) {
         BlockFalling.instaFall = true;
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
-        int lftries = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-attempts", 16);
-        int lfmin = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-min-height", 4);
-        int lfmax = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-max-height", 248);
-        int ftries = this.plugin.getConfig().getInt(this.worldConfig + "fire-attempts", 20);
-        int fmin = this.plugin.getConfig().getInt(this.worldConfig + "fire-min-height", 4);
-        int fmax = this.plugin.getConfig().getInt(this.worldConfig + "fire-max-height", 248);
-        int g1tries = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-attempts", 20);
-        int g1min = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-min-height", 4);
-        int g1max = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-max-height", 248);
-        int g2tries = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-attempts", 20);
-        int g2min = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-min-height", 0);
-        int g2max = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-max-height", 256);
-        int mbtries = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-attempts", 3);
-        int mbmin = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-min-height", 0);
-        int mbmax = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-max-height", 256);
-        int mrtries = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-attempts", 3);
-        int mrmin = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-min-height", 0);
-        int mrmax = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-max-height", 256);
-        int qtries = this.plugin.getConfig().getInt(this.worldConfig + "quartz-attempts", 32);
-        int qmin = this.plugin.getConfig().getInt(this.worldConfig + "quartz-min-height", 10);
-        int qmax = this.plugin.getConfig().getInt(this.worldConfig + "quartz-max-height", 246);
-        int hltries = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-attempts", 32);
-        int hlmin = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-min-height", 10);
-        int hlmax = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-max-height", 246);
+
+        int lftries = this.setDecoration("lavafall-attempts", 16);
+        int lfmin = this.setDecoration("lavafall-min-height", 4);
+        int lfmax = this.setDecoration("lavafall-max-height", 248);
+        int ftries = this.setDecoration("fire-attempts", 20);
+        int fmin = this.setDecoration("fire-min-height", 4);
+        int fmax = this.setDecoration("fire-max-height", 248);
+        int g1tries = this.setDecoration("glowstone1-attempts", 20);
+        int g1min = this.setDecoration("glowstone1-min-height", 4);
+        int g1max = this.setDecoration("glowstone1-max-height", 248);
+        int g2tries = this.setDecoration("glowstone2-attempts", 20);
+        int g2min = this.setDecoration("glowstone2-min-height", 0);
+        int g2max = this.setDecoration("glowstone2-max-height", 256);
+        int mbtries = this.setDecoration("brown-shroom-attempts", 2);
+        int mbmin = this.setDecoration("brown-shroom-min-height", 0);
+        int mbmax = this.setDecoration("brown-shroom-max-height", 256);
+        int mrtries = this.setDecoration("red-shroom-attempts", 2);
+        int mrmin = this.setDecoration("red-shroom-min-height", 0);
+        int mrmax = this.setDecoration("red-shroom-max-height", 256);
+        int qtries = this.setDecoration("quartz-attempts", 32);
+        int qmin = this.setDecoration("quartz-min-height", 10);
+        int qmax = this.setDecoration("quartz-max-height", 246);
+        int hltries = this.setDecoration("hidden-lava-attempts", 32);
+        int hlmin = this.setDecoration("hidden-lava-min-height", 10);
+        int hlmax = this.setDecoration("hidden-lava-max-height", 246);
 
         this.H.a(this.n, this.p, chunkcoordintpair);
 
@@ -456,12 +461,10 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         BlockFalling.instaFall = false;
     }
 
-    @Override
     public boolean a(Chunk chunk, int i, int j) {
         return false;
     }
 
-    @Override
     public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         if (enumcreaturetype == EnumCreatureType.MONSTER) {
             if (this.H.b(blockposition)) {
@@ -479,12 +482,10 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         return biomebase.getMobs(enumcreaturetype);
     }
 
-    @Override
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return null;
     }
 
-    @Override
     public void recreateStructures(Chunk chunk, int i, int j) {
         this.H.a(this.n, i, j, (ChunkSnapshot) null);
     }

@@ -65,11 +65,13 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     double[] e;
     double[] f;
     double[] g;
+    private int gravelSoulsandLimit;
 
     public TallNether_ChunkProviderHell(World world, boolean flag, long i, String config, TallNether instance) {
         super(world, flag, i);
         this.plugin = instance;
         this.worldConfig = config;
+        this.gravelSoulsandLimit = this.plugin.getConfig().getInt(this.worldConfig + "gravel-soulsand-limit", 128);
         this.w = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
         this.x = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
         this.y = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
@@ -150,7 +152,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                                 IBlockData iblockdata = null;
 
                                 if (l1 * 8
-                                        + i2 < this.plugin.getConfig().getInt(this.worldConfig + "lava-sea-level", 40)
+                                        + i2 < this.plugin.getConfig().getInt(this.worldConfig + "lava-sea-level", 48)
                                                 + 1) {
                                     iblockdata = Blocks.LAVA.getBlockData();
                                 }
@@ -184,6 +186,11 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
 
     public void b(int i, int j, ChunkSnapshot chunksnapshot) {
         int k = this.h.F() + 1;
+
+        if (this.gravelSoulsandLimit > 0) {
+            k = this.gravelSoulsandLimit;
+        }
+
         double d0 = 0.03125D;
 
         this.k = this.r.a(this.k, i * 16, j * 16, 0, 16, 16, 1, d0, d0, 1.0D);
@@ -209,22 +216,13 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                                     if (j1 <= 0) {
                                         iblockdata = null;
                                         iblockdata1 = Blocks.NETHERRACK.getBlockData();
-                                    }
-
-                                    if (l1 >= this.plugin.getConfig().getInt(this.worldConfig + "gravel-limit", 128) - 4
-                                            && l1 <= this.plugin.getConfig().getInt(this.worldConfig + "gravel-limit",
-                                                    128)) {
-
+                                    } else if (l1 >= k - 4 && l1 <= k + 1) {
+                                        iblockdata = Blocks.NETHERRACK.getBlockData();
+                                        iblockdata1 = Blocks.NETHERRACK.getBlockData();
                                         if (flag1) {
                                             iblockdata = Blocks.GRAVEL.getBlockData();
                                             iblockdata1 = Blocks.NETHERRACK.getBlockData();
                                         }
-                                    }
-
-                                    if (l1 >= this.plugin.getConfig().getInt(this.worldConfig + "soulsand-limit", 128)
-                                            - 4
-                                            && l1 <= this.plugin.getConfig().getInt(this.worldConfig + "soulsand-limit",
-                                                    128)) {
 
                                         if (flag) {
                                             iblockdata = Blocks.SOUL_SAND.getBlockData();
@@ -232,8 +230,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                                         }
                                     }
 
-                                    if (l1 < k && (iblockdata == null
-                                            || iblockdata.getBlock().getMaterial() == Material.AIR)) {
+                                    if (l1 < k && (iblockdata == null || iblockdata.getBlock().getMaterial() == Material.AIR)) {
                                         iblockdata = Blocks.LAVA.getBlockData();
                                     }
 
@@ -358,35 +355,39 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         return adouble;
     }
 
+    private int setDecoration(String setting, int defaultValue) {
+        return this.plugin.getConfig().getInt(this.worldConfig + setting, defaultValue);
+    }
+
     public void getChunkAt(IChunkProvider ichunkprovider, int i, int j) {
         BlockFalling.instaFall = true;
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
 
-        int lftries = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-attempts", 16);
-        int lfmin = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-min-height", 4);
-        int lfmax = this.plugin.getConfig().getInt(this.worldConfig + "lavafall-max-height", 248);
-        int ftries = this.plugin.getConfig().getInt(this.worldConfig + "fire-attempts", 20);
-        int fmin = this.plugin.getConfig().getInt(this.worldConfig + "fire-min-height", 4);
-        int fmax = this.plugin.getConfig().getInt(this.worldConfig + "fire-max-height", 248);
-        int g1tries = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-attempts", 20);
-        int g1min = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-min-height", 4);
-        int g1max = this.plugin.getConfig().getInt(this.worldConfig + "glowstone1-max-height", 248);
-        int g2tries = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-attempts", 20);
-        int g2min = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-min-height", 0);
-        int g2max = this.plugin.getConfig().getInt(this.worldConfig + "glowstone2-max-height", 256);
-        int mbtries = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-attempts", 4);
-        int mbmin = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-min-height", 0);
-        int mbmax = this.plugin.getConfig().getInt(this.worldConfig + "brown-shroom-max-height", 256);
-        int mrtries = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-attempts", 4);
-        int mrmin = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-min-height", 0);
-        int mrmax = this.plugin.getConfig().getInt(this.worldConfig + "red-shroom-max-height", 256);
-        int qtries = this.plugin.getConfig().getInt(this.worldConfig + "quartz-attempts", 32);
-        int qmin = this.plugin.getConfig().getInt(this.worldConfig + "quartz-min-height", 10);
-        int qmax = this.plugin.getConfig().getInt(this.worldConfig + "quartz-max-height", 246);
-        int hltries = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-attempts", 32);
-        int hlmin = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-min-height", 10);
-        int hlmax = this.plugin.getConfig().getInt(this.worldConfig + "hidden-lava-max-height", 246);
+        int lftries = this.setDecoration("lavafall-attempts", 16);
+        int lfmin = this.setDecoration("lavafall-min-height", 4);
+        int lfmax = this.setDecoration("lavafall-max-height", 248);
+        int ftries = this.setDecoration("fire-attempts", 20);
+        int fmin = this.setDecoration("fire-min-height", 4);
+        int fmax = this.setDecoration("fire-max-height", 248);
+        int g1tries = this.setDecoration("glowstone1-attempts", 20);
+        int g1min = this.setDecoration("glowstone1-min-height", 4);
+        int g1max = this.setDecoration("glowstone1-max-height", 248);
+        int g2tries = this.setDecoration("glowstone2-attempts", 20);
+        int g2min = this.setDecoration("glowstone2-min-height", 0);
+        int g2max = this.setDecoration("glowstone2-max-height", 256);
+        int mbtries = this.setDecoration("brown-shroom-attempts", 2);
+        int mbmin = this.setDecoration("brown-shroom-min-height", 0);
+        int mbmax = this.setDecoration("brown-shroom-max-height", 256);
+        int mrtries = this.setDecoration("red-shroom-attempts", 2);
+        int mrmin = this.setDecoration("red-shroom-min-height", 0);
+        int mrmax = this.setDecoration("red-shroom-max-height", 256);
+        int qtries = this.setDecoration("quartz-attempts", 32);
+        int qmin = this.setDecoration("quartz-min-height", 10);
+        int qmax = this.setDecoration("quartz-max-height", 246);
+        int hltries = this.setDecoration("hidden-lava-attempts", 32);
+        int hlmin = this.setDecoration("hidden-lava-min-height", 10);
+        int hlmax = this.setDecoration("hidden-lava-max-height", 246);
 
         this.B.a(this.h, this.j, chunkcoordintpair);
 
