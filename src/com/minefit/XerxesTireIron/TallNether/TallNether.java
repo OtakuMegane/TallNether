@@ -1,7 +1,6 @@
 package com.minefit.XerxesTireIron.TallNether;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -17,7 +16,6 @@ public class TallNether extends JavaPlugin implements Listener {
     protected String version;
     private Messages messages = new Messages(this);
     private HashMap<String, ManageHell> manageWorlds;
-    private Logger logger = Logger.getLogger("Minecraft");
 
     @Override
     public void onEnable() {
