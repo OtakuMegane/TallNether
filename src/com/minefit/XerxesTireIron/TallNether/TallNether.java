@@ -25,7 +25,8 @@ public class TallNether extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(this, this);
         this.manageWorlds = new HashMap<String, ManageHell>();
 
-        if (!version.equals("v1_8_R2") && !version.equals("v1_8_R3") && !version.equals("v1_9_R1") && !version.equals("v1_9_R2")) {
+        if (!version.equals("v1_8_R2") && !version.equals("v1_8_R3") && !version.equals("v1_9_R1")
+                && !version.equals("v1_9_R2") && !version.equals("v1_10_R1")) {
             this.messages.incompatibleVersion();
             Bukkit.getPluginManager().disablePlugin(this);
         } else {

@@ -10,6 +10,7 @@ public class ManageHell {
     private com.minefit.XerxesTireIron.TallNether.v1_8_R3.LoadHell LH8R3;
     private com.minefit.XerxesTireIron.TallNether.v1_9_R1.LoadHell LH9R1;
     private com.minefit.XerxesTireIron.TallNether.v1_9_R2.LoadHell LH9R2;
+    private com.minefit.XerxesTireIron.TallNether.v1_10_R1.LoadHell LH10R1;
 
     public ManageHell(World world, TallNether instance) {
         this.plugin = instance;
@@ -23,6 +24,8 @@ public class ManageHell {
             this.LH9R1 = new com.minefit.XerxesTireIron.TallNether.v1_9_R1.LoadHell(this.world, this.plugin);
         } else if (this.plugin.version.equals("v1_9_R2")) {
             this.LH9R2 = new com.minefit.XerxesTireIron.TallNether.v1_9_R2.LoadHell(this.world, this.plugin);
+        } else if (this.plugin.version.equals("v1_10_R1")) {
+            this.LH10R1 = new com.minefit.XerxesTireIron.TallNether.v1_10_R1.LoadHell(this.world, this.plugin);
         }
     }
 
@@ -37,6 +40,8 @@ public class ManageHell {
             this.LH9R1.restoreGenerator();
         } else if (this.plugin.version.equals("v1_9_R2")) {
             this.LH9R2.restoreGenerator();
+        } else if (this.plugin.version.equals("v1_10_R1")) {
+            this.LH10R1.restoreGenerator();
         }
     }
 }
