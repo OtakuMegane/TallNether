@@ -25,8 +25,8 @@ public class TallNether extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(this, this);
         this.manageWorlds = new HashMap<String, ManageHell>();
 
-        if (!version.equals("v1_8_R2") && !version.equals("v1_8_R3") && !version.equals("v1_9_R1")
-                && !version.equals("v1_9_R2") && !version.equals("v1_10_R1")) {
+        if (!this.version.equals("v1_8_R2") && !this.version.equals("v1_8_R3") && !this.version.equals("v1_9_R1")
+                && !this.version.equals("v1_9_R2") && !this.version.equals("v1_10_R1")) {
             this.messages.incompatibleVersion();
             Bukkit.getPluginManager().disablePlugin(this);
         } else {
@@ -52,27 +52,20 @@ public class TallNether extends JavaPlugin implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onWorldInit(WorldInitEvent event) {
-        World world = event.getWorld();
-        prepareWorld(world);
+        prepareWorld(event.getWorld());
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onWorldLoad(WorldLoadEvent event) {
-        World world = event.getWorld();
-        prepareWorld(world);
+        prepareWorld(event.getWorld());
     }
 
     public void prepareWorld(World world) {
         String worldName = world.getName();
 
-        if (!this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)) {
-            return;
+        if (this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)
+                && this.manageWorlds.containsKey(worldName)) {
+            this.manageWorlds.put(worldName, new ManageHell(world, this));
         }
-
-        if (this.manageWorlds.containsKey(worldName)) {
-            return;
-        }
-
-        this.manageWorlds.put(worldName, new ManageHell(world, this));
     }
 }
