@@ -4,8 +4,8 @@ import org.bukkit.World;
 
 public class ManageHell {
 
-    private TallNether plugin;
-    private World world;
+    private final TallNether plugin;
+    private final World world;
     private com.minefit.XerxesTireIron.TallNether.v1_8_R2.LoadHell LH8R2;
     private com.minefit.XerxesTireIron.TallNether.v1_8_R3.LoadHell LH8R3;
     private com.minefit.XerxesTireIron.TallNether.v1_9_R1.LoadHell LH9R1;

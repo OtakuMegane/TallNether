@@ -14,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class TallNether extends JavaPlugin implements Listener {
     private String name;
     protected String version;
-    private Messages messages = new Messages(this);
+    private final Messages messages = new Messages(this);
     private HashMap<String, ManageHell> manageWorlds;
 
     @Override
@@ -64,7 +64,7 @@ public class TallNether extends JavaPlugin implements Listener {
         String worldName = world.getName();
 
         if (this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)
-                && this.manageWorlds.containsKey(worldName)) {
+                && !this.manageWorlds.containsKey(worldName)) {
             this.manageWorlds.put(worldName, new ManageHell(world, this));
         }
     }

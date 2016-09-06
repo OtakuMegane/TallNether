@@ -5,9 +5,9 @@ import java.util.logging.Logger;
 import com.minefit.XerxesTireIron.TallNether.TallNether;
 
 public class Messages {
-    private TallNether plugin;
-    private String pluginName;
-    private Logger logger = Logger.getLogger("Minecraft");
+    private final TallNether plugin;
+    private final String pluginName;
+    private final Logger logger = Logger.getLogger("Minecraft");
 
     public Messages(TallNether instance) {
         this.plugin = instance;
