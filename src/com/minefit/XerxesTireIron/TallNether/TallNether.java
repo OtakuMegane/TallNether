@@ -1,6 +1,8 @@
 package com.minefit.XerxesTireIron.TallNether;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -16,6 +18,8 @@ public class TallNether extends JavaPlugin implements Listener {
     protected String version;
     private final Messages messages = new Messages(this);
     private HashMap<String, ManageHell> manageWorlds;
+    private final ServerVersion serverVersion = new ServerVersion(this);
+    private final List<String> compatibleVersions = Arrays.asList("V1_8_R2", "v1_8_R3", "v1_9_R1", "v1_9_R2", "v1_10_R1");
 
     @Override
     public void onEnable() {
@@ -25,12 +29,9 @@ public class TallNether extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(this, this);
         this.manageWorlds = new HashMap<String, ManageHell>();
 
-        if (!this.version.equals("v1_8_R2") && !this.version.equals("v1_8_R3") && !this.version.equals("v1_9_R1")
-                && !this.version.equals("v1_9_R2") && !this.version.equals("v1_10_R1")) {
+        if (!this.serverVersion.compatibleVersion(this.compatibleVersions)) {
             this.messages.incompatibleVersion();
             Bukkit.getPluginManager().disablePlugin(this);
-        } else {
-            this.messages.pluginReady();
         }
 
         // Catches the /reload command or other things that may bypass the
@@ -38,6 +39,8 @@ public class TallNether extends JavaPlugin implements Listener {
         for (World world : Bukkit.getWorlds()) {
             prepareWorld(world);
         }
+
+        this.messages.pluginReady();
     }
 
     @Override
