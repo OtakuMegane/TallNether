@@ -364,6 +364,16 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         return this.plugin.getConfig().getInt(this.worldConfig + setting, defaultValue);
     }
 
+    private int randomRange(int min, int max) {
+        int range = (max - min);
+
+        if(range <= 0) {
+            return max;
+        }
+
+        return min + this.p.nextInt(range);
+    }
+
     public void recreateStructures(int i, int j) {
         BlockFalling.instaFall = true;
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
@@ -401,35 +411,35 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         if (lftries > 0 && lfmax > 0) {
             for (k = 0; k < lftries; ++k) {
                 this.E.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(lfmax) + lfmin, this.p.nextInt(16) + 8));
+                        blockposition.a(this.p.nextInt(16) + 8, randomRange(lfmin, lfmax), this.p.nextInt(16) + 8));
             }
         }
 
         if (ftries > 0 && fmax > 0) {
             for (k = 0; k < this.p.nextInt(this.p.nextInt(ftries) + 1) + 1; ++k) {
                 this.z.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(fmax) + fmin, this.p.nextInt(16) + 8));
+                        blockposition.a(this.p.nextInt(16) + 8, randomRange(fmin, fmax), this.p.nextInt(16) + 8));
             }
         }
 
         if (g1tries > 0 && g1max > 0) {
             for (k = 0; k < this.p.nextInt(this.p.nextInt(g1tries) + 1); ++k) {
                 this.A.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(g1max) + g1min, this.p.nextInt(16) + 8));
+                        blockposition.a(this.p.nextInt(16) + 8, randomRange(g1min, g1max), this.p.nextInt(16) + 8));
             }
         }
 
         if (g2tries > 0 && g2max > 0) {
             for (k = 0; k < g2tries; ++k) {
                 this.B.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(g2max) + g2min, this.p.nextInt(16) + 8));
+                        blockposition.a(this.p.nextInt(16) + 8, randomRange(g2min, g2max), this.p.nextInt(16) + 8));
             }
         }
 
         if (mbtries > 0 && mbmax > 0) {
             for (k = 0; k < mbtries; ++k) {
                 this.F.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(mbmax) + mbmin, this.p.nextInt(16) + 8));
+                        blockposition.a(this.p.nextInt(16) + 8, randomRange(mbmin, mbmax), this.p.nextInt(16) + 8));
             }
         }
 
@@ -437,7 +447,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
             for (k = 0; k < mrtries; ++k) {
                 this.G.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(mrmax) + mrmin, this.p.nextInt(16) + 8));
+                        blockposition.a(this.p.nextInt(16) + 8, randomRange(mrmin, mrmax), this.p.nextInt(16) + 8));
             }
         }
 
@@ -445,14 +455,14 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
             for (k = 0; k < qtries; ++k) {
                 this.C.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16), this.p.nextInt(qmax) + qmin, this.p.nextInt(16)));
+                        blockposition.a(this.p.nextInt(16), randomRange(qmin, qmax), this.p.nextInt(16)));
             }
         }
 
         if (hltries > 0 && hlmax > 0) {
             for (k = 0; k < hltries; ++k) {
                 this.D.generate(this.n, this.p,
-                        blockposition.a(this.p.nextInt(16), this.p.nextInt(hlmax) + hlmin, this.p.nextInt(16)));
+                        blockposition.a(this.p.nextInt(16), randomRange(hlmin, hlmax), this.p.nextInt(16)));
             }
         }
 

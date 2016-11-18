@@ -1,4 +1,4 @@
-package com.minefit.XerxesTireIron.TallNether.v1_9_R2;
+package com.minefit.XerxesTireIron.TallNether.v1_11_R1;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -6,30 +6,30 @@ import java.util.Random;
 
 import com.minefit.XerxesTireIron.TallNether.TallNether;
 
-import net.minecraft.server.v1_9_R2.BiomeBase;
-import net.minecraft.server.v1_9_R2.BlockFalling;
-import net.minecraft.server.v1_9_R2.BlockPosition;
-import net.minecraft.server.v1_9_R2.BlockPredicate;
-import net.minecraft.server.v1_9_R2.Blocks;
-import net.minecraft.server.v1_9_R2.Chunk;
-import net.minecraft.server.v1_9_R2.ChunkCoordIntPair;
-import net.minecraft.server.v1_9_R2.ChunkGenerator;
-import net.minecraft.server.v1_9_R2.ChunkSnapshot;
-import net.minecraft.server.v1_9_R2.EnumCreatureType;
-import net.minecraft.server.v1_9_R2.IBlockData;
-import net.minecraft.server.v1_9_R2.Material;
-import net.minecraft.server.v1_9_R2.MathHelper;
-import net.minecraft.server.v1_9_R2.NoiseGeneratorOctaves;
-import net.minecraft.server.v1_9_R2.World;
-import net.minecraft.server.v1_9_R2.WorldGenBase;
-import net.minecraft.server.v1_9_R2.WorldGenFire;
-import net.minecraft.server.v1_9_R2.WorldGenHellLava;
-import net.minecraft.server.v1_9_R2.WorldGenLightStone1;
-import net.minecraft.server.v1_9_R2.WorldGenLightStone2;
-import net.minecraft.server.v1_9_R2.WorldGenMinable;
-import net.minecraft.server.v1_9_R2.WorldGenMushrooms;
-import net.minecraft.server.v1_9_R2.WorldGenNether;
-import net.minecraft.server.v1_9_R2.WorldGenerator;
+import net.minecraft.server.v1_11_R1.BiomeBase;
+import net.minecraft.server.v1_11_R1.BlockFalling;
+import net.minecraft.server.v1_11_R1.BlockPosition;
+import net.minecraft.server.v1_11_R1.BlockPredicate;
+import net.minecraft.server.v1_11_R1.Blocks;
+import net.minecraft.server.v1_11_R1.Chunk;
+import net.minecraft.server.v1_11_R1.ChunkCoordIntPair;
+import net.minecraft.server.v1_11_R1.ChunkGenerator;
+import net.minecraft.server.v1_11_R1.ChunkSnapshot;
+import net.minecraft.server.v1_11_R1.EnumCreatureType;
+import net.minecraft.server.v1_11_R1.IBlockData;
+import net.minecraft.server.v1_11_R1.Material;
+import net.minecraft.server.v1_11_R1.MathHelper;
+import net.minecraft.server.v1_11_R1.NoiseGeneratorOctaves;
+import net.minecraft.server.v1_11_R1.World;
+import net.minecraft.server.v1_11_R1.WorldGenBase;
+import net.minecraft.server.v1_11_R1.WorldGenFire;
+import net.minecraft.server.v1_11_R1.WorldGenHellLava;
+import net.minecraft.server.v1_11_R1.WorldGenLightStone1;
+import net.minecraft.server.v1_11_R1.WorldGenLightStone2;
+import net.minecraft.server.v1_11_R1.WorldGenMinable;
+import net.minecraft.server.v1_11_R1.WorldGenMushrooms;
+import net.minecraft.server.v1_11_R1.WorldGenNether;
+import net.minecraft.server.v1_11_R1.WorldGenerator;
 
 public class TallNether_ChunkProviderHell implements ChunkGenerator {
     private String worldConfig;
@@ -58,12 +58,13 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
     private final WorldGenLightStone1 A = new WorldGenLightStone1();
     private final WorldGenLightStone2 B = new WorldGenLightStone2();
     private final WorldGenerator C;
-    private final WorldGenHellLava D;
+    private final WorldGenerator D;
     private final WorldGenHellLava E;
-    private final WorldGenMushrooms F;
+    private final WorldGenHellLava F;
     private final WorldGenMushrooms G;
-    private final WorldGenNether H;
-    private final WorldGenBase I;
+    private final WorldGenMushrooms H;
+    private final WorldGenNether I;
+    private final WorldGenBase J;
     double[] i;
     double[] j;
     double[] k;
@@ -76,21 +77,22 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         this.worldConfig = config;
         this.gravelSoulsandLimit = this.plugin.getConfig().getInt(this.worldConfig + "gravel-soulsand-limit", 128);
         this.C = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
-        this.D = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
-        this.E = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
-        this.F = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
-        this.G = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
-        this.H = new TallNether_WorldGenNether(world, config, instance);
-        this.I = new TallNether_WorldGenCavesHell();
+        this.D = new WorldGenMinable(Blocks.df.getBlockData(), 33, BlockPredicate.a(Blocks.NETHERRACK));
+        this.E = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
+        this.F = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
+        this.G = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
+        this.H = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
+        this.I = new TallNether_WorldGenNether(world, config, instance);
+        this.J = new TallNether_WorldGenCavesHell();
         this.n = world;
         this.o = flag;
         this.p = new Random(i);
 
         try {
-            Method bb = net.minecraft.server.v1_9_R2.WorldGenFactory.class.getDeclaredMethod("b",
+            Method bb = net.minecraft.server.v1_11_R1.WorldGenFactory.class.getDeclaredMethod("b",
                     new Class[] { Class.class, String.class });
             bb.setAccessible(true);
-            bb.invoke(net.minecraft.server.v1_9_R2.WorldGenFactory.class,
+            bb.invoke(net.minecraft.server.v1_11_R1.WorldGenFactory.class,
                     new Object[] { TallNether_WorldGenNether.WorldGenNetherStart.class, "Fortress" });
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,8 +192,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
     public void b(int i, int j, ChunkSnapshot chunksnapshot) {
         int k = this.n.K() + 1;
 
-        if(this.gravelSoulsandLimit > 0)
-        {
+        if (this.gravelSoulsandLimit > 0) {
             k = this.gravelSoulsandLimit;
         }
 
@@ -267,9 +268,9 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
-        this.I.a(this.n, i, j, chunksnapshot);
+        this.J.a(this.n, i, j, chunksnapshot);
         if (this.o) {
-            this.H.a(this.n, i, j, chunksnapshot);
+            this.I.a(this.n, i, j, chunksnapshot);
         }
 
         Chunk chunk = new Chunk(this.n, chunksnapshot, i, j);
@@ -359,8 +360,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         return adouble;
     }
 
-    private int setDecoration(String setting, int defaultValue)
-    {
+    private int setDecoration(String setting, int defaultValue) {
         return this.plugin.getConfig().getInt(this.worldConfig + setting, defaultValue);
     }
 
@@ -376,7 +376,10 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
     public void recreateStructures(int i, int j) {
         BlockFalling.instaFall = true;
-        BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
+        int k = i * 16;
+        int l = j * 16;
+        BlockPosition blockposition = new BlockPosition(k, 0, l);
+        BiomeBase biomebase = this.n.getBiome(blockposition.a(16, 0, 16));
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
 
         int lftries = this.setDecoration("lavafall-attempts", 16);
@@ -403,10 +406,13 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         int hltries = this.setDecoration("hidden-lava-attempts", 32);
         int hlmin = this.setDecoration("hidden-lava-min-height", 10);
         int hlmax = this.setDecoration("hidden-lava-max-height", 246);
+        int magtries = this.setDecoration("magma-block-attempts", 4);
+        int magmin = this.setDecoration("magma-block-min-height", 43);
+        int magmax = this.setDecoration("magma-block-max-height", 53);
 
-        this.H.a(this.n, this.p, chunkcoordintpair);
+        this.I.a(this.n, this.p, chunkcoordintpair);
 
-        int k;
+        int i1;
 
         if (lftries > 0 && lfmax > 0) {
             for (k = 0; k < lftries; ++k) {
@@ -444,7 +450,6 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         }
 
         if (mrtries > 0 && mrmax > 0) {
-
             for (k = 0; k < mrtries; ++k) {
                 this.G.generate(this.n, this.p,
                         blockposition.a(this.p.nextInt(16) + 8, randomRange(mrmin, mrmax), this.p.nextInt(16) + 8));
@@ -452,20 +457,31 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         }
 
         if (qtries > 0 && qmax > 0) {
-
             for (k = 0; k < qtries; ++k) {
                 this.C.generate(this.n, this.p,
                         blockposition.a(this.p.nextInt(16), randomRange(qmin, qmax), this.p.nextInt(16)));
             }
         }
 
+        i1 = this.n.K() / 2 + 1;
+
+        int j1;
+
+        if (magtries > 0 && magmax > 0) {
+            for (k = 0; k < magtries; ++k) {
+                this.D.generate(this.n, this.p,
+                        blockposition.a(this.p.nextInt(16), randomRange(magmin, magmax), this.p.nextInt(16)));
+            }
+        }
+
         if (hltries > 0 && hlmax > 0) {
             for (k = 0; k < hltries; ++k) {
-                this.D.generate(this.n, this.p,
+                this.E.generate(this.n, this.p,
                         blockposition.a(this.p.nextInt(16), randomRange(hlmin, hlmax), this.p.nextInt(16)));
             }
         }
 
+        biomebase.a(this.n, this.p, new BlockPosition(k, 0, l));
         BlockFalling.instaFall = false;
     }
 
@@ -475,13 +491,13 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
     public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         if (enumcreaturetype == EnumCreatureType.MONSTER) {
-            if (this.H.b(blockposition)) {
-                return this.H.b();
+            if (this.I.b(blockposition)) {
+                return this.I.b();
             }
 
-            if (this.H.b(this.n, blockposition)
+            if (this.I.a(this.n, blockposition)
                     && this.n.getType(blockposition.down()).getBlock() == Blocks.NETHER_BRICK) {
-                return this.H.b();
+                return this.I.b();
             }
         }
 
@@ -490,11 +506,11 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         return biomebase.getMobs(enumcreaturetype);
     }
 
-    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
-        return null;
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
+        return "Fortress".equals(s) && this.I != null ? this.I.getNearestGeneratedFeature(world, blockposition, flag) : null;
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
-        this.H.a(this.n, i, j, (ChunkSnapshot) null);
+        this.I.a(this.n, i, j, (ChunkSnapshot) null);
     }
 }
