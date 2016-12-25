@@ -4,7 +4,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
-import com.minefit.XerxesTireIron.TallNether.TallNether;
+import org.bukkit.configuration.ConfigurationSection;
+
 import com.minefit.XerxesTireIron.TallNether.v1_8_R3.TallNether_WorldGenNether;
 
 import net.minecraft.server.v1_8_R3.BiomeBase;
@@ -34,8 +35,7 @@ import net.minecraft.server.v1_8_R3.WorldGenNether;
 import net.minecraft.server.v1_8_R3.WorldGenerator;
 
 public class TallNether_ChunkProviderHell extends ChunkProviderHell implements IChunkProvider {
-    private String worldConfig;
-    private TallNether plugin;
+    private final ConfigurationSection worldConfig;
     private final World h;
     private final boolean i;
     private final Random j;
@@ -65,19 +65,16 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     double[] e;
     double[] f;
     double[] g;
-    private int gravelSoulsandLimit;
 
-    public TallNether_ChunkProviderHell(World world, boolean flag, long i, String config, TallNether instance) {
+    public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig) {
         super(world, flag, i);
-        this.plugin = instance;
-        this.worldConfig = config;
-        this.gravelSoulsandLimit = this.plugin.getConfig().getInt(this.worldConfig + "gravel-soulsand-limit", 128);
+        this.worldConfig = worldConfig;
         this.w = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
         this.x = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
         this.y = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
         this.z = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
         this.A = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
-        this.B = new TallNether_WorldGenNether(world, config, instance);
+        this.B = new TallNether_WorldGenNether(world, worldConfig);
         this.C = new TallNether_WorldGenCavesHell();
         this.h = world;
         this.i = flag;
@@ -93,14 +90,14 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
             e.printStackTrace();
         }
 
-        if (this.plugin.getConfig().getBoolean(this.worldConfig + "farlands", false)) {
-            this.o = new TallNether_NoiseGeneratorOctaves(this.j, 16);
-            this.p = new TallNether_NoiseGeneratorOctaves(this.j, 16);
-            this.q = new TallNether_NoiseGeneratorOctaves(this.j, 8);
-            this.r = new TallNether_NoiseGeneratorOctaves(this.j, 4);
-            this.s = new TallNether_NoiseGeneratorOctaves(this.j, 4);
-            this.a = new TallNether_NoiseGeneratorOctaves(this.j, 10);
-            this.b = new TallNether_NoiseGeneratorOctaves(this.j, 16);
+        if (this.worldConfig.getBoolean("farlands", false)) {
+            this.o = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 16);
+            this.p = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 16);
+            this.q = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 8);
+            this.r = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 4);
+            this.s = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 4);
+            this.a = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 10);
+            this.b = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 16);
             world.b(63);
         } else {
             this.o = new NoiseGeneratorOctaves(this.j, 16);
@@ -152,7 +149,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                                 IBlockData iblockdata = null;
 
                                 if (l1 * 8
-                                        + i2 < this.plugin.getConfig().getInt(this.worldConfig + "lava-sea-level", 48)
+                                        + i2 < this.worldConfig.getInt("lava-sea-level", 48)
                                                 + 1) {
                                     iblockdata = Blocks.LAVA.getBlockData();
                                 }
@@ -187,8 +184,8 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     public void b(int i, int j, ChunkSnapshot chunksnapshot) {
         int k = this.h.F() + 1;
 
-        if (this.gravelSoulsandLimit > 0) {
-            k = this.gravelSoulsandLimit;
+        if (this.worldConfig.getInt("gravel-soulsand-limit", 128) > 0) {
+            k = this.worldConfig.getInt("gravel-soulsand-limit", 128);
         }
 
         double d0 = 0.03125D;
@@ -356,7 +353,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     }
 
     private int setDecoration(String setting, int defaultValue) {
-        return this.plugin.getConfig().getInt(this.worldConfig + setting, defaultValue);
+        return this.worldConfig.getInt(setting, defaultValue);
     }
 
     private int randomRange(int min, int max) {

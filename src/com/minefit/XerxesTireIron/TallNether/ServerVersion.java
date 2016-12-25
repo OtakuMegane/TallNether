@@ -20,28 +20,23 @@ public class ServerVersion {
         this.revision = vn[2];
     }
 
-    public boolean compatibleVersion(List<String> list)
-    {
+    public boolean compatibleVersion(List<String> list) {
         return list.contains(this.nmsVersion);
     }
 
-    public String getMajor()
-    {
+    public String getMajor() {
         return this.major;
     }
 
-    public String getMinor()
-    {
+    public String getMinor() {
         return this.minor;
     }
 
-    public String getRevision()
-    {
+    public String getRevision() {
         return this.revision;
     }
 
-    public String getNMSVersion()
-    {
+    public String getNMSVersion() {
         return this.nmsVersion;
     }
 }

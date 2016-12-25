@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.TravelAgent;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,18 +21,18 @@ import net.minecraft.server.v1_9_R1.ChunkGenerator;
 import net.minecraft.server.v1_9_R1.WorldServer;
 
 public class LoadHell implements Listener {
-    private TallNether plugin;
-    private World world;
-    private WorldServer nmsWorld;
-    private Messages messages;
+    private final TallNether plugin;
+    private final World world;
+    private final WorldServer nmsWorld;
+    private final Messages messages;
     private ChunkGenerator originalGenerator;
-    private TravelAgent portalTravelAgent;
-    private String worldConfig;
+    private final TravelAgent portalTravelAgent;
+    private final ConfigurationSection worldConfig;
 
     public LoadHell(World world, TallNether instance) {
         this.plugin = instance;
         this.world = world;
-        this.worldConfig = "worlds." + world.getName() + ".";
+        this.worldConfig = this.plugin.getConfig().getConfigurationSection("worlds." + this.world.getName());
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.messages = new Messages(this.plugin);
         overrideGenerator();
@@ -76,7 +77,7 @@ public class LoadHell implements Listener {
             }
 
             TallNether_ChunkProviderHell generator = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
-                    worldSeed, this.worldConfig, this.plugin);
+                    worldSeed, this.worldConfig);
             setFinal(cp, generator);
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +100,7 @@ public class LoadHell implements Listener {
             return;
         }
 
-        if (this.plugin.getConfig().getBoolean(this.worldConfig + ".enabled", false)) {
+        if (this.worldConfig.getBoolean("enabled", false)) {
             event.setPortalTravelAgent(this.portalTravelAgent);
         }
     }
