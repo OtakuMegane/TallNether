@@ -39,7 +39,6 @@ public class TallNether extends JavaPlugin implements Listener {
 
         if (Bukkit.getName().contains("Paper")) {
             this.isPaper = true;
-            this.messages.paperWarning();
         }
 
         // Catches the /reload command or other things that may bypass the
