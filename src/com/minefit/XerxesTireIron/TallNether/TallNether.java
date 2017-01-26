@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class TallNether extends JavaPlugin implements Listener {
     private String name;
+    private boolean isPaper;
     protected String version;
     private final Messages messages = new Messages(this);
     private HashMap<String, ManageHell> manageWorlds;
@@ -37,6 +38,7 @@ public class TallNether extends JavaPlugin implements Listener {
         }
 
         if (Bukkit.getName().contains("Paper")) {
+            this.isPaper = true;
             this.messages.paperWarning();
         }
 
@@ -47,6 +49,10 @@ public class TallNether extends JavaPlugin implements Listener {
         }
 
         this.messages.pluginReady();
+    }
+
+    public boolean isPaper() {
+        return this.isPaper;
     }
 
     @Override

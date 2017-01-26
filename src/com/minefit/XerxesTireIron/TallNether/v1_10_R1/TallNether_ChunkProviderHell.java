@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.minefit.XerxesTireIron.TallNether.PaperSpigot;
+import com.minefit.XerxesTireIron.TallNether.TallNether;
 
 import net.minecraft.server.v1_10_R1.BiomeBase;
 import net.minecraft.server.v1_10_R1.BlockFalling;
@@ -70,9 +74,13 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
     double[] l;
     double[] m;
 
-    private final boolean genFortress;
+    private boolean genFortress;
+    private boolean paperFlat;
+    private final TallNether plugin;
 
-    public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig) {
+    public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig,
+            TallNether instance) {
+        this.plugin = instance;
         this.worldConfig = worldConfig;
         this.C = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
         this.D = new WorldGenMinable(Blocks.df.getBlockData(), 33, BlockPredicate.a(Blocks.NETHERRACK));
@@ -85,6 +93,15 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         this.n = world;
         this.o = flag;
         this.p = new Random(i);
+
+        this.paperFlat = false;
+
+        if (this.plugin.isPaper()) {
+            com.destroystokyo.paper.PaperWorldConfig paperConfig = new PaperSpigot(this.plugin)
+                    .getPaperWorldConfig(world.worldData.getName());
+            this.paperFlat = paperConfig.generateFlatBedrock;
+        }
+
         this.genFortress = this.worldConfig.getBoolean("generate-fortress", true);
 
         try {
@@ -209,7 +226,8 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
                 IBlockData iblockdata1 = TallNether_ChunkProviderHell.b;
 
                 for (int l1 = 255; l1 >= 0; --l1) {
-                    if (l1 < 255 - this.p.nextInt(5) && l1 > this.p.nextInt(5)) {
+                    if (l1 < 255 - (this.paperFlat ? 0 : this.p.nextInt(5))
+                            && l1 > (this.paperFlat ? 0 : this.p.nextInt(5))) {
                         IBlockData iblockdata2 = chunksnapshot.a(i1, l1, l);
 
                         if (iblockdata2.getBlock() != null && iblockdata2.getMaterial() != Material.AIR) {
@@ -266,9 +284,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.J.a(this.n, i, j, chunksnapshot);
-        if (this.o && this.genFortress) {
-            this.I.a(this.n, i, j, chunksnapshot);
-        }
+        this.I.a(this.n, i, j, chunksnapshot);
 
         Chunk chunk = new Chunk(this.n, chunksnapshot, i, j);
         BiomeBase[] abiomebase = this.n.getWorldChunkManager().getBiomeBlock((BiomeBase[]) null, i * 16, j * 16, 16,
@@ -407,9 +423,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         int magmin = this.setDecoration("magma-block-min-height", 43);
         int magmax = this.setDecoration("magma-block-max-height", 53);
 
-        if (this.genFortress) {
-            this.I.a(this.n, this.p, chunkcoordintpair);
-        }
+        this.I.a(this.n, this.p, chunkcoordintpair);
 
         int i1;
 

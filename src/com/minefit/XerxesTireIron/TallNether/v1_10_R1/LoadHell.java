@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPortalEvent;
 
 import com.minefit.XerxesTireIron.TallNether.Messages;
+import com.minefit.XerxesTireIron.TallNether.PaperSpigot;
 import com.minefit.XerxesTireIron.TallNether.TallNether;
 
 import net.minecraft.server.v1_10_R1.ChunkGenerator;
@@ -77,7 +78,7 @@ public class LoadHell implements Listener {
             }
 
             TallNether_ChunkProviderHell generator = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
-                    worldSeed, this.worldConfig);
+                    worldSeed, this.worldConfig, this.plugin);
             setFinal(cp, generator);
         } catch (Exception e) {
             e.printStackTrace();
