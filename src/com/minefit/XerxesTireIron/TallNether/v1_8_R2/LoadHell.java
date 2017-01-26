@@ -58,7 +58,7 @@ public class LoadHell implements Listener {
             return;
         }
 
-        if (!originalGenName.equals("NetherChunkGenerator")) {
+        if (!originalGenName.equals("NetherChunkGenerator") && !originalGenName.equals("TimedChunkGenerator")) {
             this.messages.unknownGenerator(worldName, originalGenName);
             return;
         }

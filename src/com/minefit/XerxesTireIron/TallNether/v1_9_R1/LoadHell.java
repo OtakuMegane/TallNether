@@ -71,7 +71,7 @@ public class LoadHell implements Listener {
             Field cp = net.minecraft.server.v1_9_R1.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
             cp.setAccessible(true);
 
-            if (!originalGenName.equals("NetherChunkGenerator")) {
+            if (!originalGenName.equals("NetherChunkGenerator") && !originalGenName.equals("TimedChunkGenerator")) {
                 this.messages.unknownGenerator(worldName, originalGenName);
                 return;
             }

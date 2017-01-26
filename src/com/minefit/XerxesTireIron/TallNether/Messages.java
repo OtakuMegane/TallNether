@@ -23,13 +23,21 @@ public class Messages {
         this.logger.info("[" + this.pluginName + " Error] For safety, TallNether will not be enabled on this world.");
     }
 
+    public void paperWarning() {
+        this.logger.info(
+                "[" + this.pluginName + " Warning] This server appears to be running PaperSpigot or a branch of Paper.");
+        this.logger
+                .info("[" + this.pluginName + " Warning] TallNether should work ok but is not guaranteed to be fully compatible.");
+    }
+
     public void unknownEnvironment(String worldName, String environment) {
         this.logger.info("[" + this.pluginName + " Error] The world '" + worldName + "' is not a Nether environment.");
         this.logger.info("[" + this.pluginName + " Error] TallNether will not be enabled on this world.");
     }
 
     public void incompatibleVersion() {
-        this.logger.info("[" + this.pluginName + " Error] This version of Minecraft is not supported. Disabling plugin.");
+        this.logger
+                .info("[" + this.pluginName + " Error] This version of Minecraft is not supported. Disabling plugin.");
     }
 
     public void enabledSuccessfully(String worldName) {

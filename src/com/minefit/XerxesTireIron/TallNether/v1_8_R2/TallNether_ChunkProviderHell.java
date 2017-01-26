@@ -67,6 +67,8 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     double[] f;
     double[] g;
 
+    private final boolean genFortress;
+
     public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig) {
         super(world, flag, i);
         this.worldConfig = worldConfig;
@@ -80,6 +82,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         this.h = world;
         this.i = flag;
         this.j = new Random(i);
+        this.genFortress = this.worldConfig.getBoolean("generate-fortress", true);
 
         try {
             Method bb = net.minecraft.server.v1_8_R2.WorldGenFactory.class.getDeclaredMethod("b",
@@ -215,12 +218,12 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                                     } else if (l1 >= k - 4 && l1 <= k + 1) {
                                         iblockdata = Blocks.NETHERRACK.getBlockData();
                                         iblockdata1 = Blocks.NETHERRACK.getBlockData();
-                                        if (flag1) {
+                                        if (flag1 && this.worldConfig.getBoolean("generate-gravel", true)) {
                                             iblockdata = Blocks.GRAVEL.getBlockData();
                                             iblockdata1 = Blocks.NETHERRACK.getBlockData();
                                         }
 
-                                        if (flag) {
+                                        if (flag && this.worldConfig.getBoolean("generate-soulsand", true)) {
                                             iblockdata = Blocks.SOUL_SAND.getBlockData();
                                             iblockdata1 = Blocks.SOUL_SAND.getBlockData();
                                         }
@@ -261,7 +264,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.C.a(this, this.h, i, j, chunksnapshot);
-        if (this.i) {
+        if (this.i && this.genFortress) {
             this.B.a(this, this.h, i, j, chunksnapshot);
         }
 
@@ -396,7 +399,9 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         int hlmin = this.setDecoration("hidden-lava-min-height", 10);
         int hlmax = this.setDecoration("hidden-lava-max-height", 246);
 
-        this.B.a(this.h, this.j, chunkcoordintpair);
+        if (this.genFortress) {
+            this.B.a(this.h, this.j, chunkcoordintpair);
+        }
 
         int k;
 
@@ -486,7 +491,9 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
 
     @Override
     public void recreateStructures(Chunk chunk, int i, int j) {
-        this.B.a(this, this.h, i, j, (ChunkSnapshot) null);
+        if (this.genFortress) {
+            this.B.a(this, this.h, i, j, (ChunkSnapshot) null);
+        }
     }
 
     @Override

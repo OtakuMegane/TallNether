@@ -70,6 +70,8 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
     double[] l;
     double[] m;
 
+    private final boolean genFortress;
+
     public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig) {
         this.worldConfig = worldConfig;
         this.C = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
@@ -83,6 +85,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         this.n = world;
         this.o = flag;
         this.p = new Random(i);
+        this.genFortress = this.worldConfig.getBoolean("generate-fortress", true);
 
         try {
             Method bb = net.minecraft.server.v1_11_R1.WorldGenFactory.class.getDeclaredMethod("b",
@@ -218,12 +221,12 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
                                     } else if (l1 >= k - 4 && l1 <= k) {
                                         iblockdata = TallNether_ChunkProviderHell.b;
                                         iblockdata1 = TallNether_ChunkProviderHell.b;
-                                        if (flag1) {
+                                        if (flag1 && this.worldConfig.getBoolean("generate-gravel", true)) {
                                             iblockdata = TallNether_ChunkProviderHell.e;
                                             iblockdata1 = TallNether_ChunkProviderHell.b;
                                         }
 
-                                        if (flag) {
+                                        if (flag && this.worldConfig.getBoolean("generate-soulsand", true)) {
                                             iblockdata = TallNether_ChunkProviderHell.f;
                                             iblockdata1 = TallNether_ChunkProviderHell.f;
                                         }
@@ -263,7 +266,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.J.a(this.n, i, j, chunksnapshot);
-        if (this.o) {
+        if (this.o && this.genFortress) {
             this.I.a(this.n, i, j, chunksnapshot);
         }
 
@@ -404,7 +407,9 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         int magmin = this.setDecoration("magma-block-min-height", 43);
         int magmax = this.setDecoration("magma-block-max-height", 53);
 
-        this.I.a(this.n, this.p, chunkcoordintpair);
+        if (this.genFortress) {
+            this.I.a(this.n, this.p, chunkcoordintpair);
+        }
 
         int i1;
 
@@ -506,6 +511,8 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
-        this.I.a(this.n, i, j, (ChunkSnapshot) null);
+        if (this.genFortress) {
+            this.I.a(this.n, i, j, (ChunkSnapshot) null);
+        }
     }
 }
