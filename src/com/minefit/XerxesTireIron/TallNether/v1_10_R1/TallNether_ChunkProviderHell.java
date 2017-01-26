@@ -284,7 +284,9 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.J.a(this.n, i, j, chunksnapshot);
-        this.I.a(this.n, i, j, chunksnapshot);
+        if (this.genFortress) {
+            this.I.a(this.n, i, j, chunksnapshot);
+        }
 
         Chunk chunk = new Chunk(this.n, chunksnapshot, i, j);
         BiomeBase[] abiomebase = this.n.getWorldChunkManager().getBiomeBlock((BiomeBase[]) null, i * 16, j * 16, 16,

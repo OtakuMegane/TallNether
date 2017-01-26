@@ -283,7 +283,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.J.a(this.n, i, j, chunksnapshot);
-        if (this.o && this.genFortress) {
+        if (this.genFortress) {
             this.I.a(this.n, i, j, chunksnapshot);
         }
 

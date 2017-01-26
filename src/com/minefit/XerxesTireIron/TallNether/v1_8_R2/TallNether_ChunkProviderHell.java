@@ -279,7 +279,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.C.a(this, this.h, i, j, chunksnapshot);
-        if (this.i && this.genFortress) {
+        if (this.genFortress) {
             this.B.a(this, this.h, i, j, chunksnapshot);
         }
 
