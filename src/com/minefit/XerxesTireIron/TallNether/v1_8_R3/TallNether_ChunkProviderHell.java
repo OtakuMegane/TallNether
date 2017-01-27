@@ -69,7 +69,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     double[] g;
 
     private boolean genFortress;
-    private boolean paperFlat;
+    private final PaperSpigot paperSpigot;
     private final TallNether plugin;
 
     public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig,
@@ -88,14 +88,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         this.i = flag;
         this.j = new Random(i);
 
-        this.paperFlat = false;
-
-        if (this.plugin.isPaper()) {
-            com.destroystokyo.paper.PaperWorldConfig paperConfig = new PaperSpigot(this.plugin)
-                    .getPaperWorldConfig(world.worldData.getName());
-            this.paperFlat = paperConfig.generateFlatBedrock;
-        }
-
+        this.paperSpigot = new PaperSpigot(this.plugin, world.worldData.getName());
         this.genFortress = this.worldConfig.getBoolean("generate-fortress", true);
 
         try {
@@ -220,8 +213,8 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                 IBlockData iblockdata1 = Blocks.NETHERRACK.getBlockData();
 
                 for (int l1 = 255; l1 >= 0; --l1) {
-                    if (l1 < 255 - (this.paperFlat ? 0 : this.j.nextInt(5))
-                            && l1 > (this.paperFlat ? 0 : this.j.nextInt(5))) {
+                    if (l1 < 255 - (this.paperSpigot.generateFlatBedrock ? 0 : this.j.nextInt(5))
+                            && l1 > (this.paperSpigot.generateFlatBedrock ? 0 : this.j.nextInt(5))) {
                         IBlockData iblockdata2 = chunksnapshot.a(i1, l1, l);
 
                         if (iblockdata2.getBlock() != null && iblockdata2.getBlock().getMaterial() != Material.AIR) {
