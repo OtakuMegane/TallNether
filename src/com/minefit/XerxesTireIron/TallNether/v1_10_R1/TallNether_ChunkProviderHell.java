@@ -218,8 +218,8 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
                 IBlockData iblockdata1 = TallNether_ChunkProviderHell.b;
 
                 for (int l1 = 255; l1 >= 0; --l1) {
-                    if (l1 < 255 - (this.paperSpigot.generateFlatBedrock ? 0 : this.p.nextInt(5))
-                            && l1 > (this.paperSpigot.generateFlatBedrock ? 0 : this.p.nextInt(5))) {
+                    if (l1 < 255 - (this.worldConfig.getBoolean("flat-bedrock-ceiling", false) ? 0 : this.p.nextInt(5))
+                            && l1 > (this.worldConfig.getBoolean("flat-bedrock-floor", false) ? 0 : this.p.nextInt(5))) {
                         IBlockData iblockdata2 = chunksnapshot.a(i1, l1, l);
 
                         if (iblockdata2.getBlock() != null && iblockdata2.getMaterial() != Material.AIR) {
