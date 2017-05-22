@@ -1,24 +1,22 @@
-package com.minefit.XerxesTireIron.TallNether.v1_9_R2;
+package com.minefit.XerxesTireIron.TallNether.v1_12_R1;
 
 import java.util.Random;
 
-import net.minecraft.server.v1_9_R2.BlockPortal;
-import net.minecraft.server.v1_9_R2.BlockPosition;
-import net.minecraft.server.v1_9_R2.Blocks;
-import net.minecraft.server.v1_9_R2.ChunkCoordIntPair;
-import net.minecraft.server.v1_9_R2.EnumDirection;
-import net.minecraft.server.v1_9_R2.IBlockData;
-import net.minecraft.server.v1_9_R2.MathHelper;
-import net.minecraft.server.v1_9_R2.PortalTravelAgent;
-import net.minecraft.server.v1_9_R2.WorldServer;
+import net.minecraft.server.v1_12_R1.BlockPortal;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.Blocks;
+import net.minecraft.server.v1_12_R1.ChunkCoordIntPair;
+import net.minecraft.server.v1_12_R1.EnumDirection;
+import net.minecraft.server.v1_12_R1.IBlockData;
+import net.minecraft.server.v1_12_R1.MathHelper;
+import net.minecraft.server.v1_12_R1.PortalTravelAgent;
+import net.minecraft.server.v1_12_R1.WorldServer;
 
 import org.bukkit.Location;
 import org.bukkit.TravelAgent;
-
-import org.bukkit.craftbukkit.v1_9_R2.CraftTravelAgent;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import org.bukkit.craftbukkit.v1_12_R1.CraftTravelAgent;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class TallNether_CraftTravelAgent extends CraftTravelAgent implements TravelAgent {
@@ -304,7 +302,7 @@ public class TallNether_CraftTravelAgent extends CraftTravelAgent implements Tra
                     i4 = j2 + (i3 - 1) * l5;
                     BlockPosition blockposition = new BlockPosition(k3, l3, i4);
 
-                    this.world.applyPhysics(blockposition, this.world.getType(blockposition).getBlock());
+                    this.world.applyPhysics(blockposition, this.world.getType(blockposition).getBlock(), false);
                 }
             }
         }

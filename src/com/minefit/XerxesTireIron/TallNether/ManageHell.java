@@ -19,16 +19,22 @@ public class ManageHell {
 
         if (this.plugin.version.equals("v1_8_R2")) {
             this.LH8R2 = new com.minefit.XerxesTireIron.TallNether.v1_8_R2.LoadHell(this.world, this.plugin);
+            this.plugin.getServer().getPluginManager().registerEvents(this.LH8R2, this.plugin);
         } else if (this.plugin.version.equals("v1_8_R3")) {
             this.LH8R3 = new com.minefit.XerxesTireIron.TallNether.v1_8_R3.LoadHell(this.world, this.plugin);
+            this.plugin.getServer().getPluginManager().registerEvents(this.LH8R3, this.plugin);
         } else if (this.plugin.version.equals("v1_9_R1")) {
             this.LH9R1 = new com.minefit.XerxesTireIron.TallNether.v1_9_R1.LoadHell(this.world, this.plugin);
+            this.plugin.getServer().getPluginManager().registerEvents(this.LH9R1, this.plugin);
         } else if (this.plugin.version.equals("v1_9_R2")) {
             this.LH9R2 = new com.minefit.XerxesTireIron.TallNether.v1_9_R2.LoadHell(this.world, this.plugin);
+            this.plugin.getServer().getPluginManager().registerEvents(this.LH9R2, this.plugin);
         } else if (this.plugin.version.equals("v1_10_R1")) {
             this.LH10R1 = new com.minefit.XerxesTireIron.TallNether.v1_10_R1.LoadHell(this.world, this.plugin);
+            this.plugin.getServer().getPluginManager().registerEvents(this.LH10R1, this.plugin);
         } else if (this.plugin.version.equals("v1_11_R1")) {
             this.LH11R1 = new com.minefit.XerxesTireIron.TallNether.v1_11_R1.LoadHell(this.world, this.plugin);
+            this.plugin.getServer().getPluginManager().registerEvents(this.LH11R1, this.plugin);
         }
     }
 

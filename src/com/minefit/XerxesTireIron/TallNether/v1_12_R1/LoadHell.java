@@ -1,4 +1,4 @@
-package com.minefit.XerxesTireIron.TallNether.v1_9_R2;
+package com.minefit.XerxesTireIron.TallNether.v1_12_R1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -8,7 +8,7 @@ import org.bukkit.TravelAgent;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,17 +17,17 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import com.minefit.XerxesTireIron.TallNether.Messages;
 import com.minefit.XerxesTireIron.TallNether.TallNether;
 
-import net.minecraft.server.v1_9_R2.ChunkGenerator;
-import net.minecraft.server.v1_9_R2.WorldServer;
+import net.minecraft.server.v1_12_R1.ChunkGenerator;
+import net.minecraft.server.v1_12_R1.WorldServer;
 
 public class LoadHell implements Listener {
-    private TallNether plugin;
-    private World world;
-    private WorldServer nmsWorld;
-    private Messages messages;
+    private final TallNether plugin;
+    private final World world;
+    private final WorldServer nmsWorld;
+    private final Messages messages;
     private ChunkGenerator originalGenerator;
-    private TravelAgent portalTravelAgent;
-    private ConfigurationSection worldConfig;
+    private final TravelAgent portalTravelAgent;
+    private final ConfigurationSection worldConfig;
 
     public LoadHell(World world, TallNether instance) {
         this.plugin = instance;
@@ -41,7 +41,7 @@ public class LoadHell implements Listener {
 
     public void restoreGenerator() {
         try {
-            Field cp = net.minecraft.server.v1_9_R2.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
+            Field cp = net.minecraft.server.v1_12_R1.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
             cp.setAccessible(true);
             setFinal(cp, this.originalGenerator);
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class LoadHell implements Listener {
         }
 
         try {
-            Field cp = net.minecraft.server.v1_9_R2.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
+            Field cp = net.minecraft.server.v1_12_R1.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
             cp.setAccessible(true);
 
             if (!originalGenName.equals("NetherChunkGenerator") && !originalGenName.equals("TimedChunkGenerator")) {
