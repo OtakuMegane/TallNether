@@ -21,7 +21,7 @@ public class TallNether extends JavaPlugin implements Listener {
     private HashMap<String, ManageHell> manageWorlds;
     private final ServerVersion serverVersion = new ServerVersion(this);
     private final List<String> compatibleVersions = Arrays.asList("v1_8_R2", "v1_8_R3", "v1_9_R1", "v1_9_R2",
-            "v1_10_R1", "v1_11_R1");
+            "v1_10_R1", "v1_11_R1", "v1_12_R1");
 
     @Override
     public void onEnable() {
