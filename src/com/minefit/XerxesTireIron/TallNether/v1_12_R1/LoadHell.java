@@ -36,7 +36,12 @@ public class LoadHell implements Listener {
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.messages = new Messages(this.plugin);
         overrideGenerator();
-        this.portalTravelAgent = new TallNether_CraftTravelAgent(this.nmsWorld);
+
+        if (fastutilStandardLocation()) {
+            this.portalTravelAgent = new TallNether_CraftTravelAgent(this.nmsWorld);
+        } else {
+            this.portalTravelAgent = new TallNether_CraftTravelAgent_fastutil_nonstandard(this.nmsWorld);
+        }
     }
 
     public void restoreGenerator() {
@@ -117,5 +122,17 @@ public class LoadHell implements Listener {
         mf.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
         field.set(this.nmsWorld.getChunkProviderServer(), obj);
+    }
+
+    // I hate supporting PaperSpigot
+    private boolean fastutilStandardLocation() {
+        try {
+            Class.forName("org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectMap");
+            Class.forName("org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap");
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+
+        return true;
     }
 }
