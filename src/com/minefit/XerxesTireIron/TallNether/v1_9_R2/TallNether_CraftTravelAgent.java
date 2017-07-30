@@ -74,7 +74,7 @@ public class TallNether_CraftTravelAgent extends CraftTravelAgent implements Tra
         Object object = BlockPosition.ZERO;
         long k = ChunkCoordIntPair.a(i, j);
 
-        if (this.c.containsKey(k)) {
+        if (this.c.containsKey(k) && !purgeCache(k)) {
             PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.get(k);
 
             d0 = 0.0D;
@@ -310,5 +310,17 @@ public class TallNether_CraftTravelAgent extends CraftTravelAgent implements Tra
         }
 
         return true;
+    }
+
+    public boolean purgeCache(long k) {
+        PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.get(k);
+        long j = this.world.getTime() - 300L;
+
+        if (portaltravelagent_chunkcoordinatesportal == null || portaltravelagent_chunkcoordinatesportal.b < j) {
+            this.c.remove(k);
+            return true;
+        }
+
+        return false;
     }
 }

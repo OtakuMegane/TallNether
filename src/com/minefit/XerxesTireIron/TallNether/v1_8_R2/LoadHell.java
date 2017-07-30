@@ -68,7 +68,7 @@ public class LoadHell implements Listener {
         this.messages.enabledSuccessfully(worldName);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerPortal(PlayerPortalEvent event) {
         if (!this.worldConfig.getBoolean("special-travel-agent", true)) {
             return;

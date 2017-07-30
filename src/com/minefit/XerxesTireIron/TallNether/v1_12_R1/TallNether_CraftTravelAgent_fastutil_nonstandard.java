@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.TravelAgent;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+
 import org.bukkit.craftbukkit.v1_12_R1.CraftTravelAgent;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -72,9 +73,9 @@ public class TallNether_CraftTravelAgent_fastutil_nonstandard extends CraftTrave
         Object object = BlockPosition.ZERO;
         long k = ChunkCoordIntPair.a(i, j);
 
-        if (this.c.containsKey(k)) {
-            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.get(k);
-
+        if (this.c.containsKey(k) && !purgeCache(k)) {
+            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c
+                    .get(k);
             d0 = 0.0D;
             object = portaltravelagent_chunkcoordinatesportal;
             portaltravelagent_chunkcoordinatesportal.b = this.world.getTime();
@@ -308,5 +309,17 @@ public class TallNether_CraftTravelAgent_fastutil_nonstandard extends CraftTrave
         }
 
         return true;
+    }
+
+    public boolean purgeCache(long k) {
+        PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.get(k);
+        long j = this.world.getTime() - 300L;
+
+        if (portaltravelagent_chunkcoordinatesportal == null || portaltravelagent_chunkcoordinatesportal.b < j) {
+            this.c.remove(k);
+            return true;
+        }
+
+        return false;
     }
 }
