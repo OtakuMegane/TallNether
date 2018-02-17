@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.minefit.tallnether</groupId>
+    <artifactId>tallnether-parent</artifactId>
+    <version>1.0</version>
+  </parent>
+  <artifactId>v1_11_R1</artifactId>
+  <version>1.0</version>
+  <name>v1_11_R1</name>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.bukkit</groupId>
+  		<artifactId>bukkit</artifactId>
+  		<version>1.11.2-R0.1-SNAPSHOT</version>
+  		<scope>provided</scope>
+  	</dependency>
+  	<dependency>
+    	<groupId>org.bukkit</groupId>
+    	<artifactId>craftbukkit</artifactId>
+    	<version>1.11.2-R0.1-SNAPSHOT</version>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.destroystokyo.paper</groupId>
+    	<artifactId>paper</artifactId>
+    	<version>1.11.2-R0.1-SNAPSHOT</version>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.minefit.tallnether</groupId>
+    	<artifactId>messages</artifactId>
+    	<version>1.0</version>
+    	<scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

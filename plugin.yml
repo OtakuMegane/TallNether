@@ -1,7 +1,0 @@
-name: TallNether
-main: com.minefit.XerxesTireIron.TallNether.TallNether
-version: 1.3.6
-website: https://github.com/OtakuMegane/TallNether
-author: XerxesTireIron
-description: Makes the nether 256 blocks tall
-load: startup
