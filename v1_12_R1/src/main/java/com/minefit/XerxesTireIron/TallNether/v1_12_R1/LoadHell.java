@@ -121,7 +121,7 @@ public class LoadHell implements Listener {
         field.set(this.nmsWorld.getChunkProviderServer(), obj);
     }
 
-    // I hate supporting PaperSpigot
+    // PaperSpigot, WTF
     private boolean fastutilStandardLocation() {
         try {
             Class.forName("org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectMap");
