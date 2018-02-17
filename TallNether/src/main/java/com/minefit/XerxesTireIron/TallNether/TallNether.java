@@ -58,12 +58,12 @@ public class TallNether extends JavaPlugin implements Listener {
         this.messages.pluginDisable();
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onWorldInit(WorldInitEvent event) {
         prepareWorld(event.getWorld());
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onWorldLoad(WorldLoadEvent event) {
         prepareWorld(event.getWorld());
     }

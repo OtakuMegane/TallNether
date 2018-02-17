@@ -33,7 +33,7 @@ import net.minecraft.server.v1_11_R1.WorldGenNether;
 import net.minecraft.server.v1_11_R1.WorldGenerator;
 
 public class TallNether_ChunkProviderHell implements ChunkGenerator {
-    private final ConfigurationSection worldConfig;
+
     protected static final IBlockData a = Blocks.AIR.getBlockData();
     protected static final IBlockData b = Blocks.NETHERRACK.getBlockData();
     protected static final IBlockData c = Blocks.BEDROCK.getBlockData();
@@ -73,6 +73,7 @@ public class TallNether_ChunkProviderHell implements ChunkGenerator {
 
     private boolean genFortress;
     private final PaperSpigot paperSpigot;
+    private final ConfigurationSection worldConfig;
 
     public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig) {
         this.worldConfig = worldConfig;

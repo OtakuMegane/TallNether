@@ -8,9 +8,9 @@
   <modules>
     <module>TallNether</module>
     <module>Messages</module>
+    <module>v1_10_R1</module>
     <module>v1_11_R1</module>
     <module>v1_12_R1</module>
-    <module>v1_10_R1</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
