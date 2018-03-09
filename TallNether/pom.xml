@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.minefit.tallnether</groupId>
+    <groupId>com.minefit.xerxestireiron.tallnether</groupId>
     <artifactId>tallnether-parent</artifactId>
     <version>1.0</version>
   </parent>
@@ -21,25 +21,25 @@
     	<scope>provided</scope>
     </dependency>
     <dependency>
-    	<groupId>com.minefit.tallnether</groupId>
+    	<groupId>com.minefit.xerxestireiron.tallnether</groupId>
     	<artifactId>messages</artifactId>
     	<version>1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
-    	<groupId>com.minefit.tallnether</groupId>
+    	<groupId>com.minefit.xerxestireiron.tallnether</groupId>
     	<artifactId>v1_10_R1</artifactId>
     	<version>1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
-    	<groupId>com.minefit.tallnether</groupId>
+    	<groupId>com.minefit.xerxestireiron.tallnether</groupId>
     	<artifactId>v1_11_R1</artifactId>
     	<version>1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
-    	<groupId>com.minefit.tallnether</groupId>
+    	<groupId>com.minefit.xerxestireiron.tallnether</groupId>
     	<artifactId>v1_12_R1</artifactId>
     	<version>1.0</version>
     	<scope>compile</scope>
@@ -75,7 +75,7 @@
             <configuration>
               <artifactSet>
                 <includes>
-                  <include>com.minefit.tallnether:*</include>
+                  <include>com.minefit.xerxestireiron.tallnether:*</include>
                 </includes>
               </artifactSet>
             </configuration>
