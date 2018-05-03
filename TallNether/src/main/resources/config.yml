@@ -7,15 +7,15 @@
 # Example config
 #
 # worlds:
-#    world1:
-#      enabled: true
-#      farlands: true
-#      lava-sea-level: 40
-#      gravel-soulsand-limit: 92
-#      fire-min-height: 4
-#      fire-max-height: 128
-#      fire-attempts: 15
-#    world2:
-#      enabled: true
+#   world1:
+#     enabled: true
+#     farlands: true
+#     lava-sea-level: 40
+#     gravel-soulsand-limit: 92
+#     fire-min-height: 4
+#     fire-max-height: 128
+#     fire-attempts: 15
+#   world2:
+#     enabled: true
 
 worlds:
