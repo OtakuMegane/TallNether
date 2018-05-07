@@ -1,14 +1,11 @@
-package com.minefit.xerxestireiron.tallnether.v1_9_R1;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+package com.minefit.xerxestireiron.tallnether.v1_8_R3;
 
 import org.bukkit.Location;
 import org.bukkit.TravelAgent;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,14 +13,14 @@ import org.bukkit.event.player.PlayerPortalEvent;
 
 import com.minefit.xerxestireiron.tallnether.Messages;
 
-import net.minecraft.server.v1_9_R1.ChunkGenerator;
-import net.minecraft.server.v1_9_R1.WorldServer;
+import net.minecraft.server.v1_8_R3.IChunkProvider;
+import net.minecraft.server.v1_8_R3.WorldServer;
 
 public class LoadHell implements Listener {
     private final World world;
     private final WorldServer nmsWorld;
     private final Messages messages;
-    private ChunkGenerator originalGenerator;
+    private IChunkProvider originalGenerator;
     private final TravelAgent portalTravelAgent;
     private final ConfigurationSection worldConfig;
 
@@ -37,18 +34,12 @@ public class LoadHell implements Listener {
     }
 
     public void restoreGenerator() {
-        try {
-            Field cp = net.minecraft.server.v1_9_R1.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
-            cp.setAccessible(true);
-            setFinal(cp, this.originalGenerator);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.nmsWorld.chunkProviderServer.chunkProvider = this.originalGenerator;
     }
 
     public void overrideGenerator() {
         String worldName = this.world.getName();
-        this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
+        this.originalGenerator = this.nmsWorld.chunkProviderServer.chunkProvider;
         String originalGenName = this.originalGenerator.getClass().getSimpleName();
         boolean genFeatures = this.nmsWorld.getWorldData().shouldGenerateMapFeatures();
         long worldSeed = this.nmsWorld.getSeed();
@@ -64,22 +55,13 @@ public class LoadHell implements Listener {
             return;
         }
 
-        try {
-            Field cp = net.minecraft.server.v1_9_R1.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
-            cp.setAccessible(true);
-
-            if (!originalGenName.equals("NetherChunkGenerator")) {
-                this.messages.unknownGenerator(worldName, originalGenName);
-                return;
-            }
-
-            TallNether_ChunkProviderHell generator = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
-                    worldSeed, this.worldConfig);
-            setFinal(cp, generator);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!originalGenName.equals("NetherChunkGenerator")) {
+            this.messages.unknownGenerator(worldName, originalGenName);
+            return;
         }
 
+        this.nmsWorld.chunkProviderServer.chunkProvider = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
+                worldSeed, this.worldConfig);
         this.messages.enabledSuccessfully(worldName);
     }
 
@@ -104,15 +86,5 @@ public class LoadHell implements Listener {
         if (this.worldConfig.getBoolean("enabled", false)) {
             event.setPortalTravelAgent(this.portalTravelAgent);
         }
-    }
-
-    public void setFinal(Field field, Object obj) throws Exception {
-        field.setAccessible(true);
-
-        Field mf = Field.class.getDeclaredField("modifiers");
-        mf.setAccessible(true);
-        mf.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-        field.set(this.nmsWorld.getChunkProviderServer(), obj);
     }
 }
