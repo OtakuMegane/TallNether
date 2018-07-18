@@ -20,13 +20,14 @@ public class TallNether_WorldGenCavesHell extends WorldGenCavesHell {
         return random.nextFloat() <= worldgenfeatureconfigurationchance.a;
     }
 
+    @Override
     public boolean a(GeneratorAccess generatoraccess, Random random, int i, int j, int k, int l, BitSet bitset, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
         int i1 = (this.a() * 2 - 1) * 16;
         int j1 = random.nextInt(random.nextInt(random.nextInt(10) + 1) + 1);
 
         for (int k1 = 0; k1 < j1; ++k1) {
             double d0 = (double) (i * 16 + random.nextInt(16));
-            double d1 = (double) random.nextInt(128);
+            double d1 = (double) random.nextInt(256); // TallNether Change: from 128
             double d2 = (double) (j * 16 + random.nextInt(16));
             int l1 = 1;
             float f;
@@ -55,6 +56,7 @@ public class TallNether_WorldGenCavesHell extends WorldGenCavesHell {
         return true;
     }
 
+    @Override
     protected boolean a(GeneratorAccess generatoraccess, long i, int j, int k, double d0, double d1, double d2, double d3, double d4, BitSet bitset) {
         double d5 = (double) (j * 16 + 8);
         double d6 = (double) (k * 16 + 8);
@@ -63,7 +65,7 @@ public class TallNether_WorldGenCavesHell extends WorldGenCavesHell {
             int l = Math.max(MathHelper.floor(d0 - d3) - j * 16 - 1, 0);
             int i1 = Math.min(MathHelper.floor(d0 + d3) - j * 16 + 1, 16);
             int j1 = Math.max(MathHelper.floor(d1 - d4) - 1, 1);
-            int k1 = Math.min(MathHelper.floor(d1 + d4) + 1, 248);
+            int k1 = Math.min(MathHelper.floor(d1 + d4) + 1, 256); // TallNether Change: from 128
             int l1 = Math.max(MathHelper.floor(d2 - d3) - k * 16 - 1, 0);
             int i2 = Math.min(MathHelper.floor(d2 + d3) - k * 16 + 1, 16);
 

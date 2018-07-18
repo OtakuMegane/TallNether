@@ -28,7 +28,7 @@ public class TallNether_WorldProviderHell extends WorldProvider {
 
     public void m() {
         this.c = true;
-        this.d = false;
+        this.d = true;
         this.e = false;
     }
 
@@ -44,8 +44,8 @@ public class TallNether_WorldProviderHell extends WorldProvider {
     }
 
     public ChunkGenerator<?> getChunkGenerator() {
-        //GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) ChunkGeneratorType.c.a();
-        GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) new TallNether_GeneratorSettingsNether();
+        GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) ChunkGeneratorType.c.a();
+        //GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) new TallNether_GeneratorSettingsNether();
 
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
