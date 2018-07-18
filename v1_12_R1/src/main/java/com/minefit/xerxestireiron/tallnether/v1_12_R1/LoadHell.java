@@ -3,28 +3,26 @@ package com.minefit.xerxestireiron.tallnether.v1_12_R1;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import org.bukkit.Location;
-import org.bukkit.TravelAgent;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPortalEvent;
 
 import com.minefit.xerxestireiron.tallnether.Messages;
 
 import net.minecraft.server.v1_12_R1.ChunkGenerator;
+import net.minecraft.server.v1_12_R1.WorldProvider;
 import net.minecraft.server.v1_12_R1.WorldServer;
 
 public class LoadHell implements Listener {
     private final World world;
     private final WorldServer nmsWorld;
+    private final String worldName;
+    private String originalGenName;
+    private WorldProvider worldProvider;
     private final Messages messages;
     private ChunkGenerator originalGenerator;
-    private final TravelAgent portalTravelAgent;
     private final ConfigurationSection worldConfig;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
@@ -32,86 +30,67 @@ public class LoadHell implements Listener {
         this.worldConfig = worldConfig;
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.messages = new Messages(pluginName);
+        this.worldName = this.world.getName();
+        this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
+        this.originalGenName = this.originalGenerator.getClass().getSimpleName();
+        this.worldProvider = this.nmsWorld.worldProvider;
         overrideGenerator();
-
-        if (fastutilStandardLocation()) {
-            this.portalTravelAgent = new TallNether_CraftTravelAgent(this.nmsWorld);
-        } else {
-            this.portalTravelAgent = new TallNether_CraftTravelAgent_fastutil_nonstandard(this.nmsWorld);
-        }
     }
 
     public void restoreGenerator() {
-        try {
-            Field cp = net.minecraft.server.v1_12_R1.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
-            cp.setAccessible(true);
-            setFinal(cp, this.originalGenerator);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        boolean success = setGenerator(this.originalGenerator, true);
     }
 
     public void overrideGenerator() {
-        String worldName = this.world.getName();
-        this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
-        String originalGenName = this.originalGenerator.getClass().getSimpleName();
-        boolean genFeatures = this.nmsWorld.getWorldData().shouldGenerateMapFeatures();
-        long worldSeed = this.nmsWorld.getSeed();
         Environment environment = this.world.getEnvironment();
+        long worldSeed = this.nmsWorld.getSeed();
+        boolean genFeatures = this.nmsWorld.getWorldData().shouldGenerateMapFeatures();
+        TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
+                worldSeed, this.worldConfig);
 
         if (environment != Environment.NETHER) {
-            this.messages.unknownEnvironment(worldName, environment.toString());
+            this.messages.unknownEnvironment(this.worldName, environment.toString());
             return;
         }
 
-        if (originalGenName.equals("TallNether_ChunkProviderHell")) {
-            this.messages.alreadyEnabled(worldName);
+        if (this.originalGenName.equals("TallNether_ChunkProviderHell")) {
+            this.messages.alreadyEnabled(this.worldName);
             return;
         }
 
+        if (!this.originalGenName.equals("NetherChunkGenerator")
+                && !this.originalGenName.equals("TimedChunkGenerator")) {
+            this.messages.unknownGenerator(this.worldName, this.originalGenName);
+            return;
+        }
+
+        boolean success = setGenerator(tallNetherGenerator, false);
+
+        if (success) {
+            this.messages.enabledSuccessfully(this.worldName);
+        } else {
+            this.messages.enableFailed(this.worldName);
+        }
+    }
+
+    private boolean setGenerator(ChunkGenerator generator, boolean heightValue) {
         try {
-            Field cp = net.minecraft.server.v1_12_R1.ChunkProviderServer.class.getDeclaredField("chunkGenerator");
-            cp.setAccessible(true);
+            Field chunkGenerator = net.minecraft.server.v1_12_R1.ChunkProviderServer.class
+                    .getDeclaredField("chunkGenerator");
+            chunkGenerator.setAccessible(true);
+            setFinal(chunkGenerator, generator);
 
-            if (!originalGenName.equals("NetherChunkGenerator") && !originalGenName.equals("TimedChunkGenerator")) {
-                this.messages.unknownGenerator(worldName, originalGenName);
-                return;
-            }
-
-            TallNether_ChunkProviderHell generator = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
-                    worldSeed, this.worldConfig);
-            setFinal(cp, generator);
+            Field worldHeight = net.minecraft.server.v1_12_R1.WorldProvider.class.getDeclaredField("e");
+            worldHeight.setAccessible(true);
+            worldHeight.setBoolean(this.worldProvider, heightValue);
         } catch (Exception e) {
-            e.printStackTrace();
+            return false;
         }
 
-        this.messages.enabledSuccessfully(worldName);
+        return true;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerPortal(PlayerPortalEvent event) {
-        if (!this.worldConfig.getBoolean("special-travel-agent", true)) {
-            return;
-        }
-
-        Location destination = event.getTo();
-
-        if (destination == null) {
-            return;
-        }
-
-        World targetWorld = destination.getWorld();
-
-        if (targetWorld.getName() != this.nmsWorld.worldData.getName()) {
-            return;
-        }
-
-        if (this.worldConfig.getBoolean("enabled", false)) {
-            event.setPortalTravelAgent(this.portalTravelAgent);
-        }
-    }
-
-    public void setFinal(Field field, Object obj) throws Exception {
+    private void setFinal(Field field, Object obj) throws Exception {
         field.setAccessible(true);
 
         Field mf = Field.class.getDeclaredField("modifiers");
@@ -119,17 +98,5 @@ public class LoadHell implements Listener {
         mf.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
         field.set(this.nmsWorld.getChunkProviderServer(), obj);
-    }
-
-    // PaperSpigot, WTF
-    private boolean fastutilStandardLocation() {
-        try {
-            Class.forName("org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectMap");
-            Class.forName("org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap");
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-
-        return true;
     }
 }

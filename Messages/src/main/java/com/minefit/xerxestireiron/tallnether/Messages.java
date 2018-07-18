@@ -34,6 +34,11 @@ public class Messages {
                 "[" + this.pluginName + " Success] The world '" + worldName + "' will have a 256-block high nether!");
     }
 
+    public void enableFailed(String worldName) {
+        this.logger.info("[" + this.pluginName + " Error] Something went wrong enabling TallNether on world '"
+                + worldName + "'.");
+    }
+
     public void pluginReady() {
         this.logger.info("[" + this.pluginName + "] Everything is ready to go!");
     }
