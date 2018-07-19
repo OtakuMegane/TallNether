@@ -13,8 +13,6 @@ import org.bukkit.event.Listener;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
 import net.minecraft.server.v1_13_R1.SchedulerBatch;
-import net.minecraft.server.v1_13_R1.BiomeBase;
-import net.minecraft.server.v1_13_R1.BiomeHell;
 import net.minecraft.server.v1_13_R1.BiomeLayout;
 import net.minecraft.server.v1_13_R1.Biomes;
 import net.minecraft.server.v1_13_R1.Blocks;
@@ -35,6 +33,7 @@ public class LoadHell implements Listener {
     private ChunkGenerator<?> originalGenerator;
     private final ConfigurationSection worldConfig;
     private boolean enabled = false;
+    private final Decorators decorators = new Decorators();
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
@@ -51,7 +50,10 @@ public class LoadHell implements Listener {
 
     public void restoreGenerator() {
         if (this.enabled) {
-            setGenerator(this.originalGenerator, true);
+            if (!setGenerator(this.originalGenerator, true) || !this.decorators.restore()) {
+                this.messages.restoreFailed(this.worldName);
+            }
+
             this.enabled = false;
         }
     }
@@ -63,7 +65,7 @@ public class LoadHell implements Listener {
         Environment environment = this.world.getEnvironment();
         TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
                 BiomeLayout.c.a(BiomeLayout.c.a().a(Biomes.j)), generatorsettingsnether, this.worldConfig);
-        new InitializeDecorators();
+        this.decorators.initialize();
 
         if (environment != Environment.NETHER) {
             this.messages.unknownEnvironment(this.worldName, environment.toString());
@@ -84,7 +86,7 @@ public class LoadHell implements Listener {
         this.enabled = setGenerator(tallNetherGenerator, false);
 
         if (this.enabled) {
-            this.messages.enabledSuccessfully(this.worldName);
+            this.messages.enableSuccess(this.worldName);
         } else {
             this.messages.enableFailed(this.worldName);
         }
@@ -93,7 +95,6 @@ public class LoadHell implements Listener {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
         Logger.getLogger("Minecraft").info("" + nmsWorld.aa());
-
 
         try {
             Field chunkGenerator = net.minecraft.server.v1_13_R1.ChunkProviderServer.class
@@ -121,6 +122,7 @@ public class LoadHell implements Listener {
             setFinal(g, new SchedulerBatch(newScheduler), this.nmsWorld.getChunkProviderServer());
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;

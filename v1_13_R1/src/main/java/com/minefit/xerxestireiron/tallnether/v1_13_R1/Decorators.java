@@ -3,9 +3,10 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R1;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.server.v1_13_R1.BiomeBase;
 import net.minecraft.server.v1_13_R1.BiomeHell;
@@ -29,45 +30,144 @@ import net.minecraft.server.v1_13_R1.WorldGenFeatureFlowingConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureHellFlowingLavaConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureMushroomConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureOreConfiguration;
+import net.minecraft.server.v1_13_R1.WorldGenMushrooms;
+import net.minecraft.server.v1_13_R1.WorldGenNether;
 import net.minecraft.server.v1_13_R1.WorldGenNetherConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenStage;
 import net.minecraft.server.v1_13_R1.WorldGenerator;
-import net.minecraft.server.v1_13_R1.WorldGenStage.Decoration;
-import net.minecraft.server.v1_13_R1.WorldGenStage.Features;
 
 @SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
-public class InitializeDecorators {
+public class Decorators {
 
     private final BiomeHell biomeHell;
+    private List<WorldGenFeatureComposite> originalDecoratorsUnderground;
+    private List<WorldGenFeatureComposite> originalDecoratorsVegetal;
+    private List<WorldGenFeatureComposite> originalFeaturesAir;
 
-    public InitializeDecorators() {
+    public Decorators() {
         this.biomeHell = (BiomeHell) BiomeBase.a(8);
-        doFixes();
+    }
 
-        // We clear out the default decorators first so no duplicating work
+    public boolean initialize() {
+        doFixes(false);
+        List<WorldGenFeatureComposite> underground = getDecoratorsList(WorldGenStage.Decoration.UNDERGROUND_DECORATION);
+        this.originalDecoratorsUnderground = new ArrayList<>(underground);
+        underground.clear();
+        List<WorldGenFeatureComposite> vegetal = getDecoratorsList(WorldGenStage.Decoration.VEGETAL_DECORATION);
+        this.originalDecoratorsVegetal = new ArrayList<>(vegetal);
+        vegetal.clear();
+        List<WorldGenFeatureComposite> air = getFeaturesList(WorldGenStage.Features.AIR);
+        this.originalFeaturesAir = new ArrayList<>(air);
+        air.clear();
+
+        if (!doFixes(false) || !registerFortress(false)) {
+            return false;
+        }
+
+        setNewDecorators();
+        return true;
+    }
+
+    public boolean restore() {
+        List<WorldGenFeatureComposite> underground = getDecoratorsList(WorldGenStage.Decoration.UNDERGROUND_DECORATION);
+        underground.clear();
+
+        if (!setDecoratorsList(this.originalDecoratorsUnderground, WorldGenStage.Decoration.UNDERGROUND_DECORATION)) {
+            return false;
+        }
+
+        List<WorldGenFeatureComposite> vegetal = getDecoratorsList(WorldGenStage.Decoration.VEGETAL_DECORATION);
+        vegetal.clear();
+
+        if (!setDecoratorsList(this.originalDecoratorsVegetal, WorldGenStage.Decoration.UNDERGROUND_DECORATION)) {
+            return false;
+        }
+
+        List<WorldGenFeatureComposite> air = getFeaturesList(WorldGenStage.Features.AIR);
+        air.clear();
+        if (!setFeaturesList(this.originalFeaturesAir, WorldGenStage.Features.AIR)) {
+            return false;
+        }
+
+        if (!doFixes(true) || !registerFortress(true)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private List<WorldGenFeatureComposite> getFeaturesList(WorldGenStage.Features index) {
+        Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
+
         try {
             Field aX = BiomeBase.class.getDeclaredField("aX");
             aX.setAccessible(true);
-            Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featList = (Map<Features, List<WorldGenFeatureComposite>>) aX
-                    .get(biomeHell);
-            featList.get(Features.AIR).clear();
-
-            Field aY = BiomeBase.class.getDeclaredField("aY");
-            aY.setAccessible(true);
-            Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decList = (Map<Decoration, List<WorldGenFeatureComposite>>) aY
-                    .get(biomeHell);
-            decList.get(WorldGenStage.Decoration.UNDERGROUND_DECORATION).clear();
-            decList.get(WorldGenStage.Decoration.VEGETAL_DECORATION).clear();
+            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
+            aX.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
+            return featureMap.get(index);
         }
 
-        registerCaves();
-        registerFortress(); // Must be done after the clearing because it's called as a decorator
-        setNewDecorators();
+        return featureMap.get(index);
+    }
+
+    private boolean setFeaturesList(List<WorldGenFeatureComposite> featuresList, WorldGenStage.Features index) {
+        Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
+
+        try {
+            Field aX = BiomeBase.class.getDeclaredField("aX");
+            aX.setAccessible(true);
+            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
+            featureMap.get(index).addAll(featuresList);
+            aX.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private List<WorldGenFeatureComposite> getDecoratorsList(WorldGenStage.Decoration index) {
+        Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decorationMap = new HashMap();
+
+        try {
+            Field aY = BiomeBase.class.getDeclaredField("aY");
+            aY.setAccessible(true);
+            decorationMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
+            aY.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return decorationMap.get(index);
+        }
+
+        return decorationMap.get(index);
+    }
+
+    private boolean setDecoratorsList(List<WorldGenFeatureComposite> decoratorsList, WorldGenStage.Decoration index) {
+        Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decoratorMap = new HashMap();
+
+        try {
+            Field aY = BiomeBase.class.getDeclaredField("aY");
+            aY.setAccessible(true);
+            decoratorMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
+            decoratorMap.get(index).addAll(decoratorsList);
+            aY.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     private void setNewDecorators() {
+        // Cave Generation
+        WorldGenCarverWrapper caves = this.biomeHell.a((WorldGenCarver) new TallNether_WorldGenCavesHell(),
+                (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.2F)));
+        this.biomeHell.a(WorldGenStage.Features.AIR, caves);
+
         // No fucking clue yet
         WorldGenFeatureComposite<WorldGenFeatureFlowingConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> dunno = this.biomeHell
                 .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), this.biomeHell.w,
@@ -157,13 +257,7 @@ public class InitializeDecorators {
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, hiddenLava);
     }
 
-    private void registerCaves() {
-        WorldGenCarverWrapper caves = this.biomeHell.a((WorldGenCarver) new TallNether_WorldGenCavesHell(),
-                (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.2F)));
-        this.biomeHell.a(WorldGenStage.Features.AIR, caves);
-    }
-
-    private void registerFortress() {
+    private boolean registerFortress(boolean restore) {
         if (ConfigValues.generateFortress) {
             StructureGenerator<WorldGenNetherConfiguration> fortressGen = new TallNether_WorldGenNether();
             this.biomeHell.a((StructureGenerator) fortressGen,
@@ -177,23 +271,44 @@ public class InitializeDecorators {
                 Method bb = net.minecraft.server.v1_13_R1.WorldGenFactory.class.getDeclaredMethod("b",
                         new Class[] { Class.class, String.class });
                 bb.setAccessible(true);
-                bb.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
-                        new Object[] { TallNether_WorldGenNether.a.class, "Fortress" });
+
+                if (restore) {
+                    bb.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
+                            new Object[] { WorldGenNether.a.class, "Fortress" });
+                } else {
+                    bb.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
+                            new Object[] { TallNether_WorldGenNether.a.class, "Fortress" });
+                }
+
+                bb.setAccessible(false);
             } catch (Exception e) {
                 e.printStackTrace();
+                return false;
             }
         }
+
+        return true;
     }
 
-    private void doFixes() {
+    private boolean doFixes(boolean restore) {
         try {
             // Fixes placing mushrooms outside of range when changing height + work around hardcoded values
             Field ah = net.minecraft.server.v1_13_R1.WorldGenerator.class.getDeclaredField("ah");
             ah.setAccessible(true);
-            setFinal(ah, new TallNether_WorldGenMushrooms(), this.biomeHell);
+
+            if (restore) {
+                setFinal(ah, new WorldGenMushrooms(), this.biomeHell);
+            } else {
+                setFinal(ah, new TallNether_WorldGenMushrooms(), this.biomeHell);
+            }
+
+            ah.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
     private void setFinal(Field field, Object obj, Object instance) throws Exception {

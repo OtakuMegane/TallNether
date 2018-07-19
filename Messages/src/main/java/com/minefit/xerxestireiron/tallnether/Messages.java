@@ -29,7 +29,7 @@ public class Messages {
                 .info("[" + this.pluginName + " Error] This version of Minecraft is not supported. Disabling plugin.");
     }
 
-    public void enabledSuccessfully(String worldName) {
+    public void enableSuccess(String worldName) {
         this.logger.info(
                 "[" + this.pluginName + " Success] The world '" + worldName + "' will have a 256-block high nether!");
     }
@@ -51,5 +51,9 @@ public class Messages {
         this.logger.info("[" + this.pluginName + " Success] TallNether appears to already be enabled for this world.");
         this.logger.info(
                 "[" + this.pluginName + " Success] The world '" + worldName + "' will have a 256-block high nether!");
+    }
+
+    public void restoreFailed(String worldName) {
+        this.logger.info("[" + this.pluginName + " Error] Something went wrong while restoring the original Nether generation.");
     }
 }

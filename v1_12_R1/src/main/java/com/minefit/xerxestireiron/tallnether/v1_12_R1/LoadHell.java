@@ -40,7 +40,10 @@ public class LoadHell implements Listener {
 
     public void restoreGenerator() {
         if (this.enabled) {
-            setGenerator(this.originalGenerator, true);
+            if (!setGenerator(this.originalGenerator, true)) {
+                this.messages.restoreFailed(this.worldName);
+            }
+
             this.enabled = false;
         }
     }
@@ -71,7 +74,7 @@ public class LoadHell implements Listener {
         this.enabled = setGenerator(tallNetherGenerator, false);
 
         if (this.enabled) {
-            this.messages.enabledSuccessfully(this.worldName);
+            this.messages.enableSuccess(this.worldName);
         } else {
             this.messages.enableFailed(this.worldName);
         }
@@ -88,6 +91,7 @@ public class LoadHell implements Listener {
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 
