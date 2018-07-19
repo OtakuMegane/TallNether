@@ -34,6 +34,7 @@ public class LoadHell implements Listener {
     private final Messages messages;
     private ChunkGenerator<?> originalGenerator;
     private final ConfigurationSection worldConfig;
+    private boolean enabled = false;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
@@ -49,7 +50,10 @@ public class LoadHell implements Listener {
     }
 
     public void restoreGenerator() {
-        boolean success = setGenerator(this.originalGenerator, true);
+        if (this.enabled) {
+            setGenerator(this.originalGenerator, true);
+            this.enabled = false;
+        }
     }
 
     public void overrideGenerator() {
@@ -59,7 +63,7 @@ public class LoadHell implements Listener {
         Environment environment = this.world.getEnvironment();
         TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
                 BiomeLayout.c.a(BiomeLayout.c.a().a(Biomes.j)), generatorsettingsnether, this.worldConfig);
-        new InitializeDecorators(this.worldConfig);
+        new InitializeDecorators();
 
         if (environment != Environment.NETHER) {
             this.messages.unknownEnvironment(this.worldName, environment.toString());
@@ -77,26 +81,21 @@ public class LoadHell implements Listener {
             return;
         }
 
-        boolean success = setGenerator(tallNetherGenerator, false);
+        this.enabled = setGenerator(tallNetherGenerator, false);
 
-        if (success) {
+        if (this.enabled) {
             this.messages.enabledSuccessfully(this.worldName);
         } else {
             this.messages.enableFailed(this.worldName);
         }
     }
 
-
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
         Logger.getLogger("Minecraft").info("" + nmsWorld.aa());
 
-        try {
-            BiomeHell biomeHell = (BiomeHell) BiomeBase.a(8);
-            Field q = net.minecraft.server.v1_13_R1.BiomeBase.class.getDeclaredField("q");
-            q.setAccessible(true);
-            setFinal(q, new TallNether_WorldGenDecoratorChanceHeight(), biomeHell);
 
+        try {
             Field chunkGenerator = net.minecraft.server.v1_13_R1.ChunkProviderServer.class
                     .getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);

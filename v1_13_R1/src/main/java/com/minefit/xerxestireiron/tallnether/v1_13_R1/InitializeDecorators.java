@@ -5,9 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-
-import org.bukkit.configuration.ConfigurationSection;
+import java.util.Map.Entry;
 
 import net.minecraft.server.v1_13_R1.BiomeBase;
 import net.minecraft.server.v1_13_R1.BiomeHell;
@@ -40,37 +38,32 @@ import net.minecraft.server.v1_13_R1.WorldGenStage.Features;
 @SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
 public class InitializeDecorators {
 
-    private final ConfigurationSection worldConfig;
     private final BiomeHell biomeHell;
-    //private final ConfigValues configValues;
 
-    public InitializeDecorators(ConfigurationSection worldConfig) {
-        this.worldConfig = worldConfig;
+    public InitializeDecorators() {
         this.biomeHell = (BiomeHell) BiomeBase.a(8);
-        //this.configValues = new ConfigValues(worldConfig);
-
         doFixes();
-        registerCaves();
 
-        Field aY;
-
+        // We clear out the default decorators first so no duplicating work
         try {
-            aY = BiomeBase.class.getDeclaredField("aY");
-            aY.setAccessible(true);
+            Field aX = BiomeBase.class.getDeclaredField("aX");
+            aX.setAccessible(true);
+            Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featList = (Map<Features, List<WorldGenFeatureComposite>>) aX
+                    .get(biomeHell);
+            featList.get(Features.AIR).clear();
 
+            Field aY = BiomeBase.class.getDeclaredField("aY");
+            aY.setAccessible(true);
             Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decList = (Map<Decoration, List<WorldGenFeatureComposite>>) aY
                     .get(biomeHell);
             decList.get(WorldGenStage.Decoration.UNDERGROUND_DECORATION).clear();
             decList.get(WorldGenStage.Decoration.VEGETAL_DECORATION).clear();
-
-            // ???
-            Field aX = BiomeBase.class.getDeclaredField("aX");
-            aX.setAccessible(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        registerFortress();
+        registerCaves();
+        registerFortress(); // Must be done after the clearing because it's called as a decorator
         setNewDecorators();
     }
 
@@ -109,7 +102,7 @@ public class InitializeDecorators {
 
         // Glowstone Sparse (glowstone1)
         WorldGenFeatureComposite<WorldGenFeatureEmptyConfiguration, WorldGenDecoratorFrequencyConfiguration> glowStone1 = this.biomeHell
-                .a(WorldGenerator.W, WorldGenFeatureConfiguration.e, this.biomeHell.P,
+                .a(WorldGenerator.W, WorldGenFeatureConfiguration.e, new TallNether_WorldGenDecoratorNetherGlowstone(),
                         new WorldGenDecoratorFrequencyConfiguration(ConfigValues.glowstone1Attempts));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowStone1);
 
@@ -172,8 +165,7 @@ public class InitializeDecorators {
 
     private void registerFortress() {
         if (ConfigValues.generateFortress) {
-            StructureGenerator<WorldGenNetherConfiguration> fortressGen = new TallNether_WorldGenNether(null,
-                    this.worldConfig);
+            StructureGenerator<WorldGenNetherConfiguration> fortressGen = new TallNether_WorldGenNether();
             this.biomeHell.a((StructureGenerator) fortressGen,
                     (WorldGenFeatureConfiguration) (new WorldGenNetherConfiguration()));
             WorldGenFeatureComposite<WorldGenNetherConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> fortress = this.biomeHell
@@ -195,15 +187,10 @@ public class InitializeDecorators {
 
     private void doFixes() {
         try {
-            // Fixes placing mushrooms outside of range when changing height, work around hardcoded values
+            // Fixes placing mushrooms outside of range when changing height + work around hardcoded values
             Field ah = net.minecraft.server.v1_13_R1.WorldGenerator.class.getDeclaredField("ah");
             ah.setAccessible(true);
             setFinal(ah, new TallNether_WorldGenMushrooms(), this.biomeHell);
-
-            // Fixes 128 height limit hardcoded
-            Field P = net.minecraft.server.v1_13_R1.BiomeBase.class.getDeclaredField("P");
-            P.setAccessible(true);
-            setFinal(P, new TallNether_WorldGenDecoratorNetherGlowstone(), this.biomeHell);
         } catch (Exception e) {
             e.printStackTrace();
         }

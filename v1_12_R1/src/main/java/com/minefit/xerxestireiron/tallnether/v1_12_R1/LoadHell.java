@@ -24,6 +24,7 @@ public class LoadHell implements Listener {
     private final Messages messages;
     private ChunkGenerator originalGenerator;
     private final ConfigurationSection worldConfig;
+    private boolean enabled = false;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
@@ -38,7 +39,10 @@ public class LoadHell implements Listener {
     }
 
     public void restoreGenerator() {
-        boolean success = setGenerator(this.originalGenerator, true);
+        if (this.enabled) {
+            setGenerator(this.originalGenerator, true);
+            this.enabled = false;
+        }
     }
 
     public void overrideGenerator() {
@@ -64,9 +68,9 @@ public class LoadHell implements Listener {
             return;
         }
 
-        boolean success = setGenerator(tallNetherGenerator, false);
+        this.enabled = setGenerator(tallNetherGenerator, false);
 
-        if (success) {
+        if (this.enabled) {
             this.messages.enabledSuccessfully(this.worldName);
         } else {
             this.messages.enableFailed(this.worldName);
