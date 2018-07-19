@@ -259,7 +259,14 @@ public class Decorators {
 
     private boolean registerFortress(boolean restore) {
         if (ConfigValues.generateFortress) {
-            StructureGenerator<WorldGenNetherConfiguration> fortressGen = new TallNether_WorldGenNether();
+            StructureGenerator<WorldGenNetherConfiguration> fortressGen;
+
+            if (restore) {
+                fortressGen = new WorldGenNether();
+            } else {
+                fortressGen = new TallNether_WorldGenNether();
+            }
+
             this.biomeHell.a((StructureGenerator) fortressGen,
                     (WorldGenFeatureConfiguration) (new WorldGenNetherConfiguration()));
             WorldGenFeatureComposite<WorldGenNetherConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> fortress = this.biomeHell
