@@ -58,8 +58,6 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
         SeededRandom seededrandom = new SeededRandom(this.b);
         world.b(63);
 
-        logger.info("we are here!");
-
         this.worldConfig = worldConfig;
 
         if (this.worldConfig.getBoolean("farlands", false)) {

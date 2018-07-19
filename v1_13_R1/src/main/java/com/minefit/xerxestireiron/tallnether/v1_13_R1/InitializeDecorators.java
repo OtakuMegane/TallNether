@@ -11,6 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import net.minecraft.server.v1_13_R1.BiomeBase;
 import net.minecraft.server.v1_13_R1.BiomeHell;
+import net.minecraft.server.v1_13_R1.BlockPredicate;
 import net.minecraft.server.v1_13_R1.Blocks;
 import net.minecraft.server.v1_13_R1.FluidTypes;
 import net.minecraft.server.v1_13_R1.StructureGenerator;
@@ -19,6 +20,7 @@ import net.minecraft.server.v1_13_R1.WorldGenCarverWrapper;
 import net.minecraft.server.v1_13_R1.WorldGenDecoratorChanceConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenDecoratorFrequencyConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureChanceDecoratorCountConfiguration;
+import net.minecraft.server.v1_13_R1.WorldGenFeatureChanceDecoratorRangeConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureComposite;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureConfigurationChance;
@@ -28,6 +30,7 @@ import net.minecraft.server.v1_13_R1.WorldGenFeatureEmptyConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureFlowingConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureHellFlowingLavaConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenFeatureMushroomConfiguration;
+import net.minecraft.server.v1_13_R1.WorldGenFeatureOreConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenNetherConfiguration;
 import net.minecraft.server.v1_13_R1.WorldGenStage;
 import net.minecraft.server.v1_13_R1.WorldGenerator;
@@ -74,21 +77,21 @@ public class InitializeDecorators {
     private void setNewDecorators() {
         // No fucking clue yet
         WorldGenFeatureComposite<WorldGenFeatureFlowingConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> dunno = this.biomeHell
-                .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeBase.w,
+                .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), this.biomeHell.w,
                         new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256));
         this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, dunno);
 
-        // Brown Mushrooms (brown-shroom)
-        WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenDecoratorChanceConfiguration> brownMushrooms = this.biomeHell
+        // Brown Mushrooms
+        WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenDecoratorChanceConfiguration> brownShrooms = this.biomeHell
                 .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), this.biomeHell.q,
-                        new WorldGenDecoratorChanceConfiguration(1));
-        this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, brownMushrooms);
+                        new WorldGenDecoratorChanceConfiguration(4));
+        this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, brownShrooms);
 
-        // Red Mushrooms (red-shroom)
-        WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenDecoratorChanceConfiguration> redMushrooms = this.biomeHell
+        // Red Mushrooms
+        WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenDecoratorChanceConfiguration> redShrooms = this.biomeHell
                 .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), this.biomeHell.q,
-                        new WorldGenDecoratorChanceConfiguration(1));
-        biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, redMushrooms);
+                        new WorldGenDecoratorChanceConfiguration(8));
+        this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, redShrooms);
 
         // Lavafalls (lavafall)
         WorldGenFeatureComposite<WorldGenFeatureHellFlowingLavaConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> lavaFalls = this.biomeHell
@@ -98,11 +101,59 @@ public class InitializeDecorators {
                                 ConfigValues.lavafallMaxHeight));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, lavaFalls);
 
+        // Fire (fire)
+        WorldGenFeatureComposite<WorldGenFeatureEmptyConfiguration, WorldGenDecoratorFrequencyConfiguration> fire = this.biomeHell
+                .a(WorldGenerator.S, WorldGenFeatureConfiguration.e, new TallNether_WorldGenDecoratorNetherFire(),
+                        new WorldGenDecoratorFrequencyConfiguration(ConfigValues.fireAttempts));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fire);
+
         // Glowstone Sparse (glowstone1)
         WorldGenFeatureComposite<WorldGenFeatureEmptyConfiguration, WorldGenDecoratorFrequencyConfiguration> glowStone1 = this.biomeHell
                 .a(WorldGenerator.W, WorldGenFeatureConfiguration.e, this.biomeHell.P,
-                        new WorldGenDecoratorFrequencyConfiguration(10));
+                        new WorldGenDecoratorFrequencyConfiguration(ConfigValues.glowstone1Attempts));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowStone1);
+
+        // Glowstone Main (glowstone2)
+        WorldGenFeatureComposite<WorldGenFeatureEmptyConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> glowstone2 = this.biomeHell
+                .a(WorldGenerator.W, WorldGenFeatureConfiguration.e, this.biomeHell.u,
+                        new WorldGenFeatureChanceDecoratorCountConfiguration(ConfigValues.glowstone2Attempts,
+                                ConfigValues.glowstone2MinHeight, ConfigValues.glowstone2MaxMinus,
+                                ConfigValues.glowstone2MaxHeight));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowstone2);
+
+        // Brown Mushrooms (brown-shrooms)
+        WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenFeatureChanceDecoratorRangeConfiguration> brownShrooms2 = this.biomeHell
+                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), this.biomeHell.y,
+                        new WorldGenFeatureChanceDecoratorRangeConfiguration(1.0F, ConfigValues.brownShroomMinHeight, 0,
+                                ConfigValues.brownShroomMaxHeight));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms2);
+
+        // Red Mushrooms (red-shrooms)
+        WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenFeatureChanceDecoratorRangeConfiguration> redShrooms2 = this.biomeHell
+                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), this.biomeHell.y,
+                        new WorldGenFeatureChanceDecoratorRangeConfiguration(1.0F, ConfigValues.redShroomMinHeight, 0,
+                                ConfigValues.redShroomMaxHeight));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms2);
+
+        // Nether Quartz (quartz)
+        WorldGenFeatureComposite<WorldGenFeatureOreConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> quartz = this.biomeHell
+                .a(WorldGenerator.an,
+                        new WorldGenFeatureOreConfiguration(
+                                BlockPredicate.a(Blocks.NETHERRACK), Blocks.NETHER_QUARTZ_ORE.getBlockData(), 14),
+                        this.biomeHell.u,
+                        new WorldGenFeatureChanceDecoratorCountConfiguration(ConfigValues.quartzAttempts,
+                                ConfigValues.quartzMinHeight, ConfigValues.quartzMaxMinus,
+                                ConfigValues.quartzMaxHeight));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, quartz);
+
+        // Magma Block (magma)
+        WorldGenFeatureComposite<WorldGenFeatureOreConfiguration, WorldGenDecoratorFrequencyConfiguration> magma = this.biomeHell
+                .a(WorldGenerator.an,
+                        new WorldGenFeatureOreConfiguration(BlockPredicate.a(Blocks.NETHERRACK),
+                                Blocks.MAGMA_BLOCK.getBlockData(), 33),
+                        new TallNether_WorldGenDecoratorNetherMagma(),
+                        new WorldGenDecoratorFrequencyConfiguration(ConfigValues.magmaAttempts));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, magma);
 
         // Hidden Lava (hidden-lava)
         WorldGenFeatureComposite<WorldGenFeatureHellFlowingLavaConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> hiddenLava = this.biomeHell
@@ -121,10 +172,12 @@ public class InitializeDecorators {
 
     private void registerFortress() {
         if (ConfigValues.generateFortress) {
-            StructureGenerator<WorldGenNetherConfiguration> fortressGen = new TallNether_WorldGenNether(null, this.worldConfig);
-            this.biomeHell.a((StructureGenerator) fortressGen, (WorldGenFeatureConfiguration) (new WorldGenNetherConfiguration()));
+            StructureGenerator<WorldGenNetherConfiguration> fortressGen = new TallNether_WorldGenNether(null,
+                    this.worldConfig);
+            this.biomeHell.a((StructureGenerator) fortressGen,
+                    (WorldGenFeatureConfiguration) (new WorldGenNetherConfiguration()));
             WorldGenFeatureComposite<WorldGenNetherConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> fortress = this.biomeHell
-                    .a(fortressGen, new WorldGenNetherConfiguration(), TallNether_BiomeHell.n,
+                    .a(fortressGen, new WorldGenNetherConfiguration(), this.biomeHell.n,
                             WorldGenFeatureDecoratorConfiguration.e);
             this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
 
@@ -142,15 +195,15 @@ public class InitializeDecorators {
 
     private void doFixes() {
         try {
-            // Fixes trying to place some things like mushrooms off the map when we change world height
+            // Fixes placing mushrooms outside of range when changing height, work around hardcoded values
             Field ah = net.minecraft.server.v1_13_R1.WorldGenerator.class.getDeclaredField("ah");
             ah.setAccessible(true);
-            setFinal(ah, new TallNether_WorldGenMushrooms(worldConfig), this.biomeHell);
+            setFinal(ah, new TallNether_WorldGenMushrooms(), this.biomeHell);
 
             // Fixes 128 height limit hardcoded
             Field P = net.minecraft.server.v1_13_R1.BiomeBase.class.getDeclaredField("P");
             P.setAccessible(true);
-            setFinal(P, new TallNether_WorldGenDecoratorNetherGlowstone(this.worldConfig), this.biomeHell);
+            setFinal(P, new TallNether_WorldGenDecoratorNetherGlowstone(), this.biomeHell);
         } catch (Exception e) {
             e.printStackTrace();
         }

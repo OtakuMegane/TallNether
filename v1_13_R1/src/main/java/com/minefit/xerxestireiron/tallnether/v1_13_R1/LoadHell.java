@@ -2,8 +2,6 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.World;
@@ -14,31 +12,16 @@ import org.bukkit.event.Listener;
 
 import com.minefit.xerxestireiron.tallnether.Messages;
 
-import net.minecraft.server.v1_13_R1.RegistryBlockID;
 import net.minecraft.server.v1_13_R1.SchedulerBatch;
-import net.minecraft.server.v1_13_R1.WorldGenCarver;
-import net.minecraft.server.v1_13_R1.WorldGenCarverAbstract;
-import net.minecraft.server.v1_13_R1.WorldGenCarverWrapper;
-import net.minecraft.server.v1_13_R1.WorldGenDecoratorFrequencyConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureComposite;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureConfigurationChance;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenStage;
-import net.minecraft.server.v1_13_R1.WorldGenerator;
-import net.minecraft.server.v1_13_R1.WorldGenStage.Decoration;
-import net.minecraft.server.v1_13_R1.WorldGenStage.Features;
 import net.minecraft.server.v1_13_R1.BiomeBase;
 import net.minecraft.server.v1_13_R1.BiomeHell;
 import net.minecraft.server.v1_13_R1.BiomeLayout;
 import net.minecraft.server.v1_13_R1.Biomes;
 import net.minecraft.server.v1_13_R1.Blocks;
 import net.minecraft.server.v1_13_R1.ChunkGenerator;
-import net.minecraft.server.v1_13_R1.ChunkProviderServer;
 import net.minecraft.server.v1_13_R1.ChunkTaskScheduler;
 import net.minecraft.server.v1_13_R1.GeneratorSettingsNether;
 import net.minecraft.server.v1_13_R1.IChunkLoader;
-import net.minecraft.server.v1_13_R1.MinecraftKey;
 import net.minecraft.server.v1_13_R1.WorldProvider;
 import net.minecraft.server.v1_13_R1.WorldServer;
 
@@ -55,8 +38,8 @@ public class LoadHell implements Listener {
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
         this.worldConfig = worldConfig;
-        new ConfigValues(this.worldConfig);
         this.nmsWorld = ((CraftWorld) world).getHandle();
+        new ConfigValues(this.nmsWorld, this.worldConfig);
         this.messages = new Messages(pluginName);
         this.worldName = this.world.getName();
         this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
@@ -103,28 +86,17 @@ public class LoadHell implements Listener {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
         Logger.getLogger("Minecraft").info("" + nmsWorld.aa());
 
-        /*Field cl = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("chunkLoader");
-        cl.setAccessible(true);
-        IChunkLoader icl = (IChunkLoader) cl.get(this.nmsWorld.getChunkProviderServer());
-        ChunkProviderServer newcp = new ChunkProviderServer(this.nmsWorld, icl, generator, this.nmsWorld);
-        Field cpp = net.minecraft.server.v1_13_R1.World.class.getDeclaredField("chunkProvider");
-        cpp.setAccessible(true);
-        cpp.set(this.nmsWorld, newcp);*/
-        BiomeHell biomeHell = (BiomeHell) BiomeBase.a(8);
-        Field q;
         try {
-            q = net.minecraft.server.v1_13_R1.BiomeBase.class.getDeclaredField("q");
+            BiomeHell biomeHell = (BiomeHell) BiomeBase.a(8);
+            Field q = net.minecraft.server.v1_13_R1.BiomeBase.class.getDeclaredField("q");
             q.setAccessible(true);
             setFinal(q, new TallNether_WorldGenDecoratorChanceHeight(), biomeHell);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        try {
             Field chunkGenerator = net.minecraft.server.v1_13_R1.ChunkProviderServer.class
                     .getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);
@@ -135,7 +107,6 @@ public class LoadHell implements Listener {
             worldHeight.setBoolean(this.worldProvider, heightValue);
 
             Logger.getLogger("Minecraft").info("" + nmsWorld.aa());
-            // For new CraftBukkit stuff; check during Spigot updates
 
             Field chunkLoader = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("chunkLoader");
             chunkLoader.setAccessible(true);
