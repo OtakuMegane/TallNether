@@ -55,6 +55,7 @@ public class LoadHell implements Listener {
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
         this.worldConfig = worldConfig;
+        new ConfigValues(this.worldConfig);
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.messages = new Messages(pluginName);
         this.worldName = this.world.getName();
@@ -75,6 +76,7 @@ public class LoadHell implements Listener {
         Environment environment = this.world.getEnvironment();
         TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
                 BiomeLayout.c.a(BiomeLayout.c.a().a(Biomes.j)), generatorsettingsnether, this.worldConfig);
+        new InitializeDecorators(this.worldConfig);
 
         if (environment != Environment.NETHER) {
             this.messages.unknownEnvironment(this.worldName, environment.toString());
@@ -105,45 +107,24 @@ public class LoadHell implements Listener {
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
         Logger.getLogger("Minecraft").info("" + nmsWorld.aa());
 
+        /*Field cl = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("chunkLoader");
+        cl.setAccessible(true);
+        IChunkLoader icl = (IChunkLoader) cl.get(this.nmsWorld.getChunkProviderServer());
+        ChunkProviderServer newcp = new ChunkProviderServer(this.nmsWorld, icl, generator, this.nmsWorld);
+        Field cpp = net.minecraft.server.v1_13_R1.World.class.getDeclaredField("chunkProvider");
+        cpp.setAccessible(true);
+        cpp.set(this.nmsWorld, newcp);*/
+        BiomeHell biomeHell = (BiomeHell) BiomeBase.a(8);
+        Field q;
         try {
-            BiomeHell biomeHell = (BiomeHell) BiomeBase.a(8);
-            Field aY = BiomeBase.class.getDeclaredField("aY");
-            aY.setAccessible(true);
-            Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decList = (Map<Decoration, List<WorldGenFeatureComposite>>) aY
-                    .get(biomeHell);
-            decList.get(WorldGenStage.Decoration.UNDERGROUND_DECORATION).clear();
-            decList.get(WorldGenStage.Decoration.VEGETAL_DECORATION).clear();
-            WorldGenCarverWrapper newCaves = biomeHell.a((WorldGenCarver) new TallNether_WorldGenCavesHell(),
-                    (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.2F)));
-            biomeHell.a(WorldGenStage.Features.AIR, newCaves);
-            Field aX = BiomeBase.class.getDeclaredField("aX");
-            aX.setAccessible(true);
-            Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featList = (Map<Features, List<WorldGenFeatureComposite>>) aY
-                    .get(biomeHell);
-            Logger.getLogger("Minecraft").info("feat  " + featList);
-
-            WorldGenFeatureComposite<WorldGenFeatureEmptyConfiguration, WorldGenDecoratorFrequencyConfiguration> glowtest = biomeHell
-                    .a(WorldGenerator.W, WorldGenFeatureConfiguration.e,
-                            new TallNether_WorldGenDecoratorNetherGlowstone(this.worldConfig),
-                            new WorldGenDecoratorFrequencyConfiguration(10));
-            biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowtest);
-
-            for (WorldGenFeatureComposite dec : decList.get(WorldGenStage.Decoration.UNDERGROUND_DECORATION)) {
-                Logger.getLogger("Minecraft").info("dec " + dec);
-            }
-
-            /*Field cl = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("chunkLoader");
-            cl.setAccessible(true);
-            IChunkLoader icl = (IChunkLoader) cl.get(this.nmsWorld.getChunkProviderServer());
-            ChunkProviderServer newcp = new ChunkProviderServer(this.nmsWorld, icl, generator, this.nmsWorld);
-            Field cpp = net.minecraft.server.v1_13_R1.World.class.getDeclaredField("chunkProvider");
-            cpp.setAccessible(true);
-            cpp.set(this.nmsWorld, newcp);*/
-
-            Field q = net.minecraft.server.v1_13_R1.BiomeBase.class.getDeclaredField("q");
+            q = net.minecraft.server.v1_13_R1.BiomeBase.class.getDeclaredField("q");
             q.setAccessible(true);
             setFinal(q, new TallNether_WorldGenDecoratorChanceHeight(), biomeHell);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        try {
             Field chunkGenerator = net.minecraft.server.v1_13_R1.ChunkProviderServer.class
                     .getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);
@@ -170,7 +151,6 @@ public class LoadHell implements Listener {
             setFinal(g, new SchedulerBatch(newScheduler), this.nmsWorld.getChunkProviderServer());
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
 
         return true;

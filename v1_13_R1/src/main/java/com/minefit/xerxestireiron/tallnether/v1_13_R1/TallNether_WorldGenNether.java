@@ -31,7 +31,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
     protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
         BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
 
-        return new TallNether_WorldGenNether.a(generatoraccess, seededrandom, i, j, biomebase, worldConfig);
+        return new TallNether_WorldGenNether.a(generatoraccess, seededrandom, i, j, biomebase, this.worldConfig);
     }
 
     public static class a extends StructureStart {
