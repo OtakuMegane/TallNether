@@ -13,12 +13,16 @@ import net.minecraft.server.v1_13_R1.WorldGenerator;
 
 public class TallNether_WorldGenDecoratorNetherGlowstone extends WorldGenDecorator<WorldGenDecoratorFrequencyConfiguration> {
 
-    public TallNether_WorldGenDecoratorNetherGlowstone() {}
+    private final ConfigValues configValues;
+
+    public TallNether_WorldGenDecoratorNetherGlowstone(ConfigValues configValues) {
+        this.configValues = configValues;
+    }
 
     public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, WorldGenerator<C> worldgenerator, C c0) {
         for (int i = 0; i < random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.a) + 1); ++i) {
             int j = random.nextInt(16);
-            int k = random.nextInt(ConfigValues.glowstone1MaxHeight) + ConfigValues.glowstone1MinHeight;
+            int k = random.nextInt(this.configValues.glowstone1MaxHeight) + this.configValues.glowstone1MinHeight;
             int l = random.nextInt(16);
 
             k = (k > 256) ? 256 : k;

@@ -33,18 +33,20 @@ public class LoadHell implements Listener {
     private ChunkGenerator<?> originalGenerator;
     private final ConfigurationSection worldConfig;
     private boolean enabled = false;
-    private final Decorators decorators = new Decorators();
+    public final ConfigValues configValues;
+    private final Decorators decorators;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
         this.worldConfig = worldConfig;
         this.nmsWorld = ((CraftWorld) world).getHandle();
-        new ConfigValues(this.nmsWorld, this.worldConfig);
-        this.messages = new Messages(pluginName);
         this.worldName = this.world.getName();
+        this.configValues = new ConfigValues(this.worldName, this.worldConfig);
+        this.messages = new Messages(pluginName);
         this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
+        this.decorators = new Decorators(this.configValues);
         overrideGenerator();
     }
 
@@ -64,7 +66,7 @@ public class LoadHell implements Listener {
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
         Environment environment = this.world.getEnvironment();
         TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
-                BiomeLayout.c.a(BiomeLayout.c.a().a(Biomes.j)), generatorsettingsnether, this.worldConfig);
+                BiomeLayout.c.a(BiomeLayout.c.a().a(Biomes.j)), generatorsettingsnether, this.configValues);
         this.decorators.initialize();
 
         if (environment != Environment.NETHER) {

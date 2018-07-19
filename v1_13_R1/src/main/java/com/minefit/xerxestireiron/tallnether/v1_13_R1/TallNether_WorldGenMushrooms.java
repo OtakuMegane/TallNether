@@ -13,21 +13,25 @@ import net.minecraft.server.v1_13_R1.WorldGenMushrooms;
 
 public class TallNether_WorldGenMushrooms extends WorldGenMushrooms {
 
-    public TallNether_WorldGenMushrooms() {}
+    private final ConfigValues configValues;
+
+    public TallNether_WorldGenMushrooms(ConfigValues configValues) {
+        this.configValues = configValues;
+    }
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator,
             Random random, BlockPosition blockposition,
             WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
         int i = 0;
         IBlockData iblockdata = worldgenfeaturemushroomconfiguration.a.getBlockData();
-        int attempts = ConfigValues.brownShroomAttempts;
-        int min = ConfigValues.brownShroomMinHeight;
-        int max = ConfigValues.brownShroomMaxHeight;
+        int attempts = this.configValues.brownShroomAttempts;
+        int min = this.configValues.brownShroomMinHeight;
+        int max = this.configValues.brownShroomMaxHeight;
 
         if (worldgenfeaturemushroomconfiguration.a == Blocks.RED_MUSHROOM) {
-            attempts = ConfigValues.redShroomAttempts;
-            min = ConfigValues.redShroomMinHeight;
-            max = ConfigValues.redShroomMaxHeight;
+            attempts = this.configValues.redShroomAttempts;
+            min = this.configValues.redShroomMinHeight;
+            max = this.configValues.redShroomMaxHeight;
         }
 
         for (int ii = 0; ii < attempts; ++ii) {

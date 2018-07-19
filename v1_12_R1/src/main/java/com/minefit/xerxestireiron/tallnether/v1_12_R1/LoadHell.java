@@ -24,14 +24,16 @@ public class LoadHell implements Listener {
     private final Messages messages;
     private ChunkGenerator originalGenerator;
     private final ConfigurationSection worldConfig;
+    public final ConfigValues configValues;
     private boolean enabled = false;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
         this.worldConfig = worldConfig;
         this.nmsWorld = ((CraftWorld) world).getHandle();
-        this.messages = new Messages(pluginName);
         this.worldName = this.world.getName();
+        this.configValues = new ConfigValues(this.worldName, this.worldConfig);
+        this.messages = new Messages(pluginName);
         this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
@@ -53,7 +55,7 @@ public class LoadHell implements Listener {
         long worldSeed = this.nmsWorld.getSeed();
         boolean genFeatures = this.nmsWorld.getWorldData().shouldGenerateMapFeatures();
         TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
-                worldSeed, this.worldConfig);
+                worldSeed, this.configValues);
 
         if (environment != Environment.NETHER) {
             this.messages.unknownEnvironment(this.worldName, environment.toString());

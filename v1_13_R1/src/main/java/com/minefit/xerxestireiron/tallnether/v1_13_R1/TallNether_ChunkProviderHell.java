@@ -1,22 +1,14 @@
 package com.minefit.xerxestireiron.tallnether.v1_13_R1;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 
 import net.minecraft.server.v1_13_R1.BiomeBase;
 import net.minecraft.server.v1_13_R1.BlockPosition;
 import net.minecraft.server.v1_13_R1.Blocks;
 import net.minecraft.server.v1_13_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_13_R1.ChunkGeneratorAbstract;
-import net.minecraft.server.v1_13_R1.ChunkProviderHell;
 import net.minecraft.server.v1_13_R1.ChunkStatus;
 import net.minecraft.server.v1_13_R1.EnumCreatureType;
 import net.minecraft.server.v1_13_R1.GeneratorSettingsNether;
@@ -45,28 +37,25 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
     private final GeneratorSettingsNether o;
     private final IBlockData p;
     private final IBlockData q;
-    private final Logger logger;
 
-    private final ConfigurationSection worldConfig;
+    private final ConfigValues configValues;
 
-    public TallNether_ChunkProviderHell(World world, WorldChunkManager worldchunkmanager, GeneratorSettingsNether generatorsettingsnether, ConfigurationSection worldConfig) {
+    public TallNether_ChunkProviderHell(World world, WorldChunkManager worldchunkmanager, GeneratorSettingsNether generatorsettingsnether, ConfigValues configValues) {
         super(world, worldchunkmanager);
-        this.logger = LogManager.getLogger();
+        this.configValues = configValues;
         this.o = generatorsettingsnether;
         this.p = this.o.r();
         this.q = this.o.s();
         SeededRandom seededrandom = new SeededRandom(this.b);
         world.b(63);
 
-        this.worldConfig = worldConfig;
-
-        if (this.worldConfig.getBoolean("farlands", false)) {
-            this.i = new TallNether_NoiseGeneratorOctaves(this.worldConfig, seededrandom, 16);
-            this.j = new TallNether_NoiseGeneratorOctaves(this.worldConfig, seededrandom, 16);
-            this.k = new TallNether_NoiseGeneratorOctaves(this.worldConfig, seededrandom, 8);
-            this.l = new TallNether_NoiseGeneratorOctaves(this.worldConfig, seededrandom, 4);
-            this.m = new TallNether_NoiseGeneratorOctaves(this.worldConfig, seededrandom, 10);
-            this.n = new TallNether_NoiseGeneratorOctaves(this.worldConfig, seededrandom, 16);
+        if (this.configValues.generateFarLands) {
+            this.i = new TallNether_NoiseGeneratorOctaves(this.configValues, seededrandom, 16);
+            this.j = new TallNether_NoiseGeneratorOctaves(this.configValues, seededrandom, 16);
+            this.k = new TallNether_NoiseGeneratorOctaves(this.configValues, seededrandom, 8);
+            this.l = new TallNether_NoiseGeneratorOctaves(this.configValues, seededrandom, 4);
+            this.m = new TallNether_NoiseGeneratorOctaves(this.configValues, seededrandom, 10);
+            this.n = new TallNether_NoiseGeneratorOctaves(this.configValues, seededrandom, 16);
         } else {
             this.i = new NoiseGeneratorOctaves(seededrandom, 16);
             this.j = new NoiseGeneratorOctaves(seededrandom, 16);
@@ -115,7 +104,7 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
                             for (int i2 = 0; i2 < 4; ++i2) {
                                 IBlockData iblockdata = Blocks.AIR.getBlockData();
 
-                                if (j1 * 8 + k1 < this.worldConfig.getInt("lava-sea-level", 48) + 1) {
+                                if (j1 * 8 + k1 < this.configValues.lavaSeaLevel + 1) {
                                     iblockdata = this.q;
                                 }
 
@@ -158,13 +147,13 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
             int k;
 
             for (k = 255; k > 250; --k) {
-                if (k >= 255 - (this.worldConfig.getBoolean("flat-bedrock-ceiling", false) ? 0 : random.nextInt(5))) {
+                if (k >= 255 - (this.configValues.flatBedrockCeiling ? 0 : random.nextInt(5))) {
                     ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
                 }
             }
 
             for (k = 4; k >= 0; --k) {
-                if (k <= (this.worldConfig.getBoolean("flat-bedrock-floor", false) ? 0 : random.nextInt(5))) {
+                if (k <= (this.configValues.flatBedrockFloor ? 0 : random.nextInt(5))) {
                     ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
                 }
             }
@@ -302,15 +291,5 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
 
     public GeneratorSettingsNether getSettings() {
         return this.f();
-    }
-
-    private void setFinal(Field field, Object obj, Object instance) throws Exception {
-        field.setAccessible(true);
-
-        Field mf = Field.class.getDeclaredField("modifiers");
-        mf.setAccessible(true);
-        mf.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-        field.set(instance, obj);
     }
 }

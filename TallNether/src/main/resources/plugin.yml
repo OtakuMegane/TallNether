@@ -5,3 +5,4 @@ website: https://github.com/OtakuMegane/TallNether
 author: XerxesTireIron
 description: Makes the nether 256 blocks tall
 load: startup
+api-version: 1.13
