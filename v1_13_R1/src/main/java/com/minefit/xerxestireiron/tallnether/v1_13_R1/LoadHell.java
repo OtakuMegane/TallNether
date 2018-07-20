@@ -94,34 +94,27 @@ public class LoadHell implements Listener {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
-        Logger.getLogger("Minecraft").info("" + nmsWorld.aa());
-
         try {
             Field chunkGenerator = net.minecraft.server.v1_13_R1.ChunkProviderServer.class
                     .getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);
             setFinal(chunkGenerator, generator, this.nmsWorld.getChunkProviderServer());
+            chunkGenerator.setAccessible(false);
 
             Field worldHeight = net.minecraft.server.v1_13_R1.WorldProvider.class.getDeclaredField("d");
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
-
-            Logger.getLogger("Minecraft").info("" + nmsWorld.aa());
-
-            Field chunkLoader = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("chunkLoader");
-            chunkLoader.setAccessible(true);
-            IChunkLoader ichunkLoader = (IChunkLoader) chunkLoader.get(this.nmsWorld.getChunkProviderServer());
-            ChunkTaskScheduler newScheduler = new ChunkTaskScheduler(0, this.nmsWorld, generator, ichunkLoader,
-                    this.nmsWorld);
+            worldHeight.setAccessible(false);
 
             Field scheduler = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("f");
             scheduler.setAccessible(true);
-            setFinal(scheduler, newScheduler, this.nmsWorld.getChunkProviderServer());
-            Field g = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("g");
-            g.setAccessible(true);
-            setFinal(g, new SchedulerBatch(newScheduler), this.nmsWorld.getChunkProviderServer());
+            ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.nmsWorld.getChunkProviderServer());
+            Field schedulerGenerator = taskScheduler.getClass().getDeclaredField("d");
+            schedulerGenerator.setAccessible(true);
+            setFinal(schedulerGenerator, generator, taskScheduler);
+            scheduler.setAccessible(false);
+            schedulerGenerator.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
