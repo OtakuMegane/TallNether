@@ -9,9 +9,11 @@
   <artifactId>v1_9_R1</artifactId>
   <version>1.0</version>
   <name>v1_9_R1</name>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+	</properties>
   <dependencies>
   	<dependency>
   		<groupId>org.bukkit</groupId>
