@@ -67,9 +67,8 @@ public class LoadHell implements Listener {
             return;
         }
 
-        if (!this.originalGenName.equals("NetherChunkGenerator")
-                && !this.originalGenName.equals("TimedChunkGenerator")) {
-            this.messages.unknownGenerator(this.worldName, this.originalGenName);
+        if (!isRecognizedGenerator(environment, this.originalGenName)) {
+            this.messages.unknownGenerator(this.worldName, originalGenName);
             return;
         }
 
@@ -80,6 +79,14 @@ public class LoadHell implements Listener {
         } else {
             this.messages.enableFailed(this.worldName);
         }
+    }
+
+    private boolean isRecognizedGenerator(Environment environment, String originalGenName) {
+        if (environment == Environment.NETHER) {
+            return originalGenName.equals("NetherChunkGenerator") || originalGenName.equals("TimedChunkGenerator");
+        }
+
+        return false;
     }
 
     private boolean setGenerator(ChunkGenerator generator, boolean heightValue) {

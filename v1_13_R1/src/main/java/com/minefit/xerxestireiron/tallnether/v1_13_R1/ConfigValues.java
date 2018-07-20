@@ -6,7 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public class ConfigValues {
 
     private final ConfigurationSection worldConfig;
-    private final PaperSpigot paperSpigot;
+    public final PaperSpigot paperSpigot;
     public final int lavafallAttempts;
     public final int lavafallMinHeight;
     public final int lavafallMaxMinus;

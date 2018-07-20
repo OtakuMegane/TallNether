@@ -2,7 +2,6 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.logging.Logger;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -12,14 +11,12 @@ import org.bukkit.event.Listener;
 
 import com.minefit.xerxestireiron.tallnether.Messages;
 
-import net.minecraft.server.v1_13_R1.SchedulerBatch;
 import net.minecraft.server.v1_13_R1.BiomeLayout;
 import net.minecraft.server.v1_13_R1.Biomes;
 import net.minecraft.server.v1_13_R1.Blocks;
 import net.minecraft.server.v1_13_R1.ChunkGenerator;
 import net.minecraft.server.v1_13_R1.ChunkTaskScheduler;
 import net.minecraft.server.v1_13_R1.GeneratorSettingsNether;
-import net.minecraft.server.v1_13_R1.IChunkLoader;
 import net.minecraft.server.v1_13_R1.WorldProvider;
 import net.minecraft.server.v1_13_R1.WorldServer;
 
@@ -79,9 +76,8 @@ public class LoadHell implements Listener {
             return;
         }
 
-        if (!this.originalGenName.equals("NetherChunkGenerator")
-                && !this.originalGenName.equals("TimedChunkGenerator")) {
-            this.messages.unknownGenerator(this.worldName, this.originalGenName);
+        if (!isRecognizedGenerator(environment, this.originalGenName)) {
+            this.messages.unknownGenerator(this.worldName, originalGenName);
             return;
         }
 
@@ -92,6 +88,14 @@ public class LoadHell implements Listener {
         } else {
             this.messages.enableFailed(this.worldName);
         }
+    }
+
+    private boolean isRecognizedGenerator(Environment environment, String originalGenName) {
+        if (environment == Environment.NETHER) {
+            return originalGenName.equals("NetherChunkGenerator") || originalGenName.equals("TimedChunkGenerator");
+        }
+
+        return false;
     }
 
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
