@@ -7,7 +7,7 @@
 		<version>1.0</version>
 	</parent>
 	<artifactId>tallnether</artifactId>
-	<version>v1.4</version>
+	<version>v2.0</version>
 	<name>TallNether</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
