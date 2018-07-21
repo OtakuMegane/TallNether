@@ -314,7 +314,7 @@ public class Decorators {
         return true;
     }
 
-    public void setFinal(Field field, Object instance, Object obj) throws Exception {
+    private void setFinal(Field field, Object instance, Object obj) throws Exception {
         field.setAccessible(true);
         Field modifiers = Field.class.getDeclaredField("modifiers");
         modifiers.setAccessible(true);
