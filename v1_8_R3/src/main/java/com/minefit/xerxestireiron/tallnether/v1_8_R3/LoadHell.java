@@ -71,7 +71,7 @@ public class LoadHell implements Listener {
         }
 
         this.chunkProviderServer.chunkProvider = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures, worldSeed,
-                this.worldConfig);
+                this.configValues);
         this.messages.enableSuccess(this.worldName);
     }
 

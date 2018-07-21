@@ -3,8 +3,6 @@ package com.minefit.xerxestireiron.tallnether.v1_9_R2;
 import java.util.List;
 import java.util.Random;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import net.minecraft.server.v1_9_R2.StructurePiece;
 import net.minecraft.server.v1_9_R2.StructureStart;
 import net.minecraft.server.v1_9_R2.World;
@@ -14,16 +12,16 @@ import net.minecraft.server.v1_9_R2.WorldGenNetherPieces;
 @SuppressWarnings({ "rawtypes" })
 public class TallNether_WorldGenNether extends WorldGenNether {
 
-    private ConfigurationSection worldConfig;
+    private final ConfigValues configValues;
 
-    public TallNether_WorldGenNether(World world, ConfigurationSection worldConfig) {
+    public TallNether_WorldGenNether(ConfigValues configValues) {
         super();
-        this.worldConfig = worldConfig;
+        this.configValues = configValues;
     }
 
     @Override
     protected StructureStart b(int i, int j) {
-        return new TallNether_WorldGenNether.WorldGenNetherStart(this.g, this.f, i, j, this.worldConfig);
+        return new TallNether_WorldGenNether.WorldGenNetherStart(this.g, this.f, i, j, this.configValues);
     }
 
     public static class WorldGenNetherStart extends StructureStart {
@@ -31,7 +29,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
         public WorldGenNetherStart() {
         }
 
-        public WorldGenNetherStart(World world, Random random, int i, int j, ConfigurationSection worldConfig) {
+        public WorldGenNetherStart(World world, Random random, int i, int j, ConfigValues configValues) {
             super(i, j);
             WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15 = new WorldGenNetherPieces.WorldGenNetherPiece15(
                     random, (i << 4) + 2, (j << 4) + 2);
@@ -49,7 +47,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
             }
 
             this.d();
-            this.a(world, random, worldConfig.getInt("fortress-min", 64), worldConfig.getInt("fortress-max", 90));
+            this.a(world, random, configValues.fortressMin, configValues.fortressMax);
         }
     }
 }

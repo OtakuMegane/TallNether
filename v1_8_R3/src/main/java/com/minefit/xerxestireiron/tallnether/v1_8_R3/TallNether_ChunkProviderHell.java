@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import net.minecraft.server.v1_8_R3.BiomeBase;
 import net.minecraft.server.v1_8_R3.BlockFalling;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -64,24 +62,21 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     double[] f;
     double[] g;
 
-    private boolean genFortress;
-    private final ConfigurationSection worldConfig;
+    private final ConfigValues configValues;
 
-    public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigurationSection worldConfig) {
+    public TallNether_ChunkProviderHell(World world, boolean flag, long i, ConfigValues configValues) {
         super(world, flag, i);
-        this.worldConfig = worldConfig;
+        this.configValues = configValues;
         this.w = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
         this.x = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
         this.y = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
         this.z = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
         this.A = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
-        this.B = new TallNether_WorldGenNether(world, worldConfig);
+        this.B = new TallNether_WorldGenNether(this.configValues);
         this.C = new TallNether_WorldGenCavesHell();
         this.h = world;
         this.i = flag;
         this.j = new Random(i);
-
-        this.genFortress = this.worldConfig.getBoolean("generate-fortress", true);
 
         try {
             Method bb = net.minecraft.server.v1_8_R3.WorldGenFactory.class.getDeclaredMethod("b",
@@ -93,14 +88,14 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
             e.printStackTrace();
         }
 
-        if (this.worldConfig.getBoolean("farlands", false)) {
-            this.o = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 16);
-            this.p = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 16);
-            this.q = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 8);
-            this.r = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 4);
-            this.s = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 4);
-            this.a = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 10);
-            this.b = new TallNether_NoiseGeneratorOctaves(this.worldConfig, this.j, 16);
+        if (this.configValues.generateFarLands) {
+            this.o = new TallNether_NoiseGeneratorOctaves(this.configValues, this.j, 16);
+            this.p = new TallNether_NoiseGeneratorOctaves(this.configValues, this.j, 16);
+            this.q = new TallNether_NoiseGeneratorOctaves(this.configValues, this.j, 8);
+            this.r = new TallNether_NoiseGeneratorOctaves(this.configValues, this.j, 4);
+            this.s = new TallNether_NoiseGeneratorOctaves(this.configValues, this.j, 4);
+            this.a = new TallNether_NoiseGeneratorOctaves(this.configValues, this.j, 10);
+            this.b = new TallNether_NoiseGeneratorOctaves(this.configValues, this.j, 16);
             world.b(63);
         } else {
             this.o = new NoiseGeneratorOctaves(this.j, 16);
@@ -151,7 +146,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                             for (int k2 = 0; k2 < 4; ++k2) {
                                 IBlockData iblockdata = null;
 
-                                if (l1 * 8 + i2 < this.worldConfig.getInt("lava-sea-level", 48) + 1) {
+                                if (l1 * 8 + i2 < this.configValues.lavaSeaLevel + 1) {
                                     iblockdata = Blocks.LAVA.getBlockData();
                                 }
 
@@ -185,8 +180,8 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
     public void b(int i, int j, ChunkSnapshot chunksnapshot) {
         int k = this.h.F() + 1;
 
-        if (this.worldConfig.getInt("gravel-soulsand-limit", 128) > 0) {
-            k = this.worldConfig.getInt("gravel-soulsand-limit", 128);
+        if (this.configValues.gravelSoulsandLimit > 0) {
+            k = this.configValues.gravelSoulsandLimit;
         }
 
         double d0 = 0.03125D;
@@ -205,8 +200,8 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                 IBlockData iblockdata1 = Blocks.NETHERRACK.getBlockData();
 
                 for (int l1 = 255; l1 >= 0; --l1) {
-                    if (l1 < 255 - (this.worldConfig.getBoolean("flat-bedrock-ceiling", false) ? 0 : this.j.nextInt(5))
-                            && l1 > (this.worldConfig.getBoolean("flat-bedrock-floor", false) ? 0 : this.j.nextInt(5))) {
+                    if (l1 < 255 - (this.configValues.flatBedrockCeiling ? 0 : this.j.nextInt(5))
+                            && l1 > (this.configValues.flatBedrockFloor ? 0 : this.j.nextInt(5))) {
                         IBlockData iblockdata2 = chunksnapshot.a(i1, l1, l);
 
                         if (iblockdata2.getBlock() != null && iblockdata2.getBlock().getMaterial() != Material.AIR) {
@@ -218,12 +213,12 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
                                     } else if (l1 >= k - 4 && l1 <= k + 1) {
                                         iblockdata = Blocks.NETHERRACK.getBlockData();
                                         iblockdata1 = Blocks.NETHERRACK.getBlockData();
-                                        if (flag1 && this.worldConfig.getBoolean("generate-gravel", true)) {
+                                        if (flag1 && this.configValues.generateGravel) {
                                             iblockdata = Blocks.GRAVEL.getBlockData();
                                             iblockdata1 = Blocks.NETHERRACK.getBlockData();
                                         }
 
-                                        if (flag && this.worldConfig.getBoolean("generate-soulsand", true)) {
+                                        if (flag && this.configValues.generateSoulsand) {
                                             iblockdata = Blocks.SOUL_SAND.getBlockData();
                                             iblockdata1 = Blocks.SOUL_SAND.getBlockData();
                                         }
@@ -264,7 +259,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.C.a(this, this.h, i, j, chunksnapshot);
-        if (this.genFortress) {
+        if (this.configValues.generateFortress) {
             this.B.a(this, this.h, i, j, chunksnapshot);
         }
 
@@ -355,10 +350,6 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         return adouble;
     }
 
-    private int setDecoration(String setting, int defaultValue) {
-        return this.worldConfig.getInt(setting, defaultValue);
-    }
-
     private int randomRange(int min, int max) {
         int range = (max - min);
 
@@ -374,92 +365,65 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
 
-        int lftries = this.setDecoration("lavafall-attempts", 16);
-        int lfmin = this.setDecoration("lavafall-min-height", 4);
-        int lfmax = this.setDecoration("lavafall-max-height", 248);
-        int ftries = this.setDecoration("fire-attempts", 20);
-        int fmin = this.setDecoration("fire-min-height", 4);
-        int fmax = this.setDecoration("fire-max-height", 248);
-        int g1tries = this.setDecoration("glowstone1-attempts", 20);
-        int g1min = this.setDecoration("glowstone1-min-height", 4);
-        int g1max = this.setDecoration("glowstone1-max-height", 248);
-        int g2tries = this.setDecoration("glowstone2-attempts", 20);
-        int g2min = this.setDecoration("glowstone2-min-height", 0);
-        int g2max = this.setDecoration("glowstone2-max-height", 256);
-        int mbtries = this.setDecoration("brown-shroom-attempts", 2);
-        int mbmin = this.setDecoration("brown-shroom-min-height", 0);
-        int mbmax = this.setDecoration("brown-shroom-max-height", 256);
-        int mrtries = this.setDecoration("red-shroom-attempts", 2);
-        int mrmin = this.setDecoration("red-shroom-min-height", 0);
-        int mrmax = this.setDecoration("red-shroom-max-height", 256);
-        int qtries = this.setDecoration("quartz-attempts", 32);
-        int qmin = this.setDecoration("quartz-min-height", 10);
-        int qmax = this.setDecoration("quartz-max-height", 246);
-        int hltries = this.setDecoration("hidden-lava-attempts", 32);
-        int hlmin = this.setDecoration("hidden-lava-min-height", 10);
-        int hlmax = this.setDecoration("hidden-lava-max-height", 246);
-
-        if (this.genFortress) {
+        if (this.configValues.generateFortress) {
             this.B.a(this.h, this.j, chunkcoordintpair);
         }
 
         int k;
 
-        if (lftries > 0 && lfmax > 0) {
-            for (k = 0; k < lftries; ++k) {
+        if (this.configValues.lavafallAttempts > 0 && this.configValues.lavafallMaxHeight > 0) {
+            for (k = 0; k < this.configValues.lavafallAttempts; ++k) {
                 this.y.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16) + 8, randomRange(lfmin, lfmax), this.j.nextInt(16) + 8));
+                        blockposition.a(this.j.nextInt(16) + 8, randomRange(this.configValues.lavafallMinHeight, this.configValues.lavafallMaxHeight), this.j.nextInt(16) + 8));
             }
         }
 
-        if (ftries > 0 && fmax > 0) {
-            for (k = 0; k < this.j.nextInt(this.j.nextInt(ftries) + 1) + 1; ++k) {
+        if (this.configValues.fireAttempts > 0 && this.configValues.fireMaxHeight > 0) {
+            for (k = 0; k < this.j.nextInt(this.j.nextInt(this.configValues.fireAttempts) + 1) + 1; ++k) {
                 this.t.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16) + 8, randomRange(fmin, fmax), this.j.nextInt(16) + 8));
+                        blockposition.a(this.j.nextInt(16) + 8, randomRange(this.configValues.fireMinHeight, this.configValues.fireMaxHeight), this.j.nextInt(16) + 8));
             }
         }
 
-        if (g1tries > 0 && g1max > 0) {
-            for (k = 0; k < this.j.nextInt(this.j.nextInt(g1tries) + 1); ++k) {
+        if (this.configValues.glowstone1Attempts > 0 && this.configValues.glowstone1MaxHeight > 0) {
+            for (k = 0; k < this.j.nextInt(this.j.nextInt(this.configValues.glowstone1Attempts) + 1); ++k) {
                 this.u.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16) + 8, randomRange(g1min, g1max), this.j.nextInt(16) + 8));
+                        blockposition.a(this.j.nextInt(16) + 8, randomRange(this.configValues.glowstone1MinHeight, this.configValues.glowstone1MaxHeight), this.j.nextInt(16) + 8));
             }
         }
 
-        if (g2tries > 0 && g2max > 0) {
-            for (k = 0; k < g2tries; ++k) {
+        if (this.configValues.glowstone2Attempts > 0 && this.configValues.glowstone2MaxHeight > 0) {
+            for (k = 0; k < this.configValues.glowstone2Attempts; ++k) {
                 this.v.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16) + 8, randomRange(g2min, g2max), this.j.nextInt(16) + 8));
+                        blockposition.a(this.j.nextInt(16) + 8, randomRange(this.configValues.glowstone2MinHeight, this.configValues.glowstone2MaxHeight), this.j.nextInt(16) + 8));
             }
         }
 
-        if (mbtries > 0 && mbmax > 0) {
-            for (k = 0; k < mbtries; ++k) {
+        if (this.configValues.brownShroomAttempts > 0 && this.configValues.brownShroomMaxHeight > 0) {
+            for (k = 0; k < this.configValues.brownShroomAttempts; ++k) {
                 this.z.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16) + 8, randomRange(mbmin, mbmax), this.j.nextInt(16) + 8));
+                        blockposition.a(this.j.nextInt(16) + 8, randomRange(this.configValues.brownShroomMinHeight, this.configValues.brownShroomMaxHeight), this.j.nextInt(16) + 8));
             }
         }
 
-        if (mrtries > 0 && mrmax > 0) {
-
-            for (k = 0; k < mrtries; ++k) {
+        if (this.configValues.redShroomAttempts > 0 && this.configValues.redShroomMaxHeight > 0) {
+            for (k = 0; k < this.configValues.redShroomAttempts; ++k) {
                 this.A.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16) + 8, randomRange(mrmin, mrmax), this.j.nextInt(16) + 8));
+                        blockposition.a(this.j.nextInt(16) + 8, randomRange(this.configValues.redShroomMinHeight, this.configValues.redShroomMaxHeight), this.j.nextInt(16) + 8));
             }
         }
 
-        if (qtries > 0 && qmax > 0) {
-
-            for (k = 0; k < qtries; ++k) {
+        if (this.configValues.quartzAttempts > 0 && this.configValues.quartzMaxHeight > 0) {
+            for (k = 0; k < this.configValues.quartzAttempts; ++k) {
                 this.w.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16), randomRange(qmin, qmax), this.j.nextInt(16)));
+                        blockposition.a(this.j.nextInt(16), randomRange(this.configValues.quartzMinHeight, this.configValues.quartzMaxHeight), this.j.nextInt(16)));
             }
         }
 
-        if (hltries > 0 && hlmax > 0) {
-            for (k = 0; k < hltries; ++k) {
+        if (this.configValues.hiddenLavaAttempts > 0 && this.configValues.hiddenLavaMaxHeight > 0) {
+            for (k = 0; k < this.configValues.hiddenLavaAttempts; ++k) {
                 this.x.generate(this.h, this.j,
-                        blockposition.a(this.j.nextInt(16), randomRange(hlmin, hlmax), this.j.nextInt(16)));
+                        blockposition.a(this.j.nextInt(16), randomRange(this.configValues.hiddenLavaMinHeight, this.configValues.lavafallMaxHeight), this.j.nextInt(16)));
             }
         }
 
@@ -491,7 +455,7 @@ public class TallNether_ChunkProviderHell extends ChunkProviderHell implements I
 
     @Override
     public void recreateStructures(Chunk chunk, int i, int j) {
-        if (this.genFortress) {
+        if (this.configValues.generateFortress) {
             this.B.a(this, this.h, i, j, (ChunkSnapshot) null);
         }
     }
