@@ -15,54 +15,64 @@ import com.minefit.xerxestireiron.tallnether.Messages;
 
 import net.minecraft.server.v1_8_R3.IChunkProvider;
 import net.minecraft.server.v1_8_R3.WorldServer;
+import net.minecraft.server.v1_8_R3.ChunkProviderServer;
 
 public class LoadHell implements Listener {
     private final World world;
     private final WorldServer nmsWorld;
+    private final String worldName;
+    private String originalGenName;
     private final Messages messages;
+    private ChunkProviderServer chunkProviderServer;
     private IChunkProvider originalGenerator;
-    private final TravelAgent portalTravelAgent;
     private final ConfigurationSection worldConfig;
+    public final ConfigValues configValues;
+    private boolean enabled = false;
+    private final TravelAgent portalTravelAgent;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
+        this.worldName = world.getName();
         this.worldConfig = worldConfig;
+        this.configValues = new ConfigValues(this.worldName, this.worldConfig);
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.messages = new Messages(pluginName);
+        this.chunkProviderServer = this.nmsWorld.chunkProviderServer;
+        this.originalGenerator = this.chunkProviderServer.chunkProvider;
         overrideGenerator();
         this.portalTravelAgent = new TallNether_CraftTravelAgent(this.nmsWorld);
     }
 
     public void restoreGenerator() {
-        this.nmsWorld.chunkProviderServer.chunkProvider = this.originalGenerator;
+        if (this.enabled) {
+            this.chunkProviderServer.chunkProvider = this.originalGenerator;
+            this.enabled = false;
+        }
     }
 
     public void overrideGenerator() {
-        String worldName = this.world.getName();
-        this.originalGenerator = this.nmsWorld.chunkProviderServer.chunkProvider;
-        String originalGenName = this.originalGenerator.getClass().getSimpleName();
         boolean genFeatures = this.nmsWorld.getWorldData().shouldGenerateMapFeatures();
         long worldSeed = this.nmsWorld.getSeed();
         Environment environment = this.world.getEnvironment();
 
         if (environment != Environment.NETHER) {
-            this.messages.unknownEnvironment(worldName, environment.toString());
+            this.messages.unknownEnvironment(this.worldName, environment.toString());
             return;
         }
 
-        if (originalGenName.equals("TallNether_ChunkProviderHell")) {
-            this.messages.alreadyEnabled(worldName);
+        if (this.originalGenName.equals("TallNether_ChunkProviderHell")) {
+            this.messages.alreadyEnabled(this.worldName);
             return;
         }
 
-        if (!originalGenName.equals("NetherChunkGenerator")) {
-            this.messages.unknownGenerator(worldName, originalGenName);
+        if (!this.originalGenName.equals("NetherChunkGenerator")) {
+            this.messages.unknownGenerator(this.worldName, this.originalGenName);
             return;
         }
 
-        this.nmsWorld.chunkProviderServer.chunkProvider = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures,
-                worldSeed, this.worldConfig);
-        this.messages.enabledSuccessfully(worldName);
+        this.chunkProviderServer.chunkProvider = new TallNether_ChunkProviderHell(this.nmsWorld, genFeatures, worldSeed,
+                this.worldConfig);
+        this.messages.enableSuccess(this.worldName);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
