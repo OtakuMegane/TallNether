@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
 import net.minecraft.server.v1_12_R1.ChunkGenerator;
+import net.minecraft.server.v1_12_R1.ChunkProviderServer;
 import net.minecraft.server.v1_12_R1.WorldProvider;
 import net.minecraft.server.v1_12_R1.WorldServer;
 
@@ -22,6 +23,7 @@ public class LoadHell implements Listener {
     private String originalGenName;
     private WorldProvider worldProvider;
     private final Messages messages;
+    private ChunkProviderServer chunkProviderServer;
     private ChunkGenerator originalGenerator;
     private final ConfigurationSection worldConfig;
     public final ConfigValues configValues;
@@ -34,6 +36,7 @@ public class LoadHell implements Listener {
         this.worldName = this.world.getName();
         this.configValues = new ConfigValues(this.worldName, this.worldConfig);
         this.messages = new Messages(pluginName);
+        this.chunkProviderServer = this.nmsWorld.getChunkProviderServer();
         this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
@@ -91,12 +94,12 @@ public class LoadHell implements Listener {
 
     private boolean setGenerator(ChunkGenerator generator, boolean heightValue) {
         try {
-            Field chunkGenerator = net.minecraft.server.v1_12_R1.ChunkProviderServer.class
+            Field chunkGenerator = this.chunkProviderServer.getClass()
                     .getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);
-            setFinal(chunkGenerator, generator);
+            setFinal(chunkGenerator, this.chunkProviderServer, generator);
 
-            Field worldHeight = net.minecraft.server.v1_12_R1.WorldProvider.class.getDeclaredField("e");
+            Field worldHeight = this.worldProvider.getClass().getDeclaredField("e");
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
         } catch (Exception e) {
@@ -107,13 +110,13 @@ public class LoadHell implements Listener {
         return true;
     }
 
-    private void setFinal(Field field, Object obj) throws Exception {
+    public void setFinal(Field field, Object instance, Object obj) throws Exception {
         field.setAccessible(true);
-
-        Field mf = Field.class.getDeclaredField("modifiers");
-        mf.setAccessible(true);
-        mf.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-        field.set(this.nmsWorld.getChunkProviderServer(), obj);
+        Field modifiers = Field.class.getDeclaredField("modifiers");
+        modifiers.setAccessible(true);
+        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(instance, obj);
+        modifiers.setAccessible(false);
+        field.setAccessible(false);
     }
 }

@@ -115,10 +115,8 @@ public class LoadHell implements Listener {
             scheduler.setAccessible(true);
             ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.nmsWorld.getChunkProviderServer());
             Field schedulerGenerator = taskScheduler.getClass().getDeclaredField("d");
-            schedulerGenerator.setAccessible(true);
-            setFinal(schedulerGenerator, generator, taskScheduler);
+            setFinal(schedulerGenerator, taskScheduler, generator);
             scheduler.setAccessible(false);
-            schedulerGenerator.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -127,13 +125,13 @@ public class LoadHell implements Listener {
         return true;
     }
 
-    private void setFinal(Field field, Object obj, Object instance) throws Exception {
+    public void setFinal(Field field, Object instance, Object obj) throws Exception {
         field.setAccessible(true);
-
-        Field mf = Field.class.getDeclaredField("modifiers");
-        mf.setAccessible(true);
-        mf.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
+        Field modifiers = Field.class.getDeclaredField("modifiers");
+        modifiers.setAccessible(true);
+        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(instance, obj);
+        modifiers.setAccessible(false);
+        field.setAccessible(false);
     }
 }
