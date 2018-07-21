@@ -15,6 +15,7 @@ import net.minecraft.server.v1_13_R1.BiomeLayout;
 import net.minecraft.server.v1_13_R1.Biomes;
 import net.minecraft.server.v1_13_R1.Blocks;
 import net.minecraft.server.v1_13_R1.ChunkGenerator;
+import net.minecraft.server.v1_13_R1.ChunkProviderServer;
 import net.minecraft.server.v1_13_R1.ChunkTaskScheduler;
 import net.minecraft.server.v1_13_R1.GeneratorSettingsNether;
 import net.minecraft.server.v1_13_R1.WorldProvider;
@@ -28,6 +29,7 @@ public class LoadHell implements Listener {
     private WorldProvider worldProvider;
     private final Messages messages;
     private ChunkGenerator<?> originalGenerator;
+    private ChunkProviderServer chunkServer;
     private final ConfigurationSection worldConfig;
     private boolean enabled = false;
     public final ConfigValues configValues;
@@ -40,7 +42,8 @@ public class LoadHell implements Listener {
         this.worldName = this.world.getName();
         this.configValues = new ConfigValues(this.worldName, this.worldConfig);
         this.messages = new Messages(pluginName);
-        this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
+        this.chunkServer = this.nmsWorld.getChunkProviderServer();
+        this.originalGenerator = this.chunkServer.chunkGenerator;
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
         this.decorators = new Decorators(this.configValues);
@@ -100,23 +103,21 @@ public class LoadHell implements Listener {
 
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
         try {
-            Field chunkGenerator = net.minecraft.server.v1_13_R1.ChunkProviderServer.class
-                    .getDeclaredField("chunkGenerator");
+            Field chunkGenerator = this.chunkServer.getClass().getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);
-            setFinal(chunkGenerator, generator, this.nmsWorld.getChunkProviderServer());
-            chunkGenerator.setAccessible(false);
+            setFinal(chunkGenerator, generator, this.chunkServer);
 
-            Field worldHeight = net.minecraft.server.v1_13_R1.WorldProvider.class.getDeclaredField("d");
+            Field worldHeight = this.worldProvider.getClass().getDeclaredField("d");
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
-            worldHeight.setAccessible(false);
 
-            Field scheduler = net.minecraft.server.v1_13_R1.ChunkProviderServer.class.getDeclaredField("f");
+            Field scheduler = this.chunkServer.getClass().getDeclaredField("f");
             scheduler.setAccessible(true);
-            ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.nmsWorld.getChunkProviderServer());
+            ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.chunkServer);
+
             Field schedulerGenerator = taskScheduler.getClass().getDeclaredField("d");
+            scheduler.setAccessible(true);
             setFinal(schedulerGenerator, taskScheduler, generator);
-            scheduler.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -131,7 +132,5 @@ public class LoadHell implements Listener {
         modifiers.setAccessible(true);
         modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(instance, obj);
-        modifiers.setAccessible(false);
-        field.setAccessible(false);
     }
 }

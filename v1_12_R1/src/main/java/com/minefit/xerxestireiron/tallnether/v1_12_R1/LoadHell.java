@@ -23,7 +23,7 @@ public class LoadHell implements Listener {
     private String originalGenName;
     private WorldProvider worldProvider;
     private final Messages messages;
-    private ChunkProviderServer chunkProviderServer;
+    private ChunkProviderServer chunkProvider;
     private ChunkGenerator originalGenerator;
     private final ConfigurationSection worldConfig;
     public final ConfigValues configValues;
@@ -36,8 +36,8 @@ public class LoadHell implements Listener {
         this.worldName = this.world.getName();
         this.configValues = new ConfigValues(this.worldName, this.worldConfig);
         this.messages = new Messages(pluginName);
-        this.chunkProviderServer = this.nmsWorld.getChunkProviderServer();
-        this.originalGenerator = this.nmsWorld.getChunkProviderServer().chunkGenerator;
+        this.chunkProvider = this.nmsWorld.getChunkProviderServer();
+        this.originalGenerator = this.chunkProvider.chunkGenerator;
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
         overrideGenerator();
@@ -94,10 +94,9 @@ public class LoadHell implements Listener {
 
     private boolean setGenerator(ChunkGenerator generator, boolean heightValue) {
         try {
-            Field chunkGenerator = this.chunkProviderServer.getClass()
-                    .getDeclaredField("chunkGenerator");
+            Field chunkGenerator = this.chunkProvider.getClass().getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);
-            setFinal(chunkGenerator, this.chunkProviderServer, generator);
+            setFinal(chunkGenerator, this.chunkProvider, generator);
 
             Field worldHeight = this.worldProvider.getClass().getDeclaredField("e");
             worldHeight.setAccessible(true);
@@ -116,7 +115,5 @@ public class LoadHell implements Listener {
         modifiers.setAccessible(true);
         modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(instance, obj);
-        modifiers.setAccessible(false);
-        field.setAccessible(false);
     }
 }

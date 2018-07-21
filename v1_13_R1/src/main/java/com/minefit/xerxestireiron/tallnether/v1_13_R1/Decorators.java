@@ -105,7 +105,6 @@ public class Decorators {
             Field aX = BiomeBase.class.getDeclaredField("aX");
             aX.setAccessible(true);
             featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
-            aX.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return featureMap.get(index);
@@ -122,7 +121,6 @@ public class Decorators {
             aX.setAccessible(true);
             featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
             featureMap.get(index).addAll(featuresList);
-            aX.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -138,7 +136,6 @@ public class Decorators {
             Field aY = BiomeBase.class.getDeclaredField("aY");
             aY.setAccessible(true);
             decorationMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
-            aY.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return decorationMap.get(index);
@@ -155,7 +152,6 @@ public class Decorators {
             aY.setAccessible(true);
             decoratorMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
             decoratorMap.get(index).addAll(decoratorsList);
-            aY.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -279,19 +275,17 @@ public class Decorators {
             this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
 
             try {
-                Method bb = net.minecraft.server.v1_13_R1.WorldGenFactory.class.getDeclaredMethod("b",
+                Method b = net.minecraft.server.v1_13_R1.WorldGenFactory.class.getDeclaredMethod("b",
                         new Class[] { Class.class, String.class });
-                bb.setAccessible(true);
+                b.setAccessible(true);
 
                 if (restore) {
-                    bb.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
+                    b.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
                             new Object[] { WorldGenNether.a.class, "Fortress" });
                 } else {
-                    bb.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
+                    b.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
                             new Object[] { TallNether_WorldGenNether.a.class, "Fortress" });
                 }
-
-                bb.setAccessible(false);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -312,8 +306,6 @@ public class Decorators {
             } else {
                 setFinal(ah, new TallNether_WorldGenMushrooms(this.configValues), this.biomeHell);
             }
-
-            ah.setAccessible(false);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -322,13 +314,11 @@ public class Decorators {
         return true;
     }
 
-    private void setFinal(Field field, Object obj, Object instance) throws Exception {
+    public void setFinal(Field field, Object instance, Object obj) throws Exception {
         field.setAccessible(true);
-
-        Field mf = Field.class.getDeclaredField("modifiers");
-        mf.setAccessible(true);
-        mf.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
+        Field modifiers = Field.class.getDeclaredField("modifiers");
+        modifiers.setAccessible(true);
+        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(instance, obj);
     }
 }
