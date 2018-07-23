@@ -43,7 +43,7 @@ public class LoadHell implements Listener {
         this.configValues = new ConfigValues(this.worldName, this.worldConfig);
         this.messages = new Messages(pluginName);
         this.chunkServer = this.nmsWorld.getChunkProviderServer();
-        this.originalGenerator = this.chunkServer.chunkGenerator;
+        this.originalGenerator = this.chunkServer.getChunkGenerator();
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
         this.decorators = new Decorators(this.configValues);
@@ -105,9 +105,9 @@ public class LoadHell implements Listener {
         try {
             Field chunkGenerator = this.chunkServer.getClass().getDeclaredField("chunkGenerator");
             chunkGenerator.setAccessible(true);
-            setFinal(chunkGenerator, generator, this.chunkServer);
+            setFinal(chunkGenerator, this.chunkServer, generator);
 
-            Field worldHeight = this.worldProvider.getClass().getDeclaredField("d");
+            Field worldHeight = this.worldProvider.getClass().getSuperclass().getDeclaredField("d");
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
 

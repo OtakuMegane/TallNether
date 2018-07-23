@@ -102,7 +102,7 @@ public class Decorators {
         Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
 
         try {
-            Field aX = BiomeBase.class.getDeclaredField("aX");
+            Field aX = BiomeBase.class.getDeclaredField("aW");
             aX.setAccessible(true);
             featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public class Decorators {
         Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
 
         try {
-            Field aX = BiomeBase.class.getDeclaredField("aX");
+            Field aX = BiomeBase.class.getDeclaredField("aW");
             aX.setAccessible(true);
             featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
             featureMap.get(index).addAll(featuresList);
@@ -133,7 +133,7 @@ public class Decorators {
         Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decorationMap = new HashMap();
 
         try {
-            Field aY = BiomeBase.class.getDeclaredField("aY");
+            Field aY = BiomeBase.class.getDeclaredField("aX");
             aY.setAccessible(true);
             decorationMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
         } catch (Exception e) {
@@ -148,7 +148,7 @@ public class Decorators {
         Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decoratorMap = new HashMap();
 
         try {
-            Field aY = BiomeBase.class.getDeclaredField("aY");
+            Field aY = BiomeBase.class.getDeclaredField("aX");
             aY.setAccessible(true);
             decoratorMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
             decoratorMap.get(index).addAll(decoratorsList);
@@ -168,25 +168,25 @@ public class Decorators {
 
         // No fucking clue yet
         WorldGenFeatureComposite<WorldGenFeatureFlowingConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> dunno = this.biomeHell
-                .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), this.biomeHell.w,
+                .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), this.biomeHell.v,
                         new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256));
         this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, dunno);
 
         // Brown Mushrooms
         WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenDecoratorChanceConfiguration> brownShrooms = this.biomeHell
-                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), this.biomeHell.q,
+                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), this.biomeHell.p,
                         new WorldGenDecoratorChanceConfiguration(4));
         this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, brownShrooms);
 
         // Red Mushrooms
         WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenDecoratorChanceConfiguration> redShrooms = this.biomeHell
-                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), this.biomeHell.q,
+                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), this.biomeHell.p,
                         new WorldGenDecoratorChanceConfiguration(8));
         this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, redShrooms);
 
         // Lavafalls (lavafall)
         WorldGenFeatureComposite<WorldGenFeatureHellFlowingLavaConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> lavaFalls = this.biomeHell
-                .a(WorldGenerator.ak, new WorldGenFeatureHellFlowingLavaConfiguration(false), this.biomeHell.u,
+                .a(WorldGenerator.ak, new WorldGenFeatureHellFlowingLavaConfiguration(false), this.biomeHell.t,
                         new WorldGenFeatureChanceDecoratorCountConfiguration(this.configValues.lavafallAttempts,
                                 this.configValues.lavafallMinHeight, this.configValues.lavafallMaxMinus,
                                 this.configValues.lavafallMaxHeight));
@@ -208,7 +208,7 @@ public class Decorators {
 
         // Glowstone Main (glowstone2)
         WorldGenFeatureComposite<WorldGenFeatureEmptyConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> glowstone2 = this.biomeHell
-                .a(WorldGenerator.W, WorldGenFeatureConfiguration.e, this.biomeHell.u,
+                .a(WorldGenerator.W, WorldGenFeatureConfiguration.e, this.biomeHell.t,
                         new WorldGenFeatureChanceDecoratorCountConfiguration(this.configValues.glowstone2Attempts,
                                 this.configValues.glowstone2MinHeight, this.configValues.glowstone2MaxMinus,
                                 this.configValues.glowstone2MaxHeight));
@@ -216,14 +216,14 @@ public class Decorators {
 
         // Brown Mushrooms (brown-shrooms)
         WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenFeatureChanceDecoratorRangeConfiguration> brownShrooms2 = this.biomeHell
-                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), this.biomeHell.y,
+                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), this.biomeHell.x,
                         new WorldGenFeatureChanceDecoratorRangeConfiguration(1.0F,
                                 this.configValues.brownShroomMinHeight, 0, this.configValues.brownShroomMaxHeight));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms2);
 
         // Red Mushrooms (red-shrooms)
         WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenFeatureChanceDecoratorRangeConfiguration> redShrooms2 = this.biomeHell
-                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), this.biomeHell.y,
+                .a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), this.biomeHell.x,
                         new WorldGenFeatureChanceDecoratorRangeConfiguration(1.0F, this.configValues.redShroomMinHeight,
                                 0, this.configValues.redShroomMaxHeight));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms2);
@@ -233,7 +233,7 @@ public class Decorators {
                 .a(WorldGenerator.an,
                         new WorldGenFeatureOreConfiguration(
                                 BlockPredicate.a(Blocks.NETHERRACK), Blocks.NETHER_QUARTZ_ORE.getBlockData(), 14),
-                        this.biomeHell.u,
+                        this.biomeHell.t,
                         new WorldGenFeatureChanceDecoratorCountConfiguration(this.configValues.quartzAttempts,
                                 this.configValues.quartzMinHeight, this.configValues.quartzMaxMinus,
                                 this.configValues.quartzMaxHeight));
@@ -250,7 +250,7 @@ public class Decorators {
 
         // Hidden Lava (hidden-lava)
         WorldGenFeatureComposite<WorldGenFeatureHellFlowingLavaConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> hiddenLava = this.biomeHell
-                .a(WorldGenerator.ak, new WorldGenFeatureHellFlowingLavaConfiguration(true), this.biomeHell.u,
+                .a(WorldGenerator.ak, new WorldGenFeatureHellFlowingLavaConfiguration(true), this.biomeHell.t,
                         new WorldGenFeatureChanceDecoratorCountConfiguration(this.configValues.hiddenLavaAttempts,
                                 this.configValues.hiddenLavaMinHeight, this.configValues.hiddenLavaMaxMinus,
                                 this.configValues.hiddenLavaMaxHeight));
@@ -302,9 +302,9 @@ public class Decorators {
             ah.setAccessible(true);
 
             if (restore) {
-                setFinal(ah, new WorldGenMushrooms(), this.biomeHell);
+                setFinal(ah, this.biomeHell, new WorldGenMushrooms());
             } else {
-                setFinal(ah, new TallNether_WorldGenMushrooms(this.configValues), this.biomeHell);
+                setFinal(ah, this.biomeHell, new TallNether_WorldGenMushrooms(this.configValues));
             }
         } catch (Exception e) {
             e.printStackTrace();
