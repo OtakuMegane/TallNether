@@ -98,7 +98,7 @@ public class LoadHell implements Listener {
             chunkGenerator.setAccessible(true);
             setFinal(chunkGenerator, this.chunkProvider, generator);
 
-            Field worldHeight = this.worldProvider.getClass().getDeclaredField("e");
+            Field worldHeight = this.worldProvider.getClass().getSuperclass().getDeclaredField("e");
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
         } catch (Exception e) {
