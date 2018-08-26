@@ -94,11 +94,11 @@ public class LoadHell implements Listener {
 
     private boolean setGenerator(ChunkGenerator generator, boolean heightValue) {
         try {
-            Field chunkGenerator = this.chunkServer.getClass().getDeclaredField("chunkGenerator");
+            Field chunkGenerator = getField(this.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
             setFinal(chunkGenerator, this.chunkServer, generator);
 
-            Field worldHeight = this.worldProvider.getClass().getSuperclass().getDeclaredField("e");
+            Field worldHeight = getField(this.worldProvider.getClass(), "e", true);
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
         } catch (Exception e) {
@@ -107,6 +107,28 @@ public class LoadHell implements Listener {
         }
 
         return true;
+    }
+
+    private static Field getField(Class<?> baseClass, String fieldName, boolean declared) throws NoSuchFieldException {
+        Field field;
+
+        try {
+            if (declared) {
+                field = baseClass.getDeclaredField(fieldName);
+            } else {
+                field = baseClass.getField(fieldName);
+            }
+        } catch (NoSuchFieldException e) {
+            Class<?> superClass = baseClass.getSuperclass();
+
+            if (superClass != null) {
+                field = getField(superClass, fieldName, declared);
+            } else {
+                throw e;
+            }
+        }
+
+        return field;
     }
 
     private void setFinal(Field field, Object instance, Object obj) throws Exception {
