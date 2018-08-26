@@ -102,9 +102,9 @@ public class Decorators {
         Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
 
         try {
-            Field aX = BiomeBase.class.getDeclaredField("aW");
-            aX.setAccessible(true);
-            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
+            Field aW = BiomeBase.class.getDeclaredField("aW");
+            aW.setAccessible(true);
+            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aW.get(biomeHell);
         } catch (Exception e) {
             e.printStackTrace();
             return featureMap.get(index);
@@ -117,9 +117,9 @@ public class Decorators {
         Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
 
         try {
-            Field aX = BiomeBase.class.getDeclaredField("aW");
-            aX.setAccessible(true);
-            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
+            Field aW = BiomeBase.class.getDeclaredField("aW");
+            aW.setAccessible(true);
+            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aW.get(biomeHell);
             featureMap.get(index).addAll(featuresList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,9 +133,9 @@ public class Decorators {
         Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decorationMap = new HashMap();
 
         try {
-            Field aY = BiomeBase.class.getDeclaredField("aX");
-            aY.setAccessible(true);
-            decorationMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
+            Field aX = BiomeBase.class.getDeclaredField("aX");
+            aX.setAccessible(true);
+            decorationMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
         } catch (Exception e) {
             e.printStackTrace();
             return decorationMap.get(index);
@@ -148,9 +148,9 @@ public class Decorators {
         Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decoratorMap = new HashMap();
 
         try {
-            Field aY = BiomeBase.class.getDeclaredField("aX");
-            aY.setAccessible(true);
-            decoratorMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aY.get(biomeHell);
+            Field aX = BiomeBase.class.getDeclaredField("aX");
+            aX.setAccessible(true);
+            decoratorMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
             decoratorMap.get(index).addAll(decoratorsList);
         } catch (Exception e) {
             e.printStackTrace();
