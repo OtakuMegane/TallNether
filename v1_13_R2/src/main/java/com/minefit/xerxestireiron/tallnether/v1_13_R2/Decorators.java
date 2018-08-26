@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_13_R1;
+package com.minefit.xerxestireiron.tallnether.v1_13_R2;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -8,33 +8,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.server.v1_13_R1.BiomeBase;
-import net.minecraft.server.v1_13_R1.BiomeHell;
-import net.minecraft.server.v1_13_R1.BlockPredicate;
-import net.minecraft.server.v1_13_R1.Blocks;
-import net.minecraft.server.v1_13_R1.FluidTypes;
-import net.minecraft.server.v1_13_R1.StructureGenerator;
-import net.minecraft.server.v1_13_R1.WorldGenCarver;
-import net.minecraft.server.v1_13_R1.WorldGenCarverWrapper;
-import net.minecraft.server.v1_13_R1.WorldGenDecoratorChanceConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenDecoratorFrequencyConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureChanceDecoratorCountConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureChanceDecoratorRangeConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureComposite;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureConfigurationChance;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureDecoratorConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureDecoratorEmptyConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureFlowingConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureHellFlowingLavaConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureMushroomConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenFeatureOreConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenMushrooms;
-import net.minecraft.server.v1_13_R1.WorldGenNether;
-import net.minecraft.server.v1_13_R1.WorldGenNetherConfiguration;
-import net.minecraft.server.v1_13_R1.WorldGenStage;
-import net.minecraft.server.v1_13_R1.WorldGenerator;
+import net.minecraft.server.v1_13_R2.BiomeBase;
+import net.minecraft.server.v1_13_R2.BiomeHell;
+import net.minecraft.server.v1_13_R2.BlockPredicate;
+import net.minecraft.server.v1_13_R2.Blocks;
+import net.minecraft.server.v1_13_R2.FluidTypes;
+import net.minecraft.server.v1_13_R2.IRegistry;
+import net.minecraft.server.v1_13_R2.StructureGenerator;
+import net.minecraft.server.v1_13_R2.WorldGenCarver;
+import net.minecraft.server.v1_13_R2.WorldGenCarverWrapper;
+import net.minecraft.server.v1_13_R2.WorldGenDecoratorChanceConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenDecoratorFrequencyConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureChanceDecoratorCountConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureChanceDecoratorRangeConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureComposite;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureConfigurationChance;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureDecoratorConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureDecoratorEmptyConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureEmptyConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureFlowingConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureHellFlowingLavaConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureMushroomConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenFeatureOreConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenMushrooms;
+import net.minecraft.server.v1_13_R2.WorldGenNether;
+import net.minecraft.server.v1_13_R2.WorldGenNetherConfiguration;
+import net.minecraft.server.v1_13_R2.WorldGenStage;
+import net.minecraft.server.v1_13_R2.WorldGenerator;
 
 @SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
 public class Decorators {
@@ -46,7 +47,7 @@ public class Decorators {
     private final ConfigValues configValues;
 
     public Decorators(ConfigValues configValues) {
-        this.biomeHell = (BiomeHell) BiomeBase.getBiome(8, BiomeBase.REGISTRY_ID.getId(8));
+        this.biomeHell = (BiomeHell) BiomeBase.getBiome(8, IRegistry.BIOME.fromId(8));
         this.configValues = configValues;
     }
 
@@ -102,9 +103,9 @@ public class Decorators {
         Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
 
         try {
-            Field aW = BiomeBase.class.getDeclaredField("aW");
-            aW.setAccessible(true);
-            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aW.get(biomeHell);
+            Field aV = BiomeBase.class.getDeclaredField("aV");
+            aV.setAccessible(true);
+            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aV.get(biomeHell);
         } catch (Exception e) {
             e.printStackTrace();
             return featureMap.get(index);
@@ -117,9 +118,9 @@ public class Decorators {
         Map<WorldGenStage.Features, List<WorldGenFeatureComposite>> featureMap = new HashMap();
 
         try {
-            Field aW = BiomeBase.class.getDeclaredField("aW");
-            aW.setAccessible(true);
-            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aW.get(biomeHell);
+            Field aV = BiomeBase.class.getDeclaredField("aV");
+            aV.setAccessible(true);
+            featureMap = (Map<WorldGenStage.Features, List<WorldGenFeatureComposite>>) aV.get(biomeHell);
             featureMap.get(index).addAll(featuresList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,9 +134,9 @@ public class Decorators {
         Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decorationMap = new HashMap();
 
         try {
-            Field aX = BiomeBase.class.getDeclaredField("aX");
-            aX.setAccessible(true);
-            decorationMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
+            Field aW = BiomeBase.class.getDeclaredField("aW");
+            aW.setAccessible(true);
+            decorationMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aW.get(biomeHell);
         } catch (Exception e) {
             e.printStackTrace();
             return decorationMap.get(index);
@@ -148,9 +149,9 @@ public class Decorators {
         Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>> decoratorMap = new HashMap();
 
         try {
-            Field aX = BiomeBase.class.getDeclaredField("aX");
-            aX.setAccessible(true);
-            decoratorMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aX.get(biomeHell);
+            Field aW = BiomeBase.class.getDeclaredField("aW");
+            aW.setAccessible(true);
+            decoratorMap = (Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite>>) aW.get(biomeHell);
             decoratorMap.get(index).addAll(decoratorsList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -275,15 +276,15 @@ public class Decorators {
             this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
 
             try {
-                Method b = net.minecraft.server.v1_13_R1.WorldGenFactory.class.getDeclaredMethod("b",
+                Method b = net.minecraft.server.v1_13_R2.WorldGenFactory.class.getDeclaredMethod("b",
                         new Class[] { Class.class, String.class });
                 b.setAccessible(true);
 
                 if (restore) {
-                    b.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
+                    b.invoke(net.minecraft.server.v1_13_R2.WorldGenFactory.class,
                             new Object[] { WorldGenNether.a.class, "Fortress" });
                 } else {
-                    b.invoke(net.minecraft.server.v1_13_R1.WorldGenFactory.class,
+                    b.invoke(net.minecraft.server.v1_13_R2.WorldGenFactory.class,
                             new Object[] { TallNether_WorldGenNether.a.class, "Fortress" });
                 }
             } catch (Exception e) {
@@ -298,7 +299,7 @@ public class Decorators {
     private boolean doFixes(boolean restore) {
         try {
             // Fixes placing mushrooms outside of range when changing height + work around hardcoded values
-            Field ah = net.minecraft.server.v1_13_R1.WorldGenerator.class.getDeclaredField("ah");
+            Field ah = net.minecraft.server.v1_13_R2.WorldGenerator.class.getDeclaredField("ah");
             ah.setAccessible(true);
 
             if (restore) {
