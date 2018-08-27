@@ -22,7 +22,7 @@ import net.minecraft.server.v1_13_R2.GeneratorSettingsNether;
 import net.minecraft.server.v1_13_R2.WorldProvider;
 import net.minecraft.server.v1_13_R2.WorldServer;
 
-public class LoadHell implements Listener {
+public class LoadHell {
     private final World world;
     private final WorldServer nmsWorld;
     private final String worldName;
@@ -31,17 +31,15 @@ public class LoadHell implements Listener {
     private final Messages messages;
     private ChunkGenerator<?> originalGenerator;
     private ChunkProviderServer chunkServer;
-    private final ConfigurationSection worldConfig;
     private boolean enabled = false;
     public final ConfigValues configValues;
     private final Decorators decorators;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
-        this.worldConfig = worldConfig;
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.worldName = this.world.getName();
-        this.configValues = new ConfigValues(this.worldName, this.worldConfig);
+        this.configValues = new ConfigValues(this.worldName, worldConfig);
         this.messages = new Messages(pluginName);
         this.chunkServer = this.nmsWorld.getChunkProviderServer();
         this.originalGenerator = this.chunkServer.getChunkGenerator();

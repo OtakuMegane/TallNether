@@ -20,15 +20,12 @@ public class ManageHell {
         if (this.plugin.version.equals("v1_12_R1")) {
             this.LH12R1 = new com.minefit.xerxestireiron.tallnether.v1_12_R1.LoadHell(this.world, worldConfig,
                     this.plugin.getName());
-            this.plugin.getServer().getPluginManager().registerEvents(this.LH12R1, this.plugin);
         } else if (this.plugin.version.equals("v1_13_R1")) {
             this.LH13R1 = new com.minefit.xerxestireiron.tallnether.v1_13_R1.LoadHell(this.world, worldConfig,
                     this.plugin.getName());
-            this.plugin.getServer().getPluginManager().registerEvents(this.LH13R1, this.plugin);
         } else if (this.plugin.version.equals("v1_13_R2")) {
             this.LH13R2 = new com.minefit.xerxestireiron.tallnether.v1_13_R2.LoadHell(this.world, worldConfig,
                     this.plugin.getName());
-            this.plugin.getServer().getPluginManager().registerEvents(this.LH13R2, this.plugin);
         }
     }
 

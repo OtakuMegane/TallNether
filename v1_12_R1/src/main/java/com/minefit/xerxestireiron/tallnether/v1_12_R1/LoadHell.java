@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.event.Listener;
 
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
 import net.minecraft.server.v1_12_R1.ChunkGenerator;
@@ -25,16 +26,14 @@ public class LoadHell implements Listener {
     private final Messages messages;
     private ChunkProviderServer chunkServer;
     private ChunkGenerator originalGenerator;
-    private final ConfigurationSection worldConfig;
     public final ConfigValues configValues;
     private boolean enabled = false;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
-        this.worldConfig = worldConfig;
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.worldName = this.world.getName();
-        this.configValues = new ConfigValues(this.worldName, this.worldConfig);
+        this.configValues = new ConfigValues(this.worldName, worldConfig);
         this.messages = new Messages(pluginName);
         this.chunkServer = this.nmsWorld.getChunkProviderServer();
         this.originalGenerator = this.chunkServer.chunkGenerator;

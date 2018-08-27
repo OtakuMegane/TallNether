@@ -3,6 +3,8 @@ package com.minefit.xerxestireiron.tallnether.v1_12_R1;
 import java.util.List;
 import java.util.Random;
 
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
+
 import net.minecraft.server.v1_12_R1.StructurePiece;
 import net.minecraft.server.v1_12_R1.StructureStart;
 import net.minecraft.server.v1_12_R1.World;
