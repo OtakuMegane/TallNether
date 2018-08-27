@@ -46,6 +46,12 @@ public class LoadHell {
         this.worldProvider = this.nmsWorld.worldProvider;
         this.decorators = new Decorators(this.configValues);
         overrideGenerator();
+
+        if (this.enabled) {
+            this.messages.enableSuccess(this.worldName);
+        } else {
+            this.messages.enableFailed(this.worldName);
+        }
     }
 
     public void restoreGenerator() {
@@ -63,9 +69,6 @@ public class LoadHell {
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
         Environment environment = this.world.getEnvironment();
-        TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
-                BiomeLayout.b.a(BiomeLayout.b.b().a(Biomes.j)), generatorsettingsnether, this.configValues);
-        this.decorators.initialize();
 
         if (environment != Environment.NETHER) {
             this.messages.unknownEnvironment(this.worldName, environment.toString());
@@ -82,13 +85,10 @@ public class LoadHell {
             return;
         }
 
+        TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
+                BiomeLayout.b.a(BiomeLayout.b.b().a(Biomes.j)), generatorsettingsnether, this.configValues);
+        this.decorators.initialize();
         this.enabled = setGenerator(tallNetherGenerator, false);
-
-        if (this.enabled) {
-            this.messages.enableSuccess(this.worldName);
-        } else {
-            this.messages.enableFailed(this.worldName);
-        }
     }
 
     private boolean isRecognizedGenerator(Environment environment, String originalGenName) {
