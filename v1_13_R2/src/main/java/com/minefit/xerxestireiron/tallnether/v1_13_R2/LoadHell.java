@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.event.Listener;
 
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;

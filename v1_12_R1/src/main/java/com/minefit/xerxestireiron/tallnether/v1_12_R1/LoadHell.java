@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.event.Listener;
 
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;
@@ -17,7 +16,7 @@ import net.minecraft.server.v1_12_R1.ChunkProviderServer;
 import net.minecraft.server.v1_12_R1.WorldProvider;
 import net.minecraft.server.v1_12_R1.WorldServer;
 
-public class LoadHell implements Listener {
+public class LoadHell {
     private final World world;
     private final WorldServer nmsWorld;
     private final String worldName;
