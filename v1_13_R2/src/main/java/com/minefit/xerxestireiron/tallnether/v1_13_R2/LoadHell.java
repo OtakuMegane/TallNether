@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.event.Listener;
 
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
 import net.minecraft.server.v1_13_R2.BiomeLayout;

@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_13_R2;
+package com.minefit.xerxestireiron.tallnether;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;

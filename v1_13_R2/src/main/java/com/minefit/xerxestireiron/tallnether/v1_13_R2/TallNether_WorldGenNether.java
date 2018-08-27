@@ -3,6 +3,8 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R2;
 import java.util.List;
 import java.util.Random;
 
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
+
 import net.minecraft.server.v1_13_R2.BiomeBase;
 import net.minecraft.server.v1_13_R2.Biomes;
 import net.minecraft.server.v1_13_R2.BlockPosition;

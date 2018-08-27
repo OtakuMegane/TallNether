@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
+
 import net.minecraft.server.v1_13_R2.BiomeBase;
 import net.minecraft.server.v1_13_R2.BiomeHell;
 import net.minecraft.server.v1_13_R2.BlockPredicate;

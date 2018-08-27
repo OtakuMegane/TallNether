@@ -2,6 +2,8 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R2;
 
 import java.util.Random;
 
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
+
 import net.minecraft.server.v1_13_R2.MathHelper;
 import net.minecraft.server.v1_13_R2.NoiseGeneratorOctaves;
 import net.minecraft.server.v1_13_R2.NoiseGeneratorPerlin;

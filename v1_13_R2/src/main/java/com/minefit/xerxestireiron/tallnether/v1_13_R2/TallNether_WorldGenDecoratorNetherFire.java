@@ -1,5 +1,7 @@
 package com.minefit.xerxestireiron.tallnether.v1_13_R2;
 
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
+
 import java.util.Random;
 
 import net.minecraft.server.v1_13_R2.BlockPosition;

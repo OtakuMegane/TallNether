@@ -11,6 +11,7 @@
 		<module>v1_12_R1</module>
 		<module>v1_13_R1</module>
 		<module>v1_13_R2</module>
+		<module>Config</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
