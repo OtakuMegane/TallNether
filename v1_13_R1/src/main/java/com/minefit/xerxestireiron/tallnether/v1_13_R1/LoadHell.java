@@ -110,11 +110,11 @@ public class LoadHell implements Listener {
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
 
-            Field scheduler = this.chunkServer.getClass().getDeclaredField("f");
+            Field scheduler = getField(this.chunkServer.getClass(), "f", true);
             scheduler.setAccessible(true);
             ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.chunkServer);
 
-            Field schedulerGenerator = taskScheduler.getClass().getDeclaredField("d");
+            Field schedulerGenerator = getField(taskScheduler.getClass(), "d", true);
             scheduler.setAccessible(true);
             setFinal(schedulerGenerator, taskScheduler, generator);
         } catch (Exception e) {

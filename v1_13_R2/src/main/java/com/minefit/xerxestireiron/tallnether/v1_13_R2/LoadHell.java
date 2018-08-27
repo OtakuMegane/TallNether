@@ -102,19 +102,19 @@ public class LoadHell {
 
     private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
         try {
-            Field chunkGenerator = this.chunkServer.getClass().getDeclaredField("chunkGenerator");
+            Field chunkGenerator = getField(this.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
             setFinal(chunkGenerator, this.chunkServer, generator);
 
-            Field worldHeight = this.worldProvider.getClass().getSuperclass().getDeclaredField("d");
+            Field worldHeight = getField(this.worldProvider.getClass(), "d", true);
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
 
-            Field scheduler = this.chunkServer.getClass().getDeclaredField("chunkScheduler");
+            Field scheduler = getField(this.chunkServer.getClass(), "chunkScheduler", true);
             scheduler.setAccessible(true);
             ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.chunkServer);
 
-            Field schedulerGenerator = taskScheduler.getClass().getDeclaredField("d");
+            Field schedulerGenerator = getField(taskScheduler.getClass(), "d", true);
             scheduler.setAccessible(true);
             setFinal(schedulerGenerator, taskScheduler, generator);
         } catch (Exception e) {
@@ -123,6 +123,28 @@ public class LoadHell {
         }
 
         return true;
+    }
+
+    private static Field getField(Class<?> baseClass, String fieldName, boolean declared) throws NoSuchFieldException {
+        Field field;
+
+        try {
+            if (declared) {
+                field = baseClass.getDeclaredField(fieldName);
+            } else {
+                field = baseClass.getField(fieldName);
+            }
+        } catch (NoSuchFieldException e) {
+            Class<?> superClass = baseClass.getSuperclass();
+
+            if (superClass != null) {
+                field = getField(superClass, fieldName, declared);
+            } else {
+                throw e;
+            }
+        }
+
+        return field;
     }
 
     private void setFinal(Field field, Object instance, Object obj) throws Exception {
