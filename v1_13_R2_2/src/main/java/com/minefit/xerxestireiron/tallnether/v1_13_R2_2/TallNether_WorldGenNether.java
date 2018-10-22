@@ -53,10 +53,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
             }
 
             this.a((IBlockAccess) generatoraccess);
-            // Structure gen fix for 1.13 IndexArrayOutOfBounds
-            int min = configValues.fortressMin > 210 ? 210 : configValues.fortressMin;
-            int max = configValues.fortressMax > 210 ? 210 : configValues.fortressMax;
-            this.a(generatoraccess, seededrandom, min, max);
+            this.a(generatoraccess, seededrandom, configValues.fortressMin, configValues.fortressMax);
         }
     }
 }
