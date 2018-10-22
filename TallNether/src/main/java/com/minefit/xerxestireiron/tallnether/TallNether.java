@@ -20,7 +20,7 @@ public class TallNether extends JavaPlugin implements Listener {
     protected String version;
     protected final Messages messages = new Messages(this.getName());
     private HashMap<String, ManageHell> manageWorlds;
-    private final ServerVersion serverVersion = new ServerVersion(this);
+    protected final ServerVersion serverVersion = new ServerVersion(this);
     private final List<String> compatibleVersions = Arrays.asList("v1_12_R1", "v1_13_R1", "v1_13_R2");
 
     @Override
