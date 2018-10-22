@@ -46,10 +46,6 @@ public class TallNether extends JavaPlugin implements Listener {
         this.messages.pluginReady();
     }
 
-    public boolean isPaper() {
-        return Bukkit.getName().contains("Paper");
-    }
-
     @Override
     public void onDisable() {
         // Let's clean up and put the original generators back in place

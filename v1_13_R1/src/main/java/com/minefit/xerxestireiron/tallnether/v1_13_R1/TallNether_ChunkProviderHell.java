@@ -49,6 +49,7 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
         this.p = this.o.r();
         this.q = this.o.s();
         SeededRandom seededrandom = new SeededRandom(this.b);
+        seededrandom.a(1048);
         world.b(63);
 
         if (this.configValues.generateFarLands) {

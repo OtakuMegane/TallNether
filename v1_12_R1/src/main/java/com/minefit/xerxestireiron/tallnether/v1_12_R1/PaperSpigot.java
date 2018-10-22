@@ -1,5 +1,9 @@
-package com.minefit.xerxestireiron.tallnether;
+package com.minefit.xerxestireiron.tallnether.v1_12_R1;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.bukkit.Bukkit;
 import org.spigotmc.SpigotWorldConfig;
 
 public class PaperSpigot {
@@ -15,7 +19,6 @@ public class PaperSpigot {
     public final boolean generateFlatBedrock;
 
     public PaperSpigot(String worldName, boolean isPaper) {
-
         if (isPaper) {
             com.destroystokyo.paper.PaperWorldConfig paperConfig = new com.destroystokyo.paper.PaperWorldConfig(
                     worldName, new SpigotWorldConfig(worldName));
@@ -41,5 +44,24 @@ public class PaperSpigot {
             this.generateVillage = true;
             this.generateFlatBedrock = false;
         }
+    }
+
+    public PaperSpigot(String worldName) {
+        this(worldName, Bukkit.getName().contains("Paper"));
+    }
+
+    public Map<String, Boolean> getSettingsMap() {
+        Map<String, Boolean> settingsMap = new HashMap<>();
+        settingsMap.put("generateCanyon", this.generateCanyon);
+        settingsMap.put("generateCaves", this.generateCaves);
+        settingsMap.put("generateDungeon", this.generateDungeon);
+        settingsMap.put("generateFortress", this.generateFortress);
+        settingsMap.put("generateMineshaft", this.generateMineshaft);
+        settingsMap.put("generateMonument", this.generateMonument);
+        settingsMap.put("generateStronghold", this.generateStronghold);
+        settingsMap.put("generateTemple", this.generateTemple);
+        settingsMap.put("generateVillage", this.generateVillage);
+        settingsMap.put("generateFlatBedrock", this.generateFlatBedrock);
+        return settingsMap;
     }
 }

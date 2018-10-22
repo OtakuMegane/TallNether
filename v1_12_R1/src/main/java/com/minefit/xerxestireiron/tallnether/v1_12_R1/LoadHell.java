@@ -27,12 +27,14 @@ public class LoadHell {
     private ChunkGenerator originalGenerator;
     public final ConfigValues configValues;
     private boolean enabled = false;
+    private final PaperSpigot paperSpigot;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.worldName = this.world.getName();
-        this.configValues = new ConfigValues(this.worldName, worldConfig);
+        this.paperSpigot = new PaperSpigot(this.worldName);
+        this.configValues = new ConfigValues(this.worldName, worldConfig, this.paperSpigot.getSettingsMap());
         this.messages = new Messages(pluginName);
         this.chunkServer = this.nmsWorld.getChunkProviderServer();
         this.originalGenerator = this.chunkServer.chunkGenerator;

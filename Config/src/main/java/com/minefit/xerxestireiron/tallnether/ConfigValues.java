@@ -1,12 +1,13 @@
 package com.minefit.xerxestireiron.tallnether;
 
-import org.bukkit.Bukkit;
+import java.util.Map;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ConfigValues {
 
     private final ConfigurationSection worldConfig;
-    public final PaperSpigot paperSpigot;
+    private final Map<String, Boolean> paperConfig;
     public final int lavafallAttempts;
     public final int lavafallMinHeight;
     public final int lavafallMaxMinus;
@@ -55,9 +56,9 @@ public class ConfigValues {
     public final boolean flatBedrockCeiling;
     public final boolean flatBedrockFloor;
 
-    public ConfigValues(String worldName, ConfigurationSection worldConfig) {
+    public ConfigValues(String worldName, ConfigurationSection worldConfig, Map<String, Boolean> paperConfig) {
         this.worldConfig = worldConfig;
-        this.paperSpigot = new PaperSpigot(worldName, Bukkit.getName().contains("Paper"));
+        this.paperConfig = paperConfig;
         this.lavafallAttempts = setDecoration("lavafall-attempts", 12, false);
         this.lavafallMinHeight = setDecoration("lavafall-min-height", 4, true);
         this.lavafallMaxHeight = setDecoration("lavafall-max-height", 248, true);
@@ -91,7 +92,8 @@ public class ConfigValues {
         this.hiddenLavaMinHeight = setDecoration("hidden-lava-min-height", 10, true);
         this.hiddenLavaMaxHeight = setDecoration("hidden-lava-max-height", 246, true);
         this.hiddenLavaMaxMinus = 256 - this.hiddenLavaMaxHeight;
-        this.generateFortress = this.worldConfig.getBoolean("generate-fortress", this.paperSpigot.generateFortress);
+        this.generateFortress = this.worldConfig.getBoolean("generate-fortress",
+                this.paperConfig.get("generateFortress"));
         this.fortressMin = setDecoration("fortress-min", 64, true);
         this.fortressMax = setDecoration("fortress-max", 90, true);
         this.generateFarLands = this.worldConfig.getBoolean("farlands", false);
@@ -104,8 +106,9 @@ public class ConfigValues {
         this.generateSoulsand = this.worldConfig.getBoolean("generate-soulsand", true);
         this.gravelSoulsandLimit = setDecoration("gravel-soulsand-limit", 128, true);
         this.flatBedrockCeiling = this.worldConfig.getBoolean("flat-bedrock-ceiling",
-                this.paperSpigot.generateFlatBedrock);
-        this.flatBedrockFloor = this.worldConfig.getBoolean("flat-bedrock-floor", this.paperSpigot.generateFlatBedrock);
+                this.paperConfig.get("generateFlatBedrock"));
+        this.flatBedrockFloor = this.worldConfig.getBoolean("flat-bedrock-floor",
+                this.paperConfig.get("generateFlatBedrock"));
     };
 
     private int setDecoration(String setting, int defaultValue, boolean safetyMax) {
