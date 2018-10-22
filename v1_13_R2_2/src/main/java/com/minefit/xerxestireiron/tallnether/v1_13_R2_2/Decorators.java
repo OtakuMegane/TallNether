@@ -33,7 +33,6 @@ import net.minecraft.server.v1_13_R2.WorldGenFeatureFlowingConfiguration;
 import net.minecraft.server.v1_13_R2.WorldGenFeatureHellFlowingLavaConfiguration;
 import net.minecraft.server.v1_13_R2.WorldGenFeatureMushroomConfiguration;
 import net.minecraft.server.v1_13_R2.WorldGenFeatureOreConfiguration;
-import net.minecraft.server.v1_13_R2.WorldGenMushrooms;
 import net.minecraft.server.v1_13_R2.WorldGenNether;
 import net.minecraft.server.v1_13_R2.WorldGenNetherConfiguration;
 import net.minecraft.server.v1_13_R2.WorldGenStage;
@@ -299,21 +298,6 @@ public class Decorators {
     }
 
     private boolean doFixes(boolean restore) {
-        try {
-            // Fixes placing mushrooms outside of range when changing height + work around hardcoded values
-            Field ah = net.minecraft.server.v1_13_R2.WorldGenerator.class.getDeclaredField("ah");
-            ah.setAccessible(true);
-
-            if (restore) {
-                setFinal(ah, this.biomeHell, new WorldGenMushrooms());
-            } else {
-                setFinal(ah, this.biomeHell, new TallNether_WorldGenMushrooms(this.configValues));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
         return true;
     }
 
