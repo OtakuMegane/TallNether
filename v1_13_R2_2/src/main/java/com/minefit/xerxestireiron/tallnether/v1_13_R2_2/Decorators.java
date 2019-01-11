@@ -14,6 +14,7 @@ import net.minecraft.server.v1_13_R2.BiomeBase;
 import net.minecraft.server.v1_13_R2.BiomeHell;
 import net.minecraft.server.v1_13_R2.BlockPredicate;
 import net.minecraft.server.v1_13_R2.Blocks;
+import net.minecraft.server.v1_13_R2.FluidTypeFlowing;
 import net.minecraft.server.v1_13_R2.FluidTypes;
 import net.minecraft.server.v1_13_R2.IRegistry;
 import net.minecraft.server.v1_13_R2.StructureGenerator;
@@ -169,10 +170,30 @@ public class Decorators {
         this.biomeHell.a(WorldGenStage.Features.AIR, caves);
 
         // No fucking clue yet
-        WorldGenFeatureComposite<WorldGenFeatureFlowingConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> dunno = this.biomeHell
-                .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), this.biomeHell.v,
-                        new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256));
-        this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, dunno);
+        try {
+            WorldGenFeatureComposite<WorldGenFeatureFlowingConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> dunno = this.biomeHell
+                    .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), this.biomeHell.v,
+                            new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256));
+            this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, dunno);
+        }
+        catch (NoSuchFieldError e)
+        {
+            Field flLava;
+            FluidTypeFlowing flLava2 = null;
+
+            try {
+                flLava = FluidTypes.class.getDeclaredField("LAVA");
+                flLava.setAccessible(true);
+                flLava2 = (FluidTypeFlowing) flLava.get(null);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+
+            WorldGenFeatureComposite<WorldGenFeatureFlowingConfiguration, WorldGenFeatureChanceDecoratorCountConfiguration> dunno = this.biomeHell
+                    .a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(flLava2), this.biomeHell.v,
+                            new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256));
+            this.biomeHell.a(WorldGenStage.Decoration.VEGETAL_DECORATION, dunno);
+        }
 
         // Brown Mushrooms
         WorldGenFeatureComposite<WorldGenFeatureMushroomConfiguration, WorldGenDecoratorChanceConfiguration> brownShrooms = this.biomeHell

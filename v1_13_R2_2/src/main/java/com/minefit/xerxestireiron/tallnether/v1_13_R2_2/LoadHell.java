@@ -3,7 +3,6 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R2_2;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
@@ -43,7 +42,7 @@ public class LoadHell {
         this.paperSpigot = new PaperSpigot(this.worldName, false);
         this.configValues = new ConfigValues(this.worldName, worldConfig, this.paperSpigot.getSettingsMap());
         this.messages = new Messages(pluginName);
-        this.chunkServer = this.nmsWorld.getChunkProviderServer();
+        this.chunkServer = (ChunkProviderServer) this.nmsWorld.getChunkProvider();
         this.originalGenerator = this.chunkServer.getChunkGenerator();
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
