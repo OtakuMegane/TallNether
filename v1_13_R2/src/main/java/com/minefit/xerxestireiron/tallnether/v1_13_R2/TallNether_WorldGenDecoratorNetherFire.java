@@ -1,6 +1,6 @@
 package com.minefit.xerxestireiron.tallnether.v1_13_R2;
 
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
+import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 
 import java.util.Random;
 
@@ -15,16 +15,17 @@ import net.minecraft.server.v1_13_R2.WorldGenerator;
 
 public class TallNether_WorldGenDecoratorNetherFire extends WorldGenDecoratorNetherFire {
 
-    private final ConfigValues configValues;
+    private final ConfigAccessor configAccessor = new ConfigAccessor();
 
-    public TallNether_WorldGenDecoratorNetherFire(ConfigValues configValues) {
-        this.configValues = configValues;
+    public TallNether_WorldGenDecoratorNetherFire() {
     }
 
     public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        for (int i = 0; i < random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.a) + 1) + 1; ++i) {
+        String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
+
+        for (int i = 0; i < random.nextInt(random.nextInt(this.configAccessor.getConfig(worldName).fireAttempts) + 1) + 1; ++i) {
             int j = random.nextInt(16);
-            int k = random.nextInt(this.configValues.fireMaxHeight) + this.configValues.fireMinHeight;
+            int k = random.nextInt(this.configAccessor.getConfig(worldName).fireMaxHeight + 1) + this.configAccessor.getConfig(worldName).fireMinHeight;
             int l = random.nextInt(16);
 
             k = (k > 256) ? 256 : k;

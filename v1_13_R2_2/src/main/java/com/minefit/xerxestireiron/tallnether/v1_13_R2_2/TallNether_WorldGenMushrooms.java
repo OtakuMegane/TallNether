@@ -2,7 +2,7 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R2_2;
 
 import java.util.Random;
 
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
+import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 
 import net.minecraft.server.v1_13_R2.BlockPosition;
 import net.minecraft.server.v1_13_R2.Blocks;
@@ -15,25 +15,25 @@ import net.minecraft.server.v1_13_R2.WorldGenMushrooms;
 
 public class TallNether_WorldGenMushrooms extends WorldGenMushrooms {
 
-    private final ConfigValues configValues;
+    private final ConfigAccessor configAccessor = new ConfigAccessor();
 
-    public TallNether_WorldGenMushrooms(ConfigValues configValues) {
-        this.configValues = configValues;
+    public TallNether_WorldGenMushrooms() {
     }
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator,
             Random random, BlockPosition blockposition,
             WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
+        String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
         int i = 0;
         IBlockData iblockdata = worldgenfeaturemushroomconfiguration.a.getBlockData();
-        int attempts = this.configValues.brownShroomAttempts;
-        int min = this.configValues.brownShroomMinHeight;
-        int max = this.configValues.brownShroomMaxHeight;
+        int attempts = this.configAccessor.getConfig(worldName).brownShroomAttempts;
+        int min = this.configAccessor.getConfig(worldName).brownShroomMinHeight;
+        int max = this.configAccessor.getConfig(worldName).brownShroomMaxHeight;
 
         if (worldgenfeaturemushroomconfiguration.a == Blocks.RED_MUSHROOM) {
-            attempts = this.configValues.redShroomAttempts;
-            min = this.configValues.redShroomMinHeight;
-            max = this.configValues.redShroomMaxHeight;
+            attempts = this.configAccessor.getConfig(worldName).redShroomAttempts;
+            min = this.configAccessor.getConfig(worldName).redShroomMinHeight;
+            max = this.configAccessor.getConfig(worldName).redShroomMaxHeight;
         }
 
         for (int ii = 0; ii < attempts; ++ii) {

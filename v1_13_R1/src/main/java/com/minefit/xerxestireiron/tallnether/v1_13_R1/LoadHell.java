@@ -3,12 +3,12 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R1;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 
+import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
@@ -35,6 +35,7 @@ public class LoadHell {
     public final ConfigValues configValues;
     private final Decorators decorators;
     private final PaperSpigot paperSpigot;
+    private final ConfigAccessor configAccessor = new ConfigAccessor();
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
         this.world = world;
@@ -42,6 +43,8 @@ public class LoadHell {
         this.worldName = this.world.getName();
         this.paperSpigot = new PaperSpigot(this.worldName, false);
         this.configValues = new ConfigValues(this.worldName, worldConfig, this.paperSpigot.getSettingsMap());
+        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, this.paperSpigot.getSettingsMap()));
+        this.configAccessor.addConfig(worldName, this.configValues);
         this.messages = new Messages(pluginName);
         this.chunkServer = this.nmsWorld.getChunkProviderServer();
         this.originalGenerator = this.chunkServer.getChunkGenerator();

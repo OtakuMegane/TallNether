@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_13_R2;
+package com.minefit.xerxestireiron.tallnether.v1_14_R1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -6,21 +6,20 @@ import java.lang.reflect.Modifier;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
-import net.minecraft.server.v1_13_R2.BiomeLayout;
-import net.minecraft.server.v1_13_R2.Biomes;
-import net.minecraft.server.v1_13_R2.Blocks;
-import net.minecraft.server.v1_13_R2.ChunkGenerator;
-import net.minecraft.server.v1_13_R2.ChunkProviderServer;
-import net.minecraft.server.v1_13_R2.ChunkTaskScheduler;
-import net.minecraft.server.v1_13_R2.GeneratorSettingsNether;
-import net.minecraft.server.v1_13_R2.WorldProvider;
-import net.minecraft.server.v1_13_R2.WorldServer;
+import net.minecraft.server.v1_14_R1.BiomeLayout;
+import net.minecraft.server.v1_14_R1.Biomes;
+import net.minecraft.server.v1_14_R1.Blocks;
+import net.minecraft.server.v1_14_R1.ChunkGenerator;
+import net.minecraft.server.v1_14_R1.ChunkProviderServer;
+import net.minecraft.server.v1_14_R1.GeneratorSettingsNether;
+import net.minecraft.server.v1_14_R1.WorldProvider;
+import net.minecraft.server.v1_14_R1.WorldServer;
 
 public class LoadHell {
     private final World world;
@@ -46,7 +45,7 @@ public class LoadHell {
         this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, this.paperSpigot.getSettingsMap()));
         this.configAccessor.addConfig(worldName, this.configValues);
         this.messages = new Messages(pluginName);
-        this.chunkServer = this.nmsWorld.getChunkProviderServer();
+        this.chunkServer = (ChunkProviderServer) this.nmsWorld.getChunkProvider();
         this.originalGenerator = this.chunkServer.getChunkGenerator();
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
@@ -71,7 +70,7 @@ public class LoadHell {
     }
 
     public void overrideGenerator() {
-        GeneratorSettingsNether generatorsettingsnether = new GeneratorSettingsNether();
+        GeneratorSettingsNether generatorsettingsnether = new TallNether_GeneratorSettingsNether();
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
         Environment environment = this.world.getEnvironment();
@@ -92,14 +91,14 @@ public class LoadHell {
         }
 
         TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
-                BiomeLayout.b.a(BiomeLayout.b.b().a(Biomes.j)), generatorsettingsnether, this.configValues);
+                BiomeLayout.b.a(BiomeLayout.b.a().a(Biomes.NETHER)), generatorsettingsnether, this.configValues);
         this.decorators.initialize();
         this.enabled = setGenerator(tallNetherGenerator, false);
     }
 
     private boolean isRecognizedGenerator(Environment environment, String originalGenName) {
         if (environment == Environment.NETHER) {
-            return originalGenName.equals("NetherChunkGenerator") || originalGenName.equals("TimedChunkGenerator");
+            return originalGenName.equals("ChunkProviderHell") || originalGenName.equals("TimedChunkGenerator");
         }
 
         return false;
@@ -115,13 +114,9 @@ public class LoadHell {
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
 
-            Field scheduler = getField(this.chunkServer.getClass(), "chunkScheduler", true);
-            scheduler.setAccessible(true);
-            ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.chunkServer);
-
-            Field schedulerGenerator = getField(taskScheduler.getClass(), "d", true);
-            scheduler.setAccessible(true);
-            setFinal(schedulerGenerator, taskScheduler, generator);
+            Field chunkMapGenerator = getField(this.chunkServer.playerChunkMap.getClass(), "chunkGenerator", true);
+            chunkMapGenerator.setAccessible(true);
+            setFinal(chunkMapGenerator, this.chunkServer.playerChunkMap, generator);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
