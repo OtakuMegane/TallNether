@@ -33,7 +33,6 @@ import net.minecraft.server.v1_14_R1.WorldGenFeatureFlowingConfiguration;
 import net.minecraft.server.v1_14_R1.WorldGenFeatureHellFlowingLavaConfiguration;
 import net.minecraft.server.v1_14_R1.WorldGenFeatureMushroomConfiguration;
 import net.minecraft.server.v1_14_R1.WorldGenFeatureOreConfiguration;
-import net.minecraft.server.v1_14_R1.WorldGenNether;
 import net.minecraft.server.v1_14_R1.WorldGenStage;
 import net.minecraft.server.v1_14_R1.WorldGenerator;
 
@@ -63,7 +62,7 @@ public class Decorators {
         this.originalFeaturesAir = new ArrayList<>(air);
         air.clear();
 
-        if (!doFixes(false) /*|| !registerFortress(false)*/) {
+        if (!doFixes(false) || !registerFortress(false)) {
             return false;
         }
 
@@ -92,7 +91,7 @@ public class Decorators {
             return false;
         }
 
-        if (!doFixes(true) /*|| !registerFortress(true)*/) {
+        if (!doFixes(true) || !registerFortress(true)) {
             return false;
         }
 
@@ -246,6 +245,7 @@ public class Decorators {
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, hiddenLava);
     }
 
+    // Not per-world safe, unsure how to fix
     private boolean registerFortress(boolean restore) {
         if (this.configValues.generateFortress) {
             StructureGenerator<WorldGenFeatureEmptyConfiguration> fortressGen;
@@ -257,25 +257,17 @@ public class Decorators {
             }
 
             this.biomeHell.a((StructureGenerator) fortressGen, WorldGenFeatureConfiguration.e);
-
             WorldGenFeatureConfigured<?> fortress = this.biomeHell
                     .a(fortressGen, WorldGenFeatureConfiguration.e, WorldGenDecorator.h,
                             WorldGenFeatureDecoratorConfiguration.e);
-
             this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
 
             try {
-                Method b = net.minecraft.server.v1_14_R1.WorldGenFactory.class.getDeclaredMethod("b",
-                        new Class[] { Class.class, String.class });
-                b.setAccessible(true);
-
-                if (restore) {
-                    b.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class,
-                            new Object[] { WorldGenNether.a.class, "Fortress" });
-                } else {
-                    b.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class,
-                            new Object[] { TallNether_WorldGenNether.a.class, "Fortress" });
-                }
+                Method a = net.minecraft.server.v1_14_R1.WorldGenFactory.class.getDeclaredMethod("a",
+                        new Class[] { String.class, StructureGenerator.class});
+                a.setAccessible(true);
+                a.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class,
+                        new Object[] { "Fortress" , fortressGen});
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
