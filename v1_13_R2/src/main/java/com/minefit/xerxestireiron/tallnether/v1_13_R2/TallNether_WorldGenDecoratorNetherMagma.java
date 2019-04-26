@@ -26,7 +26,7 @@ public class TallNether_WorldGenDecoratorNetherMagma extends WorldGenDecoratorNe
 
         for (int j = 0; j < this.configAccessor.getConfig(worldName).magmaAttempts; ++j) {
             int k = random.nextInt(16);
-            int l = this.configAccessor.getConfig(worldName).magmaMinHeight + random.nextInt(this.configAccessor.getConfig(worldName).magmaRangeSize);
+            int l = this.configAccessor.getConfig(worldName).magmaRangeMedian - this.configAccessor.getConfig(worldName).magmaMinHeight + random.nextInt(this.configAccessor.getConfig(worldName).magmaRangeSize);
             int i1 = random.nextInt(16);
 
             worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(k, l, i1), c0);
