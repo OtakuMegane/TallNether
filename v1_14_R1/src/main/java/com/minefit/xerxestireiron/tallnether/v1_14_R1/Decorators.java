@@ -253,7 +253,7 @@ public class Decorators {
             if (restore) {
                 fortressGen = WorldGenerator.NETHER_BRIDGE;
             } else {
-                fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a, this.configValues);
+                fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a);
             }
 
             this.biomeHell.a((StructureGenerator) fortressGen, WorldGenFeatureConfiguration.e);
@@ -268,6 +268,7 @@ public class Decorators {
                 a.setAccessible(true);
                 a.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class,
                         new Object[] { "Fortress" , fortressGen});
+                System.out.println("REGISTERED");
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -279,13 +280,5 @@ public class Decorators {
 
     private boolean doFixes(boolean restore) {
         return true;
-    }
-
-    private void setFinal(Field field, Object instance, Object obj) throws Exception {
-        field.setAccessible(true);
-        Field modifiers = Field.class.getDeclaredField("modifiers");
-        modifiers.setAccessible(true);
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(instance, obj);
     }
 }
