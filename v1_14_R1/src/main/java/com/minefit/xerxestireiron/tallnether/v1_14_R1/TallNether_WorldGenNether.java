@@ -6,10 +6,10 @@ import java.util.Random;
 import java.util.function.Function;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.server.v1_14_R1.BiomeBase;
+import net.minecraft.server.v1_14_R1.BlockPosition;
 import net.minecraft.server.v1_14_R1.ChunkGenerator;
 import net.minecraft.server.v1_14_R1.DefinedStructureManager;
 import net.minecraft.server.v1_14_R1.GeneratorAccess;
@@ -26,12 +26,30 @@ public class TallNether_WorldGenNether extends WorldGenNether {
 
     public TallNether_WorldGenNether(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
         super(function);
-        System.out.println("GENLOAD");
+    }
+
+    @Override
+    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+        int k = i >> 4;
+        int l = j >> 4;
+
+        random.setSeed((long) (k ^ l << 4) ^ chunkgenerator.getSeed());
+        random.nextInt();
+        if (random.nextInt(3) != 0) {
+            return false;
+        } else if (i != (k << 4) + 4 + random.nextInt(8)) {
+            return false;
+        } else if (j != (l << 4) + 4 + random.nextInt(8)) {
+            return false;
+        } else {
+            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
+
+            return chunkgenerator.canSpawnStructure(biomebase, this);
+        }
     }
 
     @Override
     public StructureGenerator.a a() {
-        System.out.println("NEW");
         return TallNether_WorldGenNether.a::new;
     }
 
@@ -45,11 +63,9 @@ public class TallNether_WorldGenNether extends WorldGenNether {
         @Override
         public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
             WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15 = new WorldGenNetherPieces.WorldGenNetherPiece15(this.d, (i << 4) + 2, (j << 4) + 2);
-            System.out.println("IN");
             GeneratorAccess generatoraccess = null;
 
             try {
-                System.out.println(chunkgenerator.getClass().toString());
                 Field gAccess;
                 gAccess = ReflectionHelper.getField(chunkgenerator.getClass(), "a", true);
                 gAccess.setAccessible(true);
@@ -62,7 +78,6 @@ public class TallNether_WorldGenNether extends WorldGenNether {
             int fortressMax = 70;
 
             if (generatoraccess != null) {
-                System.out.println("YESY");
                 String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
                 fortressMin = this.configAccessor.getConfig(worldName).fortressMin;
                 fortressMax = this.configAccessor.getConfig(worldName).fortressMax;

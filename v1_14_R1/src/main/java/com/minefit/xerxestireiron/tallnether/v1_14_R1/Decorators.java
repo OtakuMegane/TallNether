@@ -2,7 +2,6 @@ package com.minefit.xerxestireiron.tallnether.v1_14_R1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -245,7 +244,6 @@ public class Decorators {
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, hiddenLava);
     }
 
-    // Not per-world safe, unsure how to fix
     private boolean registerFortress(boolean restore) {
         if (this.configValues.generateFortress) {
             StructureGenerator<WorldGenFeatureEmptyConfiguration> fortressGen;
@@ -261,6 +259,7 @@ public class Decorators {
                     .a(fortressGen, WorldGenFeatureConfiguration.e, WorldGenDecorator.h,
                             WorldGenFeatureDecoratorConfiguration.e);
             this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
+            this.biomeHell.a((StructureGenerator) fortressGen, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
 
             try {
                 Method a = net.minecraft.server.v1_14_R1.WorldGenFactory.class.getDeclaredMethod("a",
@@ -268,7 +267,7 @@ public class Decorators {
                 a.setAccessible(true);
                 a.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class,
                         new Object[] { "Fortress" , fortressGen});
-                System.out.println("REGISTERED");
+                WorldGenerator.aP.put("Fortress".toLowerCase(), fortressGen);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

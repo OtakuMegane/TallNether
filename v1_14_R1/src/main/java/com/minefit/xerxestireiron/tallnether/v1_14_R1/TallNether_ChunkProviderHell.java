@@ -1,6 +1,5 @@
 package com.minefit.xerxestireiron.tallnether.v1_14_R1;
 
-import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -115,7 +114,7 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
 
     @Override
     public int getGenerationDepth() {
-        return 128;
+        return 256;
     }
 
     @Override

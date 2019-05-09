@@ -1,7 +1,6 @@
 package com.minefit.xerxestireiron.tallnether.v1_14_R1;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
