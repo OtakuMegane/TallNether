@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableSet;
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
 
 import net.minecraft.server.v1_15_R1.BiomeBase;
@@ -15,7 +14,6 @@ import net.minecraft.server.v1_15_R1.BiomeDecoratorGroups;
 import net.minecraft.server.v1_15_R1.BiomeHell;
 import net.minecraft.server.v1_15_R1.Biomes;
 import net.minecraft.server.v1_15_R1.Blocks;
-import net.minecraft.server.v1_15_R1.FluidTypes;
 import net.minecraft.server.v1_15_R1.StructureGenerator;
 import net.minecraft.server.v1_15_R1.WorldGenCarverAbstract;
 import net.minecraft.server.v1_15_R1.WorldGenCarverConfiguration;
@@ -28,10 +26,7 @@ import net.minecraft.server.v1_15_R1.WorldGenFeatureComposite;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureConfigurationChance;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureConfigured;
-import net.minecraft.server.v1_15_R1.WorldGenFeatureDecoratorConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.server.v1_15_R1.WorldGenFeatureHellFlowingLavaConfiguration;
-import net.minecraft.server.v1_15_R1.WorldGenFeatureMushroomConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureOreConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenStage;
 import net.minecraft.server.v1_15_R1.WorldGenerator;
@@ -161,6 +156,11 @@ public class Decorators {
     }
 
     private void setNewDecorators() {
+        // Taken from BiomeHell.java
+        // Some type casts used in the decompiled code are not necessary when done here
+        // Trial and error is involved
+        // NMS methods in the early/dev releases of Spigot will sometimes change without a version update, so wait until stable release to be safe
+
         // Cave Generation
         WorldGenCarverWrapper caves = this.biomeHell.a((WorldGenCarverAbstract) new TallNether_WorldGenCavesHell(WorldGenFeatureConfigurationChance::a),
                 (WorldGenCarverConfiguration) (new WorldGenFeatureConfigurationChance(0.2F)));
@@ -252,11 +252,9 @@ public class Decorators {
                 fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a);
             }
 
-            // DEV NOTE: Wait for Carver to get straightened out?
-            this.biomeHell.a((StructureGenerator) fortressGen, WorldGenFeatureConfiguration.e);
+            this.biomeHell.a(fortressGen.b(WorldGenFeatureConfiguration.e));
             WorldGenFeatureConfigured<?,?> fortress = fortressGen.b(WorldGenFeatureConfiguration.e);
             this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
-            this.biomeHell.a((StructureGenerator) fortressGen, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
 
             try {
                 Method a = net.minecraft.server.v1_15_R1.WorldGenFactory.class.getDeclaredMethod("a",

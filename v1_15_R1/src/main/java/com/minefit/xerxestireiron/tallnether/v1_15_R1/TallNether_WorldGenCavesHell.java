@@ -21,6 +21,7 @@ import com.mojang.datafixers.Dynamic;
 public class TallNether_WorldGenCavesHell extends WorldGenCaves {
 
     public TallNether_WorldGenCavesHell(Function<Dynamic<?>, ? extends WorldGenFeatureConfigurationChance> function) {
+        // TallNether: Minecraft default is 128, change to 256
         super(function, 256);
         this.j = ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, new Block[] { Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.NETHERRACK});
         this.k = ImmutableSet.of(FluidTypes.LAVA, FluidTypes.WATER);
@@ -45,9 +46,8 @@ public class TallNether_WorldGenCavesHell extends WorldGenCaves {
     protected int b(Random random) {
         return random.nextInt(this.l);
     }
-
-    @Override
-    protected boolean a(IChunkAccess ichunkaccess, BitSet bitset, Random random, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, BlockPosition.MutableBlockPosition blockposition_mutableblockposition1, BlockPosition.MutableBlockPosition blockposition_mutableblockposition2, int i, int j, int k, int l, int i1, int j1, int k1, int l1, AtomicBoolean atomicboolean) {
+// No longer needed?
+    /*protected boolean a(IChunkAccess ichunkaccess, BitSet bitset, Random random, BlockPosition.MutableBlockPosition blockposition_mutableblockposition, BlockPosition.MutableBlockPosition blockposition_mutableblockposition1, BlockPosition.MutableBlockPosition blockposition_mutableblockposition2, int i, int j, int k, int l, int i1, int j1, int k1, int l1, AtomicBoolean atomicboolean) {
         int i2 = j1 | l1 << 4 | k1 << 8;
 
         if (bitset.get(i2)) {
@@ -70,6 +70,6 @@ public class TallNether_WorldGenCavesHell extends WorldGenCaves {
                 return false;
             }
         }
-    }
+    }*/
 }
 

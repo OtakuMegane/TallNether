@@ -85,6 +85,8 @@ public class TallNether_WorldGenNether extends WorldGenNether {
             }
 
             this.b();
+
+            // TallNether: Minecraft default is 48 min, 72 max; change to use fortress parameters from config
             this.a(this.d, fortressMin, fortressMax);
         }
     }

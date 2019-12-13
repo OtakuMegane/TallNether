@@ -108,15 +108,18 @@ public class TallNether_ChunkProviderHell extends ChunkGeneratorAbstract<Generat
         return super.getMobsFor(enumcreaturetype, blockposition);
     }
 
+    // TallNether: Change to use lava sea level from config
     public int getSpawnHeight() {
         return this.configValues.lavaSeaLevel + 1;
     }
 
+    // TallNether: Minecraft default is 128, change to 256
     @Override
     public int getGenerationDepth() {
         return 256;
     }
 
+    // TallNether: Minecraft default is 32, change to use lava sea level from config
     @Override
     public int getSeaLevel() {
         return this.configValues.lavaSeaLevel;
