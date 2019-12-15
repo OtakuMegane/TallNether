@@ -49,9 +49,10 @@ public class TallNether extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         // Let's clean up and put the original generators back in place
-        for (String worldName : this.manageWorlds.keySet()) {
+        // NOTE: Disabling this for now due to errors
+        /*for (String worldName : this.manageWorlds.keySet()) {
             this.manageWorlds.get(worldName).restoreGenerator();
-        }
+        }*/
 
         this.messages.pluginDisable();
     }

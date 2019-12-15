@@ -1,10 +1,10 @@
 package com.minefit.xerxestireiron.tallnether.v1_15_R1;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
@@ -14,12 +14,14 @@ import net.minecraft.server.v1_15_R1.BiomeDecoratorGroups;
 import net.minecraft.server.v1_15_R1.BiomeHell;
 import net.minecraft.server.v1_15_R1.Biomes;
 import net.minecraft.server.v1_15_R1.Blocks;
+import net.minecraft.server.v1_15_R1.IRegistry;
 import net.minecraft.server.v1_15_R1.StructureGenerator;
 import net.minecraft.server.v1_15_R1.WorldGenCarverAbstract;
 import net.minecraft.server.v1_15_R1.WorldGenCarverConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenCarverWrapper;
 import net.minecraft.server.v1_15_R1.WorldGenDecorator;
 import net.minecraft.server.v1_15_R1.WorldGenDecoratorFrequencyConfiguration;
+import net.minecraft.server.v1_15_R1.WorldGenFactory;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureChanceDecoratorCountConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureChanceDecoratorRangeConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureComposite;
@@ -39,6 +41,7 @@ public class Decorators {
     private List<WorldGenFeatureConfigured> originalDecoratorsVegetal;
     private List<WorldGenFeatureComposite> originalFeaturesAir;
     private final ConfigValues configValues;
+    private StructureGenerator<WorldGenFeatureEmptyConfiguration> vanilla_fortress = WorldGenerator.NETHER_BRIDGE;
 
     public Decorators(ConfigValues configValues) {
         this.biomeHell = (BiomeHell) Biomes.NETHER;
@@ -247,22 +250,23 @@ public class Decorators {
             StructureGenerator<WorldGenFeatureEmptyConfiguration> fortressGen;
 
             if (restore) {
-                fortressGen = WorldGenerator.NETHER_BRIDGE;
+                fortressGen = this.vanilla_fortress;
             } else {
                 fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a);
             }
 
             this.biomeHell.a(fortressGen.b(WorldGenFeatureConfiguration.e));
-            WorldGenFeatureConfigured<?,?> fortress = fortressGen.b(WorldGenFeatureConfiguration.e);
+            WorldGenFeatureConfigured<?, ?> fortress = fortressGen.b(WorldGenFeatureConfiguration.e);
             this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
 
             try {
-                Method a = net.minecraft.server.v1_15_R1.WorldGenFactory.class.getDeclaredMethod("a",
-                        new Class[] { String.class, StructureGenerator.class});
-                a.setAccessible(true);
-                a.invoke(net.minecraft.server.v1_15_R1.WorldGenFactory.class,
-                        new Object[] { "Fortress" , fortressGen});
-                WorldGenerator.ao.put("Fortress".toLowerCase(), fortressGen);
+                StructureGenerator<WorldGenFeatureEmptyConfiguration> sGen = IRegistry.a(IRegistry.STRUCTURE_FEATURE,
+                        "Fortress".toLowerCase(Locale.ROOT), fortressGen);
+                Field c = ReflectionHelper.getField(WorldGenFactory.class, "c", false);
+                ReflectionHelper.setFinal(c, null, sGen);
+                Field NETHER_BRIDGE = ReflectionHelper.getField(WorldGenerator.class, "NETHER_BRIDGE", false);
+                ReflectionHelper.setFinal(NETHER_BRIDGE, null, sGen);
+                WorldGenerator.ao.replace("Fortress".toLowerCase(Locale.ROOT), fortressGen);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
