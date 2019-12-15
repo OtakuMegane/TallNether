@@ -154,6 +154,11 @@ public class Decorators {
     }
 
     private void setNewDecorators() {
+        // Taken from BiomeHell.java
+        // Some type casts used in the decompiled code are not necessary when done here
+        // Trial and error is involved
+        // NMS methods in the early/dev releases of Spigot will sometimes change without a version update, so wait until stable release to be safe
+
         // Cave Generation
         WorldGenCarverWrapper caves = this.biomeHell.a(
                 (WorldGenCarverAbstract) new TallNether_WorldGenCavesHell(WorldGenFeatureConfigurationChance::a),

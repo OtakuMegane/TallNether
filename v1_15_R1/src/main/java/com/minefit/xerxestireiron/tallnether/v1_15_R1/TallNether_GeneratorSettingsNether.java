@@ -11,6 +11,7 @@ public class TallNether_GeneratorSettingsNether extends GeneratorSettingsNether 
         return 0;
     }
 
+    // TallNether: Default 127, change to 255
     @Override
     public int t() {
         return 255;

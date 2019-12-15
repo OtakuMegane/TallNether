@@ -1,6 +1,7 @@
 package com.minefit.xerxestireiron.tallnether.v1_14_R1;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.server.v1_14_R1.BlockPosition;
@@ -22,28 +23,30 @@ public class TallNether_WorldGenDecoratorNetherHeight extends TallNether_WorldGe
         this.blockType = blockType;
     }
 
+    // TallNether: Methods added to allow per-world config access through GeneratorAccess
     public Stream<BlockPosition> a(GeneratorAccess generatoraccess, Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition) {
         String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
+        ConfigValues worldConfig = this.configAccessor.getConfig(worldName);
         int attempts;
         int innerRand;
         int outerRand;
 
         if(this.blockType.equals("quartz")) {
-            attempts = this.configAccessor.getConfig(worldName).quartzAttempts;
-            innerRand = this.configAccessor.getConfig(worldName).quartzMaxHeight - this.configAccessor.getConfig(worldName).quartzMaxMinus;
-            outerRand = this.configAccessor.getConfig(worldName).quartzMinHeight;
+            attempts = worldConfig.quartzAttempts;
+            innerRand = worldConfig.quartzMaxHeight - worldConfig.quartzMaxMinus;
+            outerRand = worldConfig.quartzMinHeight;
         } else if(this.blockType.equals("glowstone")) {
-            attempts = this.configAccessor.getConfig(worldName).glowstone2Attempts;
-            innerRand = this.configAccessor.getConfig(worldName).glowstone2MaxHeight - this.configAccessor.getConfig(worldName).glowstone2MaxMinus;
-            outerRand = this.configAccessor.getConfig(worldName).glowstone2MinHeight;
+            attempts = worldConfig.glowstone2Attempts;
+            innerRand = worldConfig.glowstone2MaxHeight - worldConfig.glowstone2MaxMinus;
+            outerRand = worldConfig.glowstone2MinHeight;
         } else if(this.blockType.equals("hidden-lava")) {
-            attempts = this.configAccessor.getConfig(worldName).hiddenLavaAttempts;
-            innerRand = this.configAccessor.getConfig(worldName).hiddenLavaMaxHeight - this.configAccessor.getConfig(worldName).hiddenLavaMaxMinus;
-            outerRand = this.configAccessor.getConfig(worldName).hiddenLavaMinHeight;
+            attempts = worldConfig.hiddenLavaAttempts;
+            innerRand = worldConfig.hiddenLavaMaxHeight - worldConfig.hiddenLavaMaxMinus;
+            outerRand = worldConfig.hiddenLavaMinHeight;
         } else if(this.blockType.equals("lavafall")) {
-            attempts = this.configAccessor.getConfig(worldName).lavafallAttempts;
-            innerRand = this.configAccessor.getConfig(worldName).lavafallMaxHeight - this.configAccessor.getConfig(worldName).lavafallMaxMinus;
-            outerRand = this.configAccessor.getConfig(worldName).lavafallMinHeight;
+            attempts = worldConfig.lavafallAttempts;
+            innerRand = worldConfig.lavafallMaxHeight - worldConfig.lavafallMaxMinus;
+            outerRand = worldConfig.lavafallMinHeight;
         } else {
             attempts = worldgenfeaturechancedecoratorcountconfiguration.a;
             innerRand = worldgenfeaturechancedecoratorcountconfiguration.d - worldgenfeaturechancedecoratorcountconfiguration.c;
@@ -66,13 +69,11 @@ public class TallNether_WorldGenDecoratorNetherHeight extends TallNether_WorldGe
         });
     }
 
+    // TallNether: Override default gen so it doesn't actually do anything
+    @Override
     public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition) {
-        return IntStream.range(0, worldgenfeaturechancedecoratorcountconfiguration.a).mapToObj((i) -> {
-            int j = random.nextInt(16);
-            int k = random.nextInt(worldgenfeaturechancedecoratorcountconfiguration.d - worldgenfeaturechancedecoratorcountconfiguration.c) + worldgenfeaturechancedecoratorcountconfiguration.b;
-            int l = random.nextInt(16);
-
-            return blockposition.b(j, k, l);
+        return IntStream.empty().mapToObj((i) -> {
+            return blockposition.b(0, 0, 0);
         });
     }
 }

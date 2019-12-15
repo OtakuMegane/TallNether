@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.server.v1_15_R1.BlockPosition;
@@ -23,20 +24,20 @@ public class TallNether_WorldGenDecoratorNetherMagma extends WorldGenDecoratorNe
         super(function);
     }
 
+    // TallNether: Methods added to allow per-world config access through GeneratorAccess
     public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
         String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
-        int attempts = this.configAccessor.getConfig(worldName).magmaAttempts;
-        int min = this.configAccessor.getConfig(worldName).magmaMinHeight;
-        int max = this.configAccessor.getConfig(worldName).magmaMaxHeight;
-        int median = this.configAccessor.getConfig(worldName).magmaRangeMedian;
-        int size = this.configAccessor.getConfig(worldName).magmaRangeSize;
+        ConfigValues worldConfig = this.configAccessor.getConfig(worldName);
+        int attempts = worldConfig.magmaAttempts;
+        int min = worldConfig.magmaMinHeight;
+        int max = worldConfig.magmaMaxHeight;
+        int median = worldConfig.magmaRangeMedian;
+        int size = worldConfig.magmaRangeSize;
         size = size >0 ? size : 1;
         return a(generatoraccess, chunkgenerator, random, worldgendecoratorfrequencyconfiguration, blockposition, attempts, min, max, median, size);
     }
 
     public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition, int attempts, int min, int max, int median, int size) {
-        int i = generatoraccess.getSeaLevel() / 2 + 1;
-
         return IntStream.range(0, attempts).mapToObj((j) -> {
             int k = random.nextInt(16);
             int l = min + random.nextInt(size);

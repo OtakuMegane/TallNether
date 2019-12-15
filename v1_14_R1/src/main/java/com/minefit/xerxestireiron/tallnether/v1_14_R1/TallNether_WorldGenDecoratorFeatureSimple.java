@@ -26,5 +26,6 @@ public abstract class TallNether_WorldGenDecoratorFeatureSimple<DC extends World
 
     protected abstract Stream<BlockPosition> a(Random random, DC dc, BlockPosition blockposition);
 
+    // TallNether: Provides GeneratorAccess to methods in modified decorator classes so they can check which world is being generated
     protected abstract Stream<BlockPosition> a(GeneratorAccess generatorAccess, Random random, DC dc, BlockPosition blockposition);
 }
