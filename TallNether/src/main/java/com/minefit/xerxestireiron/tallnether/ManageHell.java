@@ -20,6 +20,7 @@ public class ManageHell {
 
     public void overrideGenerator(World world) {
         ConfigurationSection worldConfig = this.plugin.getConfig().getConfigurationSection("worlds." + world.getName());
+
         if (this.plugin.version.equals("v1_12_R1")) {
             if (this.LH12R1 == null) {
                 this.LH12R1 = new com.minefit.xerxestireiron.tallnether.v1_12_R1.LoadHell(world, worldConfig,
@@ -34,6 +35,7 @@ public class ManageHell {
                 this.LH13R1.overrideDecorators();
             }
 
+            this.LH13R1.addWorld(world, worldConfig);
             this.LH13R1.overrideGenerator(world);
         } else if (this.plugin.version.equals("v1_13_R2")) {
             if (Bukkit.getVersion().contains("1.13.2")) {
@@ -43,6 +45,7 @@ public class ManageHell {
                     this.LH13R2_2.overrideDecorators();
                 }
 
+                this.LH13R2_2.addWorld(world, worldConfig);
                 this.LH13R2_2.overrideGenerator(world);
             } else {
                 if (this.LH13R2 == null) {
@@ -51,6 +54,7 @@ public class ManageHell {
                     this.LH13R2.overrideDecorators();
                 }
 
+                this.LH13R2.addWorld(world, worldConfig);
                 this.LH13R2.overrideGenerator(world);
             }
         } else if (this.plugin.version.equals("v1_14_R1")) {
@@ -80,12 +84,12 @@ public class ManageHell {
         if (this.plugin.version.equals("v1_12_R1")) {
             this.LH12R1.restoreGenerator();
         } else if (this.plugin.version.equals("v1_13_R1")) {
-            this.LH13R1.restoreGenerator();
+            this.LH13R1.restoreGenerator(world);
         } else if (this.plugin.version.equals("v1_13_R2")) {
             if (Bukkit.getVersion().contains("1.13.2")) {
-                this.LH13R2_2.restoreGenerator();
+                this.LH13R2_2.restoreGenerator(world);
             } else {
-                this.LH13R2.restoreGenerator();
+                this.LH13R2.restoreGenerator(world);
             }
         } else if (this.plugin.version.equals("v1_14_R1")) {
             this.LH14R1.restoreGenerator(world);

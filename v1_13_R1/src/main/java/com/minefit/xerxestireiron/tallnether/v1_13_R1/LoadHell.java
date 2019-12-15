@@ -2,11 +2,11 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
@@ -16,89 +16,73 @@ import net.minecraft.server.v1_13_R1.BiomeLayout;
 import net.minecraft.server.v1_13_R1.Biomes;
 import net.minecraft.server.v1_13_R1.Blocks;
 import net.minecraft.server.v1_13_R1.ChunkGenerator;
-import net.minecraft.server.v1_13_R1.ChunkProviderServer;
 import net.minecraft.server.v1_13_R1.ChunkTaskScheduler;
 import net.minecraft.server.v1_13_R1.GeneratorSettingsNether;
-import net.minecraft.server.v1_13_R1.WorldProvider;
-import net.minecraft.server.v1_13_R1.WorldServer;
 
 public class LoadHell {
-    private final World world;
-    private final WorldServer nmsWorld;
-    private final String worldName;
-    private String originalGenName;
-    private WorldProvider worldProvider;
     private final Messages messages;
-    private ChunkGenerator<?> originalGenerator;
-    private ChunkProviderServer chunkServer;
-    private boolean enabled = false;
-    public final ConfigValues configValues;
     private final Decorators decorators;
-    private final PaperSpigot paperSpigot;
     private final ConfigAccessor configAccessor = new ConfigAccessor();
+    private final HashMap<String, WorldInfo> worldInfos;
 
     public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
-        this.world = world;
-        this.nmsWorld = ((CraftWorld) world).getHandle();
-        this.worldName = this.world.getName();
-        this.paperSpigot = new PaperSpigot(this.worldName, false);
-        this.configValues = new ConfigValues(this.worldName, worldConfig, this.paperSpigot.getSettingsMap());
-        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, this.paperSpigot.getSettingsMap()));
-        this.configAccessor.addConfig(worldName, this.configValues);
+        // Add vanilla values
+        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, new PaperSpigot().getSettingsMap()));
         this.messages = new Messages(pluginName);
-        this.chunkServer = this.nmsWorld.getChunkProviderServer();
-        this.originalGenerator = this.chunkServer.getChunkGenerator();
-        this.originalGenName = this.originalGenerator.getClass().getSimpleName();
-        this.worldProvider = this.nmsWorld.worldProvider;
-        this.decorators = new Decorators(this.configValues);
+        this.decorators = new Decorators();
+        this.worldInfos = new HashMap<>();
     }
 
     public boolean overrideDecorators() {
-        return this.decorators.initialize();
+        return this.decorators.set();
     }
 
     public boolean restoreDecorators() {
         return this.decorators.restore();
     }
 
-    public void restoreGenerator() {
-        if (this.enabled) {
-            if (!setGenerator(this.originalGenerator, true) || !this.decorators.restore()) {
-                this.messages.restoreFailed(this.worldName);
-            }
+    public void addWorld(World world, ConfigurationSection worldConfig) {
+        String worldName = world.getName();
+        this.configAccessor.addConfig(worldName,
+                new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName).getSettingsMap()));
+        this.worldInfos.putIfAbsent(worldName, new WorldInfo(world, worldConfig));
+    }
 
-            this.enabled = false;
-        }
+    public boolean restoreGenerator(World world) {
+        WorldInfo worldInfo = this.worldInfos.get(world.getName());
+        return this.setGenerator(worldInfo, worldInfo.originalGenerator, true);
     }
 
     public void overrideGenerator(World world) {
+        String worldName = world.getName();
+        WorldInfo worldInfo = this.worldInfos.get(worldName);
         GeneratorSettingsNether generatorsettingsnether = new GeneratorSettingsNether();
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
-        Environment environment = this.world.getEnvironment();
+        Environment environment = world.getEnvironment();
 
         if (environment != Environment.NETHER) {
-            this.messages.unknownEnvironment(this.worldName, environment.toString());
+            this.messages.unknownEnvironment(worldName, environment.toString());
             return;
         }
 
-        if (this.originalGenName.equals("TallNether_ChunkProviderHell")) {
-            this.messages.alreadyEnabled(this.worldName);
+        if (worldInfo.originalGenName.equals("TallNether_ChunkProviderHell")) {
+            this.messages.alreadyEnabled(worldName);
             return;
         }
 
-        if (!isRecognizedGenerator(environment, this.originalGenName)) {
-            this.messages.unknownGenerator(this.worldName, originalGenName);
+        if (!isRecognizedGenerator(environment, worldInfo.originalGenName)) {
+            this.messages.unknownGenerator(worldName, worldInfo.originalGenName);
             return;
         }
 
-        TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
-                BiomeLayout.c.a(BiomeLayout.c.a().a(Biomes.j)), generatorsettingsnether, this.configValues);
+        TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(worldInfo.nmsWorld,
+                BiomeLayout.c.a(BiomeLayout.c.a().a(Biomes.j)), generatorsettingsnether, worldInfo.configValues);
 
-        if (setGenerator(tallNetherGenerator, false)) {
-            this.messages.enableSuccess(this.worldName);
+        if (setGenerator(worldInfo, tallNetherGenerator, false)) {
+            this.messages.enableSuccess(worldName);
         } else {
-            this.messages.enableFailed(this.worldName);
+            this.messages.enableFailed(worldName);
         }
     }
 
@@ -110,19 +94,19 @@ public class LoadHell {
         return false;
     }
 
-    private boolean setGenerator(ChunkGenerator<?> generator, boolean heightValue) {
+    private boolean setGenerator(WorldInfo worldInfo, ChunkGenerator<?> generator, boolean heightValue) {
         try {
-            Field chunkGenerator = getField(this.chunkServer.getClass(), "chunkGenerator", true);
+            Field chunkGenerator = getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
-            setFinal(chunkGenerator, this.chunkServer, generator);
+            setFinal(chunkGenerator, worldInfo.chunkServer, generator);
 
-            Field worldHeight = getField(this.worldProvider.getClass(), "d", true);
+            Field worldHeight = getField(worldInfo.worldProvider.getClass(), "d", true);
             worldHeight.setAccessible(true);
-            worldHeight.setBoolean(this.worldProvider, heightValue);
+            worldHeight.setBoolean(worldInfo.worldProvider, heightValue);
 
-            Field scheduler = getField(this.chunkServer.getClass(), "f", true);
+            Field scheduler = getField(worldInfo.chunkServer.getClass(), "f", true);
             scheduler.setAccessible(true);
-            ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(this.chunkServer);
+            ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(worldInfo.chunkServer);
 
             Field schedulerGenerator = getField(taskScheduler.getClass(), "d", true);
             scheduler.setAccessible(true);

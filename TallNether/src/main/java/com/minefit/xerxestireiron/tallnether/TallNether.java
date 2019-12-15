@@ -67,7 +67,13 @@ public class TallNether extends JavaPlugin implements Listener {
 
         if (this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)
                 && !this.manageWorlds.containsKey(worldName)) {
-            manageHell.overrideGenerator(world);
+            if (this.version.equals("v1_12_R1")) {
+                ManageHell manageHell = new ManageHell(this); //A bit lazy but should keep things working for 1.12
+                manageHell.overrideGenerator(world);
+            } else {
+                this.manageHell.overrideGenerator(world);
+            }
+
             this.manageWorlds.put(worldName, null);
         }
     }

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
@@ -16,9 +15,7 @@ import net.minecraft.server.v1_14_R1.BiomeLayout;
 import net.minecraft.server.v1_14_R1.Biomes;
 import net.minecraft.server.v1_14_R1.Blocks;
 import net.minecraft.server.v1_14_R1.ChunkGenerator;
-import net.minecraft.server.v1_14_R1.ChunkProviderServer;
 import net.minecraft.server.v1_14_R1.GeneratorSettingsNether;
-import net.minecraft.server.v1_14_R1.WorldServer;
 
 public class LoadHell {
     private final Messages messages;
