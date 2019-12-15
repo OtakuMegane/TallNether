@@ -20,6 +20,7 @@ public class TallNether extends JavaPlugin implements Listener {
     protected String version;
     protected final Messages messages = new Messages(this.getName());
     private HashMap<String, ManageHell> manageWorlds;
+    private ManageHell manageHell = new ManageHell(this);
     protected final ServerVersion serverVersion = new ServerVersion(this);
     private final List<String> compatibleVersions = Arrays.asList("v1_12_R1", "v1_13_R1", "v1_13_R2", "v1_14_R1", "v1_15_R1");
 
@@ -72,7 +73,8 @@ public class TallNether extends JavaPlugin implements Listener {
 
         if (this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)
                 && !this.manageWorlds.containsKey(worldName)) {
-            this.manageWorlds.put(worldName, new ManageHell(world, this));
+            manageHell.overrideGenerator(world);
+            this.manageWorlds.put(worldName, null);
         }
     }
 }

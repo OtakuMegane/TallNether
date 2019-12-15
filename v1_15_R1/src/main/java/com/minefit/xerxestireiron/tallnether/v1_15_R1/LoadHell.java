@@ -49,26 +49,17 @@ public class LoadHell {
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         this.worldProvider = this.nmsWorld.worldProvider;
         this.decorators = new Decorators(this.configValues);
-        overrideGenerator();
-
-        if (this.enabled) {
-            this.messages.enableSuccess(this.worldName);
-        } else {
-            this.messages.enableFailed(this.worldName);
-        }
     }
 
-    public void restoreGenerator() {
-        if (this.enabled) {
-            if (!setGenerator(this.originalGenerator, true) || !this.decorators.restore()) {
-                this.messages.restoreFailed(this.worldName);
-            }
-
-            this.enabled = false;
-        }
+    public boolean overrideDecorators() {
+        return this.decorators.set();
     }
 
-    public void overrideGenerator() {
+    public boolean restoreDecorators() {
+        return this.decorators.restore();
+    }
+
+    public void overrideGenerator(World world) {
         GeneratorSettingsNether generatorsettingsnether = new TallNether_GeneratorSettingsNether();
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
@@ -91,8 +82,22 @@ public class LoadHell {
 
         TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(this.nmsWorld,
                 BiomeLayout.b.a(BiomeLayout.b.a(this.nmsWorld.getWorldData()).a(Biomes.NETHER)), generatorsettingsnether, this.configValues);
-        this.decorators.initialize();
-        this.enabled = setGenerator(tallNetherGenerator, false);
+
+        if (setGenerator(tallNetherGenerator, false)) {
+            this.messages.enableSuccess(this.worldName);
+        } else {
+            this.messages.enableFailed(this.worldName);
+        }
+    }
+
+    public void restoreGenerator(World world) {
+        if (this.enabled) {
+            if (!setGenerator(this.originalGenerator, true) || !this.decorators.restore()) {
+                this.messages.restoreFailed(this.worldName);
+            }
+
+            this.enabled = false;
+        }
     }
 
     private boolean isRecognizedGenerator(Environment environment, String originalGenName) {

@@ -7,7 +7,6 @@ import org.bukkit.configuration.ConfigurationSection;
 public class ManageHell {
 
     private final TallNether plugin;
-    private final World world;
     private com.minefit.xerxestireiron.tallnether.v1_12_R1.LoadHell LH12R1;
     private com.minefit.xerxestireiron.tallnether.v1_13_R1.LoadHell LH13R1;
     private com.minefit.xerxestireiron.tallnether.v1_13_R2.LoadHell LH13R2;
@@ -15,38 +14,67 @@ public class ManageHell {
     private com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell LH14R1;
     private com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell LH15R1;
 
-    public ManageHell(World world, TallNether instance) {
+    public ManageHell(TallNether instance) {
         this.plugin = instance;
-        this.world = world;
-        ConfigurationSection worldConfig = this.plugin.getConfig()
-                .getConfigurationSection("worlds." + this.world.getName());
+    }
 
+    public void overrideGenerator(World world) {
+        ConfigurationSection worldConfig = this.plugin.getConfig().getConfigurationSection("worlds." + world.getName());
         if (this.plugin.version.equals("v1_12_R1")) {
-            this.LH12R1 = new com.minefit.xerxestireiron.tallnether.v1_12_R1.LoadHell(this.world, worldConfig,
-                    this.plugin.getName());
-        } else if (this.plugin.version.equals("v1_13_R1")) {
-            this.LH13R1 = new com.minefit.xerxestireiron.tallnether.v1_13_R1.LoadHell(this.world, worldConfig,
-                    this.plugin.getName());
-        } else if (this.plugin.version.equals("v1_13_R2")) {
-            if (Bukkit.getVersion().contains("1.13.2")) {
-                this.LH13R2_2 = new com.minefit.xerxestireiron.tallnether.v1_13_R2_2.LoadHell(this.world, worldConfig,
-                        this.plugin.getName());
-            } else {
-                this.LH13R2 = new com.minefit.xerxestireiron.tallnether.v1_13_R2.LoadHell(this.world, worldConfig,
+            if (this.LH12R1 == null) {
+                this.LH12R1 = new com.minefit.xerxestireiron.tallnether.v1_12_R1.LoadHell(world, worldConfig,
                         this.plugin.getName());
             }
+
+            this.LH12R1.overrideGenerator(world);
+        } else if (this.plugin.version.equals("v1_13_R1")) {
+            if (this.LH13R1 == null) {
+                this.LH13R1 = new com.minefit.xerxestireiron.tallnether.v1_13_R1.LoadHell(world, worldConfig,
+                        this.plugin.getName());
+                this.LH13R1.overrideDecorators();
+            }
+
+            this.LH13R1.overrideGenerator(world);
+        } else if (this.plugin.version.equals("v1_13_R2")) {
+            if (Bukkit.getVersion().contains("1.13.2")) {
+                if (this.LH13R2_2 == null) {
+                    this.LH13R2_2 = new com.minefit.xerxestireiron.tallnether.v1_13_R2_2.LoadHell(world, worldConfig,
+                            this.plugin.getName());
+                    this.LH13R2_2.overrideDecorators();
+                }
+
+                this.LH13R2_2.overrideGenerator(world);
+            } else {
+                if (this.LH13R2 == null) {
+                    this.LH13R2 = new com.minefit.xerxestireiron.tallnether.v1_13_R2.LoadHell(world, worldConfig,
+                            this.plugin.getName());
+                    this.LH13R2.overrideDecorators();
+                }
+
+                this.LH13R2.overrideGenerator(world);
+            }
         } else if (this.plugin.version.equals("v1_14_R1")) {
-            this.LH14R1 = new com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell(this.world, worldConfig,
-                    this.plugin.getName());
+            if (this.LH14R1 == null) {
+                this.LH14R1 = new com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell(world, worldConfig,
+                        this.plugin.getName());
+                this.LH14R1.overrideDecorators();
+            }
+
+            this.LH14R1.overrideGenerator(world);
         } else if (this.plugin.version.equals("v1_15_R1")) {
-            this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(this.world, worldConfig,
-                    this.plugin.getName());
+            if (this.LH15R1 == null) {
+                this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(world, worldConfig,
+                        this.plugin.getName());
+                this.LH15R1.overrideDecorators();
+            }
+
+            this.LH15R1.overrideGenerator(world);
         }
     }
 
     // Always good to clean up when disabling a plugin
     // Especially if it's a /reload command
-    public void restoreGenerator() {
+    public void restoreGenerator(World world) {
         if (this.plugin.version.equals("v1_12_R1")) {
             this.LH12R1.restoreGenerator();
         } else if (this.plugin.version.equals("v1_13_R1")) {
@@ -58,9 +86,9 @@ public class ManageHell {
                 this.LH13R2.restoreGenerator();
             }
         } else if (this.plugin.version.equals("v1_14_R1")) {
-            this.LH14R1.restoreGenerator();
+            this.LH14R1.restoreGenerator(world);
         } else if (this.plugin.version.equals("v1_15_R1")) {
-            this.LH15R1.restoreGenerator();
+            this.LH15R1.restoreGenerator(world);
         }
     }
 }
