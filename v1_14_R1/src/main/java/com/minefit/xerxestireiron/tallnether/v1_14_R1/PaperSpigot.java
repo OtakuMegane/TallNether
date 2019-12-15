@@ -17,7 +17,16 @@ public class PaperSpigot {
     public final boolean generateVillage;
     public final boolean generateFlatBedrock;
 
+    // Used for vanilla
+    public PaperSpigot() {
+        this(null, Bukkit.getName().contains("Paper"));
+    }
+
     public PaperSpigot(String worldName, boolean isPaper) {
+        if(worldName != null) {
+            ; // Nothing until Paper restores settings
+        }
+
         this.generateCanyon = true;
         this.generateCaves = true;
         this.generateDungeon = true;

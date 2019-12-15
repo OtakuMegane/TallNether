@@ -22,7 +22,8 @@ public class TallNether extends JavaPlugin implements Listener {
     private HashMap<String, ManageHell> manageWorlds;
     private ManageHell manageHell = new ManageHell(this);
     protected final ServerVersion serverVersion = new ServerVersion(this);
-    private final List<String> compatibleVersions = Arrays.asList("v1_12_R1", "v1_13_R1", "v1_13_R2", "v1_14_R1", "v1_15_R1");
+    private final List<String> compatibleVersions = Arrays.asList("v1_12_R1", "v1_13_R1", "v1_13_R2", "v1_14_R1",
+            "v1_15_R1");
 
     @Override
     public void onEnable() {
@@ -38,8 +39,7 @@ public class TallNether extends JavaPlugin implements Listener {
             return;
         }
 
-        // Catches the /reload command or other things that may bypass the
-        // WorldInitEvent
+        // Catches the /reload command or other things that may bypass the WorldInitEvent
         for (World world : Bukkit.getWorlds()) {
             prepareWorld(world);
         }
@@ -49,12 +49,6 @@ public class TallNether extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        // Let's clean up and put the original generators back in place
-        // NOTE: Disabling this for now due to errors
-        /*for (String worldName : this.manageWorlds.keySet()) {
-            this.manageWorlds.get(worldName).restoreGenerator();
-        }*/
-
         this.messages.pluginDisable();
     }
 

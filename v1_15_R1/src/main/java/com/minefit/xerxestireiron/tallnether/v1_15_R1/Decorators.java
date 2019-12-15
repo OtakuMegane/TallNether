@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
-
 import net.minecraft.server.v1_15_R1.BiomeBase;
 import net.minecraft.server.v1_15_R1.BiomeDecoratorGroups;
 import net.minecraft.server.v1_15_R1.BiomeHell;
@@ -40,13 +38,12 @@ public class Decorators {
     private List<WorldGenFeatureConfigured> originalDecoratorsUnderground;
     private List<WorldGenFeatureConfigured> originalDecoratorsVegetal;
     private List<WorldGenFeatureComposite> originalFeaturesAir;
-    private final ConfigValues configValues;
     private StructureGenerator<WorldGenFeatureEmptyConfiguration> vanilla_fortress = WorldGenerator.NETHER_BRIDGE;
 
-    public Decorators(ConfigValues configValues) {
+    public Decorators() {
         this.biomeHell = (BiomeHell) Biomes.NETHER;
-        this.configValues = configValues;
-        List<WorldGenFeatureConfigured> underground = getDecoratorsList(WorldGenStage.Decoration.UNDERGROUND_DECORATION);
+        List<WorldGenFeatureConfigured> underground = getDecoratorsList(
+                WorldGenStage.Decoration.UNDERGROUND_DECORATION);
         this.originalDecoratorsUnderground = new ArrayList<>(underground);
         List<WorldGenFeatureConfigured> vegetal = getDecoratorsList(WorldGenStage.Decoration.VEGETAL_DECORATION);
         this.originalDecoratorsVegetal = new ArrayList<>(vegetal);
@@ -228,31 +225,29 @@ public class Decorators {
     }
 
     private boolean registerFortress(boolean restore) {
-        if (this.configValues.generateFortress) {
-            StructureGenerator<WorldGenFeatureEmptyConfiguration> fortressGen;
+        StructureGenerator<WorldGenFeatureEmptyConfiguration> fortressGen;
 
-            if (restore) {
-                fortressGen = this.vanilla_fortress;
-            } else {
-                fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a);
-            }
+        if (restore) {
+            fortressGen = this.vanilla_fortress;
+        } else {
+            fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a);
+        }
 
-            this.biomeHell.a(fortressGen.b(WorldGenFeatureConfiguration.e));
-            WorldGenFeatureConfigured<?, ?> fortress = fortressGen.b(WorldGenFeatureConfiguration.e);
-            this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
+        this.biomeHell.a(fortressGen.b(WorldGenFeatureConfiguration.e));
+        WorldGenFeatureConfigured<?, ?> fortress = fortressGen.b(WorldGenFeatureConfiguration.e);
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
 
-            try {
-                StructureGenerator<WorldGenFeatureEmptyConfiguration> sGen = IRegistry.a(IRegistry.STRUCTURE_FEATURE,
-                        "Fortress".toLowerCase(Locale.ROOT), fortressGen);
-                Field c = ReflectionHelper.getField(WorldGenFactory.class, "c", false);
-                ReflectionHelper.setFinal(c, null, sGen);
-                Field NETHER_BRIDGE = ReflectionHelper.getField(WorldGenerator.class, "NETHER_BRIDGE", false);
-                ReflectionHelper.setFinal(NETHER_BRIDGE, null, sGen);
-                WorldGenerator.ao.replace("Fortress".toLowerCase(Locale.ROOT), fortressGen);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
+        try {
+            StructureGenerator<WorldGenFeatureEmptyConfiguration> sGen = IRegistry.a(IRegistry.STRUCTURE_FEATURE,
+                    "Fortress".toLowerCase(Locale.ROOT), fortressGen);
+            Field c = ReflectionHelper.getField(WorldGenFactory.class, "c", false);
+            ReflectionHelper.setFinal(c, null, sGen);
+            Field NETHER_BRIDGE = ReflectionHelper.getField(WorldGenerator.class, "NETHER_BRIDGE", false);
+            ReflectionHelper.setFinal(NETHER_BRIDGE, null, sGen);
+            WorldGenerator.ao.replace("Fortress".toLowerCase(Locale.ROOT), fortressGen);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
 
         return true;

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
-
 import net.minecraft.server.v1_14_R1.BiomeBase;
 import net.minecraft.server.v1_14_R1.BiomeHell;
 import net.minecraft.server.v1_14_R1.Biomes;
@@ -42,12 +40,12 @@ public class Decorators {
     private List<WorldGenFeatureConfigured> originalDecoratorsUnderground;
     private List<WorldGenFeatureConfigured> originalDecoratorsVegetal;
     private List<WorldGenFeatureComposite> originalFeaturesAir;
-    private final ConfigValues configValues;
+    private StructureGenerator<WorldGenFeatureEmptyConfiguration> vanilla_fortress = WorldGenerator.NETHER_BRIDGE;
 
-    public Decorators(ConfigValues configValues) {
+    public Decorators() {
         this.biomeHell = (BiomeHell) Biomes.NETHER;
-        this.configValues = configValues;
-        List<WorldGenFeatureConfigured> underground = getDecoratorsList(WorldGenStage.Decoration.UNDERGROUND_DECORATION);
+        List<WorldGenFeatureConfigured> underground = getDecoratorsList(
+                WorldGenStage.Decoration.UNDERGROUND_DECORATION);
         this.originalDecoratorsUnderground = new ArrayList<>(underground);
         List<WorldGenFeatureConfigured> vegetal = getDecoratorsList(WorldGenStage.Decoration.VEGETAL_DECORATION);
         this.originalDecoratorsVegetal = new ArrayList<>(vegetal);
@@ -236,33 +234,30 @@ public class Decorators {
     }
 
     private boolean setFortress(boolean restore) {
-        if (this.configValues.generateFortress) {
-            StructureGenerator<WorldGenFeatureEmptyConfiguration> fortressGen;
+        StructureGenerator<WorldGenFeatureEmptyConfiguration> fortressGen;
 
-            if (restore) {
-                fortressGen = WorldGenerator.NETHER_BRIDGE;
-            } else {
-                fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a);
-            }
+        if (restore) {
+            fortressGen = this.vanilla_fortress;
+        } else {
+            fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration::a);
+        }
 
-            this.biomeHell.a((StructureGenerator) fortressGen, WorldGenFeatureConfiguration.e);
-            WorldGenFeatureConfigured<?> fortress = this.biomeHell
-                    .a(fortressGen, WorldGenFeatureConfiguration.e, WorldGenDecorator.h,
-                            WorldGenFeatureDecoratorConfiguration.e);
-            this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
-            this.biomeHell.a((StructureGenerator) fortressGen, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.biomeHell.a((StructureGenerator) fortressGen, WorldGenFeatureConfiguration.e);
+        WorldGenFeatureConfigured<?> fortress = this.biomeHell.a(fortressGen, WorldGenFeatureConfiguration.e,
+                WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fortress);
+        this.biomeHell.a((StructureGenerator) fortressGen,
+                (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
 
-            try {
-                Method a = net.minecraft.server.v1_14_R1.WorldGenFactory.class.getDeclaredMethod("a",
-                        new Class[] { String.class, StructureGenerator.class});
-                a.setAccessible(true);
-                a.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class,
-                        new Object[] { "Fortress" , fortressGen});
-                WorldGenerator.aP.put("Fortress".toLowerCase(), fortressGen);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
+        try {
+            Method a = net.minecraft.server.v1_14_R1.WorldGenFactory.class.getDeclaredMethod("a",
+                    new Class[] { String.class, StructureGenerator.class });
+            a.setAccessible(true);
+            a.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class, new Object[] { "Fortress", fortressGen });
+            WorldGenerator.aP.put("Fortress".toLowerCase(), fortressGen);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
 
         return true;

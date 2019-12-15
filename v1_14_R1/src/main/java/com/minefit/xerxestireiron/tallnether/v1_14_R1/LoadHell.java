@@ -21,33 +21,17 @@ import net.minecraft.server.v1_14_R1.GeneratorSettingsNether;
 import net.minecraft.server.v1_14_R1.WorldServer;
 
 public class LoadHell {
-    private final World world;
-    private final WorldServer nmsWorld;
-    private final String worldName;
-    private String originalGenName;
     private final Messages messages;
-    private ChunkGenerator<?> originalGenerator;
-    private ChunkProviderServer chunkServer;
-    public final ConfigValues configValues;
     private final Decorators decorators;
-    private final PaperSpigot paperSpigot;
     private final ConfigAccessor configAccessor = new ConfigAccessor();
-    private final HashMap<String, WorldInfo> worldInfo;
+    private final HashMap<String, WorldInfo> worldInfos;
 
-    public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
-        this.world = world;
-        this.nmsWorld = ((CraftWorld) world).getHandle();
-        this.worldName = this.world.getName();
-        this.paperSpigot = new PaperSpigot(this.worldName, false);
-        this.configValues = new ConfigValues(this.worldName, worldConfig, this.paperSpigot.getSettingsMap());
-        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, this.paperSpigot.getSettingsMap()));
-        this.configAccessor.addConfig(worldName, this.configValues);
+    public LoadHell(ConfigurationSection worldConfig, String pluginName) {
+        // Add vanilla values
+        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, new PaperSpigot().getSettingsMap()));
         this.messages = new Messages(pluginName);
-        this.chunkServer = (ChunkProviderServer) this.nmsWorld.getChunkProvider();
-        this.originalGenerator = this.chunkServer.getChunkGenerator();
-        this.originalGenName = this.originalGenerator.getClass().getSimpleName();
-        this.decorators = new Decorators(this.configValues);
-        this.worldInfo = new HashMap<>();
+        this.decorators = new Decorators();
+        this.worldInfos = new HashMap<>();
     }
 
     public boolean overrideDecorators() {
@@ -58,25 +42,33 @@ public class LoadHell {
         return this.decorators.restore();
     }
 
+    public void addWorld(World world, ConfigurationSection worldConfig) {
+        String worldName = world.getName();
+        this.configAccessor.addConfig(worldName,
+                new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName).getSettingsMap()));
+        this.worldInfos.putIfAbsent(worldName, new WorldInfo(world, worldConfig));
+    }
+
     public void overrideGenerator(World world) {
-        WorldInfo worldInfo = this.worldInfo.get(world.getName());
+        String worldName = world.getName();
+        WorldInfo worldInfo = this.worldInfos.get(worldName);
         GeneratorSettingsNether generatorsettingsnether = new TallNether_GeneratorSettingsNether();
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
-        Environment environment = this.world.getEnvironment();
+        Environment environment = world.getEnvironment();
 
         if (environment != Environment.NETHER) {
-            this.messages.unknownEnvironment(worldInfo.worldName, environment.toString());
+            this.messages.unknownEnvironment(worldName, environment.toString());
             return;
         }
 
-        if (this.originalGenName.equals("TallNether_ChunkProviderHell")) {
-            this.messages.alreadyEnabled(worldInfo.worldName);
+        if (worldInfo.originalGenName.equals("TallNether_ChunkProviderHell")) {
+            this.messages.alreadyEnabled(worldName);
             return;
         }
 
         if (!isRecognizedGenerator(environment, worldInfo.originalGenName)) {
-            this.messages.unknownGenerator(worldInfo.worldName, worldInfo.originalGenName);
+            this.messages.unknownGenerator(worldName, worldInfo.originalGenName);
             return;
         }
 
@@ -91,7 +83,7 @@ public class LoadHell {
     }
 
     public boolean restoreGenerator(World world) {
-        WorldInfo worldInfo = this.worldInfo.get(world.getName());
+        WorldInfo worldInfo = this.worldInfos.get(world.getName());
         return this.setGenerator(worldInfo, worldInfo.originalGenerator, true);
     }
 

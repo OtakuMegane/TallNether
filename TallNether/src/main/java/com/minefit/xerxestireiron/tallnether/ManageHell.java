@@ -55,19 +55,21 @@ public class ManageHell {
             }
         } else if (this.plugin.version.equals("v1_14_R1")) {
             if (this.LH14R1 == null) {
-                this.LH14R1 = new com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell(world, worldConfig,
+                this.LH14R1 = new com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell(worldConfig,
                         this.plugin.getName());
                 this.LH14R1.overrideDecorators();
             }
 
+            this.LH14R1.addWorld(world, worldConfig);
             this.LH14R1.overrideGenerator(world);
         } else if (this.plugin.version.equals("v1_15_R1")) {
             if (this.LH15R1 == null) {
-                this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(world, worldConfig,
+                this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(worldConfig,
                         this.plugin.getName());
                 this.LH15R1.overrideDecorators();
             }
 
+            this.LH15R1.addWorld(world, worldConfig);
             this.LH15R1.overrideGenerator(world);
         }
     }
