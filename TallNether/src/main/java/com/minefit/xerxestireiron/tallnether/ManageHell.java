@@ -13,6 +13,7 @@ public class ManageHell {
     private com.minefit.xerxestireiron.tallnether.v1_13_R2_2.LoadHell LH13R2_2;
     private com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell LH14R1;
     private com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell LH15R1;
+    private com.minefit.xerxestireiron.tallnether.v1_15_R1_2.LoadHell LH15R1_2;
 
     public ManageHell(TallNether instance) {
         this.plugin = instance;
@@ -67,14 +68,26 @@ public class ManageHell {
             this.LH14R1.addWorld(world, worldConfig);
             this.LH14R1.overrideGenerator(world);
         } else if (this.plugin.version.equals("v1_15_R1")) {
-            if (this.LH15R1 == null) {
-                this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(worldConfig,
-                        this.plugin.getName());
-                this.LH15R1.overrideDecorators();
+            if (Bukkit.getVersion().contains("1.15.2")) {
+                if (this.LH15R1_2 == null) {
+                    this.LH15R1_2 = new com.minefit.xerxestireiron.tallnether.v1_15_R1_2.LoadHell(worldConfig,
+                            this.plugin.getName());
+                    this.LH15R1_2.overrideDecorators();
+                }
+
+                this.LH15R1_2.addWorld(world, worldConfig);
+                this.LH15R1_2.overrideGenerator(world);
+            } else {
+                if (this.LH15R1 == null) {
+                    this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(worldConfig,
+                            this.plugin.getName());
+                    this.LH15R1.overrideDecorators();
+                }
+
+                this.LH15R1.addWorld(world, worldConfig);
+                this.LH15R1.overrideGenerator(world);
             }
 
-            this.LH15R1.addWorld(world, worldConfig);
-            this.LH15R1.overrideGenerator(world);
         }
     }
 
@@ -94,7 +107,12 @@ public class ManageHell {
         } else if (this.plugin.version.equals("v1_14_R1")) {
             this.LH14R1.restoreGenerator(world);
         } else if (this.plugin.version.equals("v1_15_R1")) {
-            this.LH15R1.restoreGenerator(world);
+            if (Bukkit.getVersion().contains("1.15.2")) {
+                this.LH15R1_2.restoreGenerator(world);
+            } else {
+                this.LH15R1.restoreGenerator(world);
+            }
+
         }
     }
 }

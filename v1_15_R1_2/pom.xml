@@ -6,9 +6,9 @@
 		<artifactId>tallnether-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>v1_15_R1</artifactId>
+	<artifactId>v1_15_R1_2</artifactId>
 	<version>1.0</version>
-	<name>v1_15_R1</name>
+	<name>v1_15_R1_2</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>1.15-R0.1-SNAPSHOT</version>
+			<version>1.15.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
