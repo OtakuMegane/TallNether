@@ -51,6 +51,10 @@ public class Decorators {
         this.originalFeaturesAir = new ArrayList<>(air);
     }
 
+    public boolean alreadySet() {
+        return WorldGenerator.ao.get("Fortress".toLowerCase(Locale.ROOT)).getClass().getSimpleName().equals("TallNether_WorldGenNether");
+    }
+
     public boolean set() {
         return doFixes(false) && setDecorators();
     }

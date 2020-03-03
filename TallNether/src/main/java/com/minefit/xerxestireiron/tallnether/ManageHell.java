@@ -62,7 +62,7 @@ public class ManageHell {
             if (this.LH14R1 == null) {
                 this.LH14R1 = new com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell(worldConfig,
                         this.plugin.getName());
-                this.LH14R1.overrideDecorators();
+                this.LH14R1.overrideDecorators(true);
             }
 
             this.LH14R1.addWorld(world, worldConfig);
@@ -72,7 +72,7 @@ public class ManageHell {
                 if (this.LH15R1_2 == null) {
                     this.LH15R1_2 = new com.minefit.xerxestireiron.tallnether.v1_15_R1_2.LoadHell(worldConfig,
                             this.plugin.getName());
-                    this.LH15R1_2.overrideDecorators();
+                    this.LH15R1_2.overrideDecorators(true);
                 }
 
                 this.LH15R1_2.addWorld(world, worldConfig);
@@ -81,7 +81,7 @@ public class ManageHell {
                 if (this.LH15R1 == null) {
                     this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(worldConfig,
                             this.plugin.getName());
-                    this.LH15R1.overrideDecorators();
+                    this.LH15R1.overrideDecorators(true);
                 }
 
                 this.LH15R1.addWorld(world, worldConfig);
@@ -91,8 +91,28 @@ public class ManageHell {
         }
     }
 
-    // Always good to clean up when disabling a plugin
-    // Especially if it's a /reload command
+    public void removeWorld(World world) {
+        if (this.plugin.version.equals("v1_12_R1")) {
+            ;
+        } else if (this.plugin.version.equals("v1_13_R1")) {
+            this.LH13R1.removeWorld(world);
+        } else if (this.plugin.version.equals("v1_13_R2")) {
+            if (Bukkit.getVersion().contains("1.13.2")) {
+                this.LH13R2_2.removeWorld(world);
+            } else {
+                this.LH13R2.removeWorld(world);
+            }
+        } else if (this.plugin.version.equals("v1_14_R1")) {
+            this.LH14R1.removeWorld(world);
+        } else if (this.plugin.version.equals("v1_15_R1")) {
+            if (Bukkit.getVersion().contains("1.15.2")) {
+                this.LH15R1_2.removeWorld(world);
+            } else {
+                this.LH15R1.removeWorld(world);
+            }
+        }
+    }
+
     public void restoreGenerator(World world) {
         if (this.plugin.version.equals("v1_12_R1")) {
             this.LH12R1.restoreGenerator();
@@ -111,6 +131,29 @@ public class ManageHell {
                 this.LH15R1_2.restoreGenerator(world);
             } else {
                 this.LH15R1.restoreGenerator(world);
+            }
+        }
+    }
+
+    // Should be called on plugin disable or server shutdown
+    public void unloadHell() {
+        if (this.plugin.version.equals("v1_12_R1")) {
+            this.LH12R1 = null;
+        } else if (this.plugin.version.equals("v1_13_R1")) {
+            this.LH13R1 = null;
+        } else if (this.plugin.version.equals("v1_13_R2")) {
+            if (Bukkit.getVersion().contains("1.13.2")) {
+                this.LH13R2_2 = null;
+            } else {
+                this.LH13R2 = null;
+            }
+        } else if (this.plugin.version.equals("v1_14_R1")) {
+            this.LH14R1 = null;
+        } else if (this.plugin.version.equals("v1_15_R1")) {
+            if (Bukkit.getVersion().contains("1.15.2")) {
+                this.LH15R1_2 = null;
+            } else {
+                this.LH15R1 = null;
             }
 
         }

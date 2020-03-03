@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.server.v1_14_R1.BiomeBase;
@@ -51,6 +52,10 @@ public class Decorators {
         this.originalDecoratorsVegetal = new ArrayList<>(vegetal);
         List<WorldGenFeatureComposite> air = getFeaturesList(WorldGenStage.Features.AIR);
         this.originalFeaturesAir = new ArrayList<>(air);
+    }
+
+    public boolean alreadySet() {
+        return WorldGenerator.aP.get("Fortress".toLowerCase(Locale.ROOT)).getClass().getSimpleName().equals("TallNether_WorldGenNether");
     }
 
     public boolean set() {
@@ -259,7 +264,7 @@ public class Decorators {
                     new Class[] { String.class, StructureGenerator.class });
             a.setAccessible(true);
             a.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class, new Object[] { "Fortress", fortressGen });
-            WorldGenerator.aP.put("Fortress".toLowerCase(), fortressGen);
+            WorldGenerator.aP.put("Fortress".toLowerCase(Locale.ROOT), fortressGen);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

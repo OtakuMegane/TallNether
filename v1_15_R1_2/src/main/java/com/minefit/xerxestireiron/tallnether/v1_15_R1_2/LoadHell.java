@@ -31,8 +31,20 @@ public class LoadHell {
         this.worldInfos = new HashMap<>();
     }
 
-    public boolean overrideDecorators() {
-        return this.decorators.set();
+    public boolean overrideDecorators(boolean check) {
+        boolean alreadySet = false;
+
+        // Check if decorators were already modified
+        // If we set decorators a second time it causes null errors
+        if(check) {
+            alreadySet = this.decorators.alreadySet();
+        }
+
+        if(!alreadySet) {
+            return this.decorators.set();
+        }
+
+        return false;
     }
 
     public boolean restoreDecorators() {
@@ -44,6 +56,10 @@ public class LoadHell {
         this.configAccessor.addConfig(worldName,
                 new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName).getSettingsMap()));
         this.worldInfos.putIfAbsent(worldName, new WorldInfo(world, worldConfig));
+    }
+
+    public void removeWorld(World world) {
+        this.worldInfos.remove(world.getName());
     }
 
     public void overrideGenerator(World world) {
