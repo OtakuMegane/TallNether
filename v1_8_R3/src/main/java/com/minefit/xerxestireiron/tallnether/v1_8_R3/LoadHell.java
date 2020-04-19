@@ -39,6 +39,7 @@ public class LoadHell implements Listener {
         this.messages = new Messages(pluginName);
         this.chunkProviderServer = this.nmsWorld.chunkProviderServer;
         this.originalGenerator = this.chunkProviderServer.chunkProvider;
+        this.originalGenName = this.originalGenerator.getClass().getSimpleName();
         overrideGenerator();
         this.portalTravelAgent = new TallNether_CraftTravelAgent(this.nmsWorld);
     }
