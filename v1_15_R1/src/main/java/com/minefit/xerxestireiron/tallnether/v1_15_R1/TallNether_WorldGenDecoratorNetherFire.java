@@ -13,9 +13,8 @@ import java.util.stream.Stream;
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.GeneratorAccess;
 import net.minecraft.server.v1_15_R1.WorldGenDecoratorFrequencyConfiguration;
-import net.minecraft.server.v1_15_R1.WorldGenDecoratorNetherFire;
 
-public class TallNether_WorldGenDecoratorNetherFire extends WorldGenDecoratorNetherFire {
+public class TallNether_WorldGenDecoratorNetherFire extends TallNether_WorldGenDecoratorFeatureSimple<WorldGenDecoratorFrequencyConfiguration> {
 
     private final ConfigAccessor configAccessor = new ConfigAccessor();
 

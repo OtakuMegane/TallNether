@@ -195,14 +195,16 @@ public class Decorators {
                         "glowstone").a(new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowstone2);
 
-        // Brown Mushrooms (brown-shrooms)
+        // Brown Mushrooms (brown-shroom)
         WorldGenFeatureConfigured<?, ?> brownShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.J)
-                .a(WorldGenDecorator.r.a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
+                .a(new TallNether_WorldGenDecoratorNetherChance(WorldGenFeatureChanceDecoratorRangeConfiguration::a,
+                        "brown-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms);
 
-        // Red Mushrooms (red-shrooms)
+        // Red Mushrooms (red-shroom)
         WorldGenFeatureConfigured<?, ?> redShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.I)
-                .a(WorldGenDecorator.r.a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
+                .a(new TallNether_WorldGenDecoratorNetherChance(WorldGenFeatureChanceDecoratorRangeConfiguration::a,
+                        "red-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms);
 
         // Nether Quartz (quartz)
@@ -222,7 +224,7 @@ public class Decorators {
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, magma);
 
         // Hidden Lava (hidden-lava)
-        WorldGenFeatureConfigured<?, ?> hiddenLava = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.Z)
+        WorldGenFeatureConfigured<?, ?> hiddenLava = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.aa)
                 .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration::a,
                         "hidden-lava").a(new WorldGenFeatureChanceDecoratorCountConfiguration(16, 10, 20, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, hiddenLava);
