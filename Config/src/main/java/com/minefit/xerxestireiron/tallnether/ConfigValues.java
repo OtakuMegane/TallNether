@@ -25,9 +25,11 @@ public class ConfigValues {
     public final int brownShroomAttempts;
     public final int brownShroomMinHeight;
     public final int brownShroomMaxHeight;
+    public final int brownShroomMaxMinus;
     public final int redShroomAttempts;
     public final int redShroomMinHeight;
     public final int redShroomMaxHeight;
+    public final int redShroomMaxMinus;
     public final int quartzAttempts;
     public final int quartzMinHeight;
     public final int quartzMaxMinus;
@@ -78,9 +80,11 @@ public class ConfigValues {
             this.brownShroomAttempts = 1;
             this.brownShroomMinHeight = 0;
             this.brownShroomMaxHeight = 128;
+            this.brownShroomMaxMinus = 0;
             this.redShroomAttempts = 1;
             this.redShroomMinHeight = 0;
             this.redShroomMaxHeight = 128;
+            this.redShroomMaxMinus = 0;
             this.quartzAttempts = 16;
             this.quartzMinHeight = 10;
             this.quartzMaxHeight = 108;
@@ -126,9 +130,11 @@ public class ConfigValues {
             this.brownShroomAttempts = setDecoration("brown-shroom-attempts", 2, false);
             this.brownShroomMinHeight = setDecoration("brown-shroom-min-height", 0, true);
             this.brownShroomMaxHeight = setDecoration("brown-shroom-max-height", 256, true);
+            this.brownShroomMaxMinus = 256 - this.brownShroomMaxHeight;
             this.redShroomAttempts = setDecoration("red-shroom-attempts", 2, false);
             this.redShroomMinHeight = setDecoration("red-shroom-min-height", 0, true);
             this.redShroomMaxHeight = setDecoration("red-shroom-max-height", 256, true);
+            this.redShroomMaxMinus = 256 - this.redShroomMaxHeight;
             this.quartzAttempts = setDecoration("quartz-attempts", 32, false);
             this.quartzMinHeight = setDecoration("quartz-min-height", 10, true);
             this.quartzMaxHeight = setDecoration("quartz-max-height", 246, true);

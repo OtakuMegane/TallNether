@@ -48,6 +48,10 @@ public class LoadHell {
         this.worldInfos.putIfAbsent(worldName, new WorldInfo(world, worldConfig));
     }
 
+    public void removeWorld(World world) {
+        this.worldInfos.remove(world.getName());
+    }
+
     public boolean restoreGenerator(World world) {
         WorldInfo worldInfo = this.worldInfos.get(world.getName());
         return this.setGenerator(worldInfo, worldInfo.originalGenerator, true);

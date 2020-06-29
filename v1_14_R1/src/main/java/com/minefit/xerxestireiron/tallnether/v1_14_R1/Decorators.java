@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.server.v1_14_R1.BiomeBase;
@@ -51,6 +52,11 @@ public class Decorators {
         this.originalDecoratorsVegetal = new ArrayList<>(vegetal);
         List<WorldGenFeatureComposite> air = getFeaturesList(WorldGenStage.Features.AIR);
         this.originalFeaturesAir = new ArrayList<>(air);
+    }
+
+    public boolean alreadySet() {
+        return WorldGenerator.aP.get("Fortress".toLowerCase(Locale.ROOT)).getClass().getSimpleName()
+                .equals("TallNether_WorldGenNether");
     }
 
     public boolean set() {
@@ -200,17 +206,21 @@ public class Decorators {
                         new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 128));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowstone2);
 
-        // Brown Mushrooms (brown-shrooms)
-        WorldGenFeatureConfigured<?> brownShrooms2 = this.biomeHell.a(WorldGenerator.BUSH,
-                new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM.getBlockData()), WorldGenDecorator.r,
-                new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128));
-        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms2);
+        // Brown Mushrooms (brown-shroom)
+        WorldGenFeatureConfigured<?> brownShrooms = this.biomeHell
+                .a(WorldGenerator.BUSH, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM.getBlockData()),
+                        new TallNether_WorldGenDecoratorNetherChance(
+                                WorldGenFeatureChanceDecoratorRangeConfiguration::a, "brown-shroom"),
+                        new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms);
 
-        // Red Mushrooms (red-shrooms)
-        WorldGenFeatureConfigured<?> redShrooms2 = this.biomeHell.a(WorldGenerator.BUSH,
-                new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM.getBlockData()), WorldGenDecorator.r,
-                new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128));
-        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms2);
+        // Red Mushrooms (red-shroom)
+        WorldGenFeatureConfigured<?> redShrooms = this.biomeHell
+                .a(WorldGenerator.BUSH, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM.getBlockData()),
+                        new TallNether_WorldGenDecoratorNetherChance(
+                                WorldGenFeatureChanceDecoratorRangeConfiguration::a, "red-shroom"),
+                        new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128));
+        this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms);
 
         // Nether Quartz (quartz)
         WorldGenFeatureConfigured<?> quartz = this.biomeHell.a(WorldGenerator.ORE,
@@ -259,7 +269,7 @@ public class Decorators {
                     new Class[] { String.class, StructureGenerator.class });
             a.setAccessible(true);
             a.invoke(net.minecraft.server.v1_14_R1.WorldGenFactory.class, new Object[] { "Fortress", fortressGen });
-            WorldGenerator.aP.put("Fortress".toLowerCase(), fortressGen);
+            WorldGenerator.aP.put("Fortress".toLowerCase(Locale.ROOT), fortressGen);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

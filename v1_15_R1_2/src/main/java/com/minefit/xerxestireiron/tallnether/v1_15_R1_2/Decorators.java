@@ -51,6 +51,10 @@ public class Decorators {
         this.originalFeaturesAir = new ArrayList<>(air);
     }
 
+    public boolean alreadySet() {
+        return WorldGenerator.ao.get("Fortress".toLowerCase(Locale.ROOT)).getClass().getSimpleName().equals("TallNether_WorldGenNether");
+    }
+
     public boolean set() {
         return doFixes(false) && setDecorators();
     }
@@ -174,7 +178,7 @@ public class Decorators {
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, lavaFalls);
 
         // Fire (fire)
-        WorldGenFeatureConfigured<?, ?> fire = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.G)
+        WorldGenFeatureConfigured<?, ?> fire = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.K)
                 .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration::a)
                         .a(new WorldGenDecoratorFrequencyConfiguration(10)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fire);
@@ -191,14 +195,16 @@ public class Decorators {
                         "glowstone").a(new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowstone2);
 
-        // Brown Mushrooms (brown-shrooms)
-        WorldGenFeatureConfigured<?, ?> brownShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.J)
-                .a(WorldGenDecorator.r.a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
+        // Brown Mushrooms (brown-shroom)
+        WorldGenFeatureConfigured<?, ?> brownShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.N)
+                .a(new TallNether_WorldGenDecoratorNetherChance(WorldGenFeatureChanceDecoratorRangeConfiguration::a,
+                        "brown-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms);
 
-        // Red Mushrooms (red-shrooms)
-        WorldGenFeatureConfigured<?, ?> redShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.I)
-                .a(WorldGenDecorator.r.a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
+        // Red Mushrooms (red-shroom)
+        WorldGenFeatureConfigured<?, ?> redShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.M)
+                .a(new TallNether_WorldGenDecoratorNetherChance(WorldGenFeatureChanceDecoratorRangeConfiguration::a,
+                        "red-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms);
 
         // Nether Quartz (quartz)
@@ -218,7 +224,7 @@ public class Decorators {
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, magma);
 
         // Hidden Lava (hidden-lava)
-        WorldGenFeatureConfigured<?, ?> hiddenLava = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.ad)
+        WorldGenFeatureConfigured<?, ?> hiddenLava = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.ae)
                 .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration::a,
                         "hidden-lava").a(new WorldGenFeatureChanceDecoratorCountConfiguration(16, 10, 20, 128)));
         this.biomeHell.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, hiddenLava);
