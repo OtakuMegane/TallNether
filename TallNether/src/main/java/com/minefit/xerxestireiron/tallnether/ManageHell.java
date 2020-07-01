@@ -14,6 +14,7 @@ public class ManageHell {
     private com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell LH14R1;
     private com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell LH15R1;
     private com.minefit.xerxestireiron.tallnether.v1_15_R1_2.LoadHell LH15R1_2;
+    private com.minefit.xerxestireiron.tallnether.v1_16_R1.LoadHell LH16R1;
 
     public ManageHell(TallNether instance) {
         this.plugin = instance;
@@ -88,6 +89,15 @@ public class ManageHell {
                 this.LH15R1.overrideGenerator(world);
             }
 
+        } else if (this.plugin.version.equals("v1_16_R1")) {
+            if (this.LH16R1 == null) {
+                this.LH16R1 = new com.minefit.xerxestireiron.tallnether.v1_16_R1.LoadHell(worldConfig,
+                        this.plugin.getName());
+                this.LH16R1.overrideDecorators();
+            }
+
+            this.LH16R1.addWorld(world, worldConfig);
+            this.LH16R1.overrideGenerator(world);
         }
     }
 
