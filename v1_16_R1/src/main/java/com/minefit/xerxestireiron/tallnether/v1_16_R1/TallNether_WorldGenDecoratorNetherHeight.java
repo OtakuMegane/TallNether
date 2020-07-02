@@ -27,7 +27,6 @@ public class TallNether_WorldGenDecoratorNetherHeight extends TallNether_WorldGe
     public Stream<BlockPosition> a(GeneratorAccess generatoraccess, Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition) {
         String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
         BiomeBase blockBiome = generatoraccess.getBiome(blockposition);
-        System.out.println(blockBiome.C());
         ConfigValues worldConfig = this.configAccessor.getConfig(worldName);
         int attempts;
         int innerRand;

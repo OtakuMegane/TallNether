@@ -50,6 +50,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
         public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15 = new WorldGenNetherPieces.WorldGenNetherPiece15(this.d, (i << 4) + 2, (j << 4) + 2);
             GeneratorAccess generatoraccess = null;
+            System.out.println("FORT HERE i: " + i + "  j: " + j);
 
             try {
                 Field gAccess;
@@ -64,6 +65,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
             int fortressMax = 70;
 
             if (generatoraccess != null) {
+                System.out.println("FORT HERE 2");
                 String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
                 fortressMin = this.configAccessor.getConfig(worldName).fortressMin;
                 fortressMax = this.configAccessor.getConfig(worldName).fortressMax;

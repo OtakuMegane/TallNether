@@ -93,7 +93,8 @@ public class ManageHell {
             if (this.LH16R1 == null) {
                 this.LH16R1 = new com.minefit.xerxestireiron.tallnether.v1_16_R1.LoadHell(worldConfig,
                         this.plugin.getName());
-                this.LH16R1.overrideDecorators();
+                this.LH16R1.registerFortress();
+                this.LH16R1.overrideDecorators(true);
             }
 
             this.LH16R1.addWorld(world, worldConfig);

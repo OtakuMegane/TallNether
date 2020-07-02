@@ -9,15 +9,26 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.server.v1_16_R1.Biomes;
 import net.minecraft.server.v1_16_R1.Blocks;
 import net.minecraft.server.v1_16_R1.ChunkGenerator;
 import net.minecraft.server.v1_16_R1.GeneratorSettingBase;
+import net.minecraft.server.v1_16_R1.GeneratorSettingBase.a;
+import net.minecraft.server.v1_16_R1.IRegistry;
+import net.minecraft.server.v1_16_R1.MinecraftKey;
+import net.minecraft.server.v1_16_R1.StructureGenerator;
+import net.minecraft.server.v1_16_R1.StructureSettings;
+import net.minecraft.server.v1_16_R1.StructureSettingsFeature;
 import net.minecraft.server.v1_16_R1.WorldChunkManager;
+import net.minecraft.server.v1_16_R1.WorldChunkManagerMultiNoise;
+import net.minecraft.server.v1_16_R1.WorldGenFeatureEmptyConfiguration;
 
 public class LoadHell {
     private final Messages messages;
@@ -25,6 +36,8 @@ public class LoadHell {
     private final RegisterFortress registerFortress = new RegisterFortress();
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final HashMap<String, WorldInfo> worldInfos;
+    private final StructureGenerator<WorldGenFeatureEmptyConfiguration> vanillaFortress = StructureGenerator.FORTRESS;
+    private boolean decoratorsDone = false;
 
     public LoadHell(ConfigurationSection worldConfig, String pluginName) {
         this.messages = new Messages(pluginName);
@@ -35,9 +48,14 @@ public class LoadHell {
         this.configAccessor.setVanillaConfig(new PaperSpigot().getSettingsMap());
     }
 
-    public boolean overrideDecorators() {
-        return new DecoratorsNetherWastes().set();
-        //return this.decorators.set();
+    // Returns whether or not decorators were successfully overriden
+    public boolean overrideDecorators(boolean check) {
+        if (this.decoratorsDone) {
+            return false;
+        }
+
+        this.decoratorsDone = new DecoratorsNetherWastes().set();
+        return this.decoratorsDone;
     }
 
     public boolean restoreDecorators() {
@@ -45,11 +63,13 @@ public class LoadHell {
     }
 
     public boolean registerFortress() {
-        return this.registerFortress.set(false);
+        return true;
+        //return this.registerFortress.set(false);
     }
 
     public boolean restoreFortress() {
-        return this.registerFortress.set(true);
+        return true;
+        //return this.registerFortress.set(true);
     }
 
     public void addWorld(World world, ConfigurationSection worldConfig) {
@@ -63,42 +83,6 @@ public class LoadHell {
     public void overrideGenerator(World world) {
         String worldName = world.getName();
         WorldInfo worldInfo = this.worldInfos.get(worldName);
-        WorldChunkManager chunkManager = worldInfo.chunkServer.chunkGenerator.getWorldChunkManager();
-        ChunkGenerator chunkGen = worldInfo.chunkServer.chunkGenerator;
-        TallNether_ChunkGenerator generator = null;
-
-        try {
-            Field wField = ReflectionHelper.getField(chunkGen.getClass(), "w", true);
-            wField.setAccessible(true);
-            long i = wField.getLong(chunkGen);
-            Field hField = ReflectionHelper.getField(chunkGen.getClass(), "h", true);
-            hField.setAccessible(true);
-            GeneratorSettingBase h;
-            h = (GeneratorSettingBase) hField.get(chunkGen);
-            generator = new TallNether_ChunkGenerator(worldInfo.nmsWorld, chunkManager, i, h);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Field chunkGenerator = ReflectionHelper.getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
-            chunkGenerator.setAccessible(true);
-            ReflectionHelper.setFinal(chunkGenerator, worldInfo.chunkServer, generator);
-
-            Field chunkMapGenerator = ReflectionHelper.getField(worldInfo.chunkServer.playerChunkMap.getClass(),
-                    "chunkGenerator", true);
-            chunkMapGenerator.setAccessible(true);
-            ReflectionHelper.setFinal(chunkMapGenerator, worldInfo.chunkServer.playerChunkMap, generator);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Get i and generatorsettingbase from fields w and h
-        /*
-        WorldInfo worldInfo = this.worldInfos.get(worldName);
-        GeneratorSettingsNether generatorsettingsnether = new TallNether_GeneratorSettingsNether();
-        generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
-        generatorsettingsnether.b(Blocks.LAVA.getBlockData());
         Environment environment = world.getEnvironment();
 
         if (environment != Environment.NETHER) {
@@ -106,7 +90,7 @@ public class LoadHell {
             return;
         }
 
-        if (worldInfo.originalGenName.equals("TallNether_ChunkProviderHell")) {
+        if (worldInfo.originalGenName.equals("TallNether_ChunkGenerator")) {
             this.messages.alreadyEnabled(worldName);
             return;
         }
@@ -116,42 +100,63 @@ public class LoadHell {
             return;
         }
 
-        // Seems to now be an initialized DimensionManager ?
-        TallNether_ChunkProviderHell tallNetherGenerator = new TallNether_ChunkProviderHell(worldInfo.nmsWorld,
-                BiomeLayout.b.a(BiomeLayout.b.a(worldInfo.nmsWorld.getWorldData()).a(Biomes.NETHER)),
-                generatorsettingsnether, this.configAccessor.getConfig(worldName));
+        WorldChunkManager chunkManager = worldInfo.chunkServer.chunkGenerator.getWorldChunkManager();
+        ChunkGenerator chunkGen = worldInfo.chunkServer.chunkGenerator;
+        TallNether_ChunkGenerator tallNetherGenerator = null;
+
+        try {
+            Field wField = ReflectionHelper.getField(chunkGen.getClass(), "w", true);
+            wField.setAccessible(true);
+            long i = wField.getLong(chunkGen);
+            Field hField = ReflectionHelper.getField(chunkGen.getClass(), "h", true);
+            hField.setAccessible(true);
+            GeneratorSettingBase h;
+            h = (GeneratorSettingBase) hField.get(chunkGen);
+
+            // We'll come back for this
+            /*for (java.util.Map.Entry<StructureGenerator<?>, StructureSettingsFeature> entry : h.a().a().entrySet()) {
+                System.out.println("GENERATOR: " + entry.getKey());
+            }
+            h.a().a().remove(this.vanillaFortress);
+            h.a().a().put(StructureGenerator.FORTRESS, new StructureSettingsFeature(27, 4, 30084232));
+
+            Field h2Field = ReflectionHelper.getField(chunkGen.getClass(), "h", true);
+            h2Field.setAccessible(true);
+            GeneratorSettingBase h2;
+            h2 = (GeneratorSettingBase) h2Field.get(chunkGen);
+            for (java.util.Map.Entry<StructureGenerator<?>, StructureSettingsFeature> entry : h2.a().a().entrySet()) {
+                System.out.println("GENERATOR: " + entry.getKey());
+            }*/
+            tallNetherGenerator = new TallNether_ChunkGenerator(worldInfo.nmsWorld, chunkManager, i, h);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (setGenerator(worldInfo, tallNetherGenerator, false)) {
             this.messages.enableSuccess(worldName);
         } else {
             this.messages.enableFailed(worldName);
-        }*/
+        }
     }
 
     public boolean restoreGenerator(World world) {
         WorldInfo worldInfo = this.worldInfos.get(world.getName());
-        return true;
-        //return this.setGenerator(worldInfo, worldInfo.originalGenerator, true);
+        return this.setGenerator(worldInfo, worldInfo.originalGenerator, true);
     }
 
     private boolean isRecognizedGenerator(Environment environment, String originalGenName) {
         if (environment == Environment.NETHER) {
-            return originalGenName.equals("ChunkProviderHell") || originalGenName.equals("TimedChunkGenerator");
+            return originalGenName.equals("ChunkGeneratorAbstract") || originalGenName.equals("TimedChunkGenerator");
         }
 
         return false;
     }
 
-    /*private boolean setGenerator(WorldInfo worldInfo, ChunkGenerator<?> generator, boolean heightValue) {
+    private boolean setGenerator(WorldInfo worldInfo, ChunkGenerator generator, boolean heightValue) {
         try {
             Field chunkGenerator = ReflectionHelper.getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
             ReflectionHelper.setFinal(chunkGenerator, worldInfo.chunkServer, generator);
-
-            // Probably merged into DimensionManager logicalHeight
-            Field worldHeight = ReflectionHelper.getField(worldInfo.worldProvider.getClass(), "d", true);
-            worldHeight.setAccessible(true);
-            worldHeight.setBoolean(worldInfo.worldProvider, heightValue);
 
             Field chunkMapGenerator = ReflectionHelper.getField(worldInfo.chunkServer.playerChunkMap.getClass(),
                     "chunkGenerator", true);
@@ -163,5 +168,5 @@ public class LoadHell {
         }
 
         return true;
-    }*/
+    }
 }

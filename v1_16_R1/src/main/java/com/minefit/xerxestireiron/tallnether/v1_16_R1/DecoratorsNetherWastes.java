@@ -11,18 +11,26 @@ import net.minecraft.server.v1_16_R1.BiomeDecoratorGroups;
 import net.minecraft.server.v1_16_R1.BiomeHell;
 import net.minecraft.server.v1_16_R1.Biomes;
 import net.minecraft.server.v1_16_R1.Blocks;
+import net.minecraft.server.v1_16_R1.StructureFeature;
+import net.minecraft.server.v1_16_R1.StructureGenerator;
 import net.minecraft.server.v1_16_R1.WorldGenCarverAbstract;
 import net.minecraft.server.v1_16_R1.WorldGenCarverConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenCarverWrapper;
 import net.minecraft.server.v1_16_R1.WorldGenDecorator;
+import net.minecraft.server.v1_16_R1.WorldGenDecoratorDungeonConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorFrequencyConfiguration;
+import net.minecraft.server.v1_16_R1.WorldGenFeatureBastionPieces;
+import net.minecraft.server.v1_16_R1.WorldGenFeatureBastionRemnantConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureChanceDecoratorCountConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureChanceDecoratorRangeConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureComposite;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureConfigurationChance;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureConfigured;
+import net.minecraft.server.v1_16_R1.WorldGenFeatureEmptyConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureOreConfiguration;
+import net.minecraft.server.v1_16_R1.WorldGenFeatureRuinedPortal;
+import net.minecraft.server.v1_16_R1.WorldGenFeatureRuinedPortalConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenStage;
 import net.minecraft.server.v1_16_R1.WorldGenerator;
 
@@ -149,6 +157,21 @@ public class DecoratorsNetherWastes {
         // Trial and error is involved
         // NMS methods in the early/dev releases of Spigot will sometimes change without a version update, so wait until stable release to be safe
 
+        /*// Nether Fortress
+        StructureFeature<WorldGenFeatureEmptyConfiguration, ? extends StructureGenerator<WorldGenFeatureEmptyConfiguration>> nether_fortress = StructureGenerator.FORTRESS
+                .a(WorldGenFeatureEmptyConfiguration.b);
+        this.biome.a(nether_fortress);
+
+        // Ruined Portals
+        StructureFeature<WorldGenFeatureRuinedPortalConfiguration, ? extends StructureGenerator<WorldGenFeatureRuinedPortalConfiguration>> ruined_portal = StructureGenerator.RUINED_PORTAL
+                .a(new WorldGenFeatureRuinedPortalConfiguration(WorldGenFeatureRuinedPortal.Type.NETHER));
+        this.biome.a(ruined_portal);
+
+        // Bastion remnant
+        StructureFeature<WorldGenFeatureBastionRemnantConfiguration, ? extends StructureGenerator<WorldGenFeatureBastionRemnantConfiguration>> bastion_remnant = StructureGenerator.BASTION_REMNANT
+                .a(new WorldGenFeatureBastionRemnantConfiguration(WorldGenFeatureBastionPieces.a));
+        this.biome.a(bastion_remnant);*/
+
         // Cave Generation
         WorldGenCarverWrapper caves = this.biome.a(
                 (WorldGenCarverAbstract) new TallNether_WorldGenCavesHell(WorldGenFeatureConfigurationChance.b),
@@ -160,22 +183,33 @@ public class DecoratorsNetherWastes {
                 .a(WorldGenDecorator.p.a(new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, dunno);
 
+        // TODO: Test to find exactly how this works, add settings
+        // The following two are from BiomeDecoratorGroups.ab(this)
+        // Red shrooms of some kind
+        WorldGenFeatureConfigured<?, ?> redShroom = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.at)
+                .a(WorldGenDecorator.j.a(new WorldGenDecoratorDungeonConfiguration(4)));
+        this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, redShroom);
+
+        // Brown shrooms of some kind
+        WorldGenFeatureConfigured<?, ?> brownShroom = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.as)
+                .a(WorldGenDecorator.j.a(new WorldGenDecoratorDungeonConfiguration(8)));
+        this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, brownShroom);
+
         // Lavafalls (lavafall)
         WorldGenFeatureConfigured<?, ?> lavaFalls = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.aM)
                 .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
                         "lavafall").a(new WorldGenFeatureChanceDecoratorCountConfiguration(8, 4, 8, 128)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, lavaFalls);
 
-        // !!! We need to add option between soul fire and fire settings!
         // Fire (fire)
         WorldGenFeatureConfigured<?, ?> fire = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.ap)
-                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a)
+                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, "fire")
                         .a(new WorldGenDecoratorFrequencyConfiguration(10)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fire);
 
         // Soul Fire (soul-fire)
         WorldGenFeatureConfigured<?, ?> soulFire = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.aq)
-                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a)
+                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, "soul-fire")
                         .a(new WorldGenDecoratorFrequencyConfiguration(10)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, soulFire);
 
@@ -191,19 +225,19 @@ public class DecoratorsNetherWastes {
                         "glowstone").a(new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 128)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowstone2);
 
-        // Brown Mushrooms (brown-shroom)
-        WorldGenFeatureConfigured<?, ?> brownShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.as)
-                .a(new TallNether_WorldGenDecoratorNetherChance(WorldGenFeatureChanceDecoratorRangeConfiguration.a,
-                        "brown-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
-        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms);
-
         // Red Mushrooms (red-shroom)
-        WorldGenFeatureConfigured<?, ?> redShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.at)
+        WorldGenFeatureConfigured<?, ?> redShrooms2 = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.at)
                 .a(new TallNether_WorldGenDecoratorNetherChance(WorldGenFeatureChanceDecoratorRangeConfiguration.a,
                         "red-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
-        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms);
+        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, redShrooms2);
 
-        // !!! Not sure where this is set up
+        // Brown Mushrooms (brown-shroom)
+        WorldGenFeatureConfigured<?, ?> brownShrooms2 = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.as)
+                .a(new TallNether_WorldGenDecoratorNetherChance(WorldGenFeatureChanceDecoratorRangeConfiguration.a,
+                        "brown-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
+        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms2);
+
+        // Not certain where this is normally established, but it works
         // Nether Quartz (quartz)
         WorldGenFeatureConfigured<?, ?> quartz = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,

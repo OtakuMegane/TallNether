@@ -26,11 +26,10 @@ public class RegisterFortress {
             fortressGen = new TallNether_WorldGenNether(WorldGenFeatureEmptyConfiguration.a);
         }
 
-        // Maybe new process
-
         try {
-            Class<?>[] methodParams = new Class<?>[] { String.class, Object.class,
-                    WorldGenStage.Decoration.UNDERGROUND_DECORATION.getClass() };
+            Class<?>[] methodParams = new Class<?>[] { String.class, StructureGenerator.class,
+                    WorldGenStage.Decoration.class };
+                    Method[] methods = StructureGenerator.class.getDeclaredMethods();
             Method methodA = StructureGenerator.class.getDeclaredMethod("a", methodParams);
             methodA.setAccessible(true);
             Object[] methodValues = new Object[] { "Fortress", fortressGen,
