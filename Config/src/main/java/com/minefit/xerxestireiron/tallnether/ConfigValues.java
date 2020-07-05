@@ -102,7 +102,7 @@ public class ConfigValues {
             this.magmaRangeMedian = (int) (this.magmaRangeSize / 2);
             this.hiddenLavaAttempts = 16;
             this.hiddenLavaMinHeight = 10;
-            this.hiddenLavaMaxHeight = 108;
+            this.hiddenLavaMaxHeight = 118;
             this.hiddenLavaMaxMinus = 0;
             this.generateFortress = (this.paperConfig.containsKey("generateFortress") ? this.paperConfig.get("generateFortress") : true);
             this.fortressMin = setDecoration("fortress-min", 48, true);

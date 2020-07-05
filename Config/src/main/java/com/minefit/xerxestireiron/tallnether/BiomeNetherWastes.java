@@ -90,12 +90,9 @@ public class BiomeNetherWastes extends BiomeValues {
         values.put("hidden-lava-attempts", setDecoration("hidden-lava-attempts", 32, false));
         values.put("hidden-lava-min-height", setDecoration("hidden-lava-min-height", 10, true));
         values.put("hidden-lava-max-height", setDecoration("hidden-lava-max-height", 246, true));
-        values.put("soul-sand-patch-attempts", setDecoration("soul-sand-patch-attempts", 2, false));
-        values.put("soul-sand-patch-min-height", setDecoration("soul-sand-patch-min-height", 0, true));
-        values.put("soul-sand-patch-max-height", setDecoration("soul-sand-patch-max-height", 0, true));
         values.put("ancient-debris1-attempts", setDecoration("ancient-debris1-attempts", 2, false));
         values.put("ancient-debris1-min-height", setDecoration("ancient-debris1-min-height", 8, true));
-        values.put("ancient-debris1-max-height", setDecoration("ancient-debris1-max-height", 248, true));
+        values.put("ancient-debris1-max-height", setDecoration("ancient-debris1-max-height", 44, true));
         values.put("ancient-debris1-range-size", values.get("ancient-debris1-max-height") - values.get("ancient-debris1-min-height"));
         values.put("ancient-debris1-range-median", (int) values.get("ancient-debris1-range-size") / 2);
         values.put("ancient-debris2-attempts", setDecoration("ancient-debris2-attempts", 2, false));

@@ -93,7 +93,6 @@ public class ManageHell {
             if (this.LH16R1 == null) {
                 this.LH16R1 = new com.minefit.xerxestireiron.tallnether.v1_16_R1.LoadHell(worldConfig,
                         this.plugin.getName());
-                this.LH16R1.registerFortress();
                 this.LH16R1.overrideDecorators(true);
             }
 
@@ -121,6 +120,8 @@ public class ManageHell {
             } else {
                 this.LH15R1.removeWorld(world);
             }
+        } else if (this.plugin.version.equals("v1_16_R1")) {
+            this.LH16R1.removeWorld(world);
         }
     }
 
@@ -143,6 +144,8 @@ public class ManageHell {
             } else {
                 this.LH15R1.restoreGenerator(world);
             }
+        } else if (this.plugin.version.equals("v1_16_R1")) {
+            this.LH16R1.restoreGenerator(world);
         }
     }
 
@@ -166,7 +169,8 @@ public class ManageHell {
             } else {
                 this.LH15R1 = null;
             }
-
+        } else if (this.plugin.version.equals("v1_16_R1")) {
+            this.LH16R1 = null;
         }
     }
 }

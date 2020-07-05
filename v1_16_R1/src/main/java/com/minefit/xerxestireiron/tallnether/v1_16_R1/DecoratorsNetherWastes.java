@@ -162,11 +162,6 @@ public class DecoratorsNetherWastes {
         // Trial and error is involved
         // NMS methods in the early/dev releases of Spigot will sometimes change without a version update, so wait until stable release to be safe
 
-        /*// Nether Fortress (BiomeDecoratorGroups.o)
-        StructureFeature<WorldGenFeatureEmptyConfiguration, ? extends StructureGenerator<WorldGenFeatureEmptyConfiguration>> nether_fortress = StructureGenerator.FORTRESS
-                .a(WorldGenFeatureEmptyConfiguration.b);
-        this.biome.a(nether_fortress);*/
-
         // Cave Generation
         WorldGenCarverWrapper caves = this.biome.a(
                 (WorldGenCarverAbstract) new TallNether_WorldGenCavesHell(WorldGenFeatureConfigurationChance.b),
@@ -291,7 +286,7 @@ public class DecoratorsNetherWastes {
                         "gravel-patch").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 0, 37)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, gravel_patch);
 
-     // Set from BiomeDecoratorGroups.a method
+        // Set from BiomeDecoratorGroups.a method
         // Blackstone Patches
         WorldGenFeatureConfigured<?, ?> blackstone_patch = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
