@@ -20,11 +20,16 @@ public class WorldConfig {
         if (worldSettings != null && worldSettings.getBoolean("enabled")) {
             this.isVanilla = false;
             this.worldValues = new WorldValues(this.worldSettings, paperConfig);
-            this.biomeValues.put("nether-wastes", new BiomeNetherWastes(worldSettings, paperConfig));
-            this.biomeValues.put("crimson-forest", new BiomeCrimsonForest(worldSettings, paperConfig));
-            this.biomeValues.put("warped-forest", new BiomeWarpedForest(worldSettings, paperConfig));
-            this.biomeValues.put("basalt-deltas", new BiomeBasaltDeltas(worldSettings, paperConfig));
-            this.biomeValues.put("soul-sand-valley", new BiomeSoulSandValley(worldSettings, paperConfig));
+            this.biomeValues.put("nether-wastes",
+                    new BiomeNetherWastes(worldSettings.getConfigurationSection("nether-wastes"), paperConfig));
+            this.biomeValues.put("crimson-forest",
+                    new BiomeCrimsonForest(worldSettings.getConfigurationSection("crimson-forest"), paperConfig));
+            this.biomeValues.put("warped-forest",
+                    new BiomeWarpedForest(worldSettings.getConfigurationSection("warped-forest"), paperConfig));
+            this.biomeValues.put("basalt-deltas",
+                    new BiomeBasaltDeltas(worldSettings.getConfigurationSection("basalt-deltas"), paperConfig));
+            this.biomeValues.put("soul-sand-valley",
+                    new BiomeSoulSandValley(worldSettings.getConfigurationSection("soul-sand-valley"), paperConfig));
         } else {
             this.worldValues = new WorldValues(this.paperConfig); // Vanilla
             this.isVanilla = true;

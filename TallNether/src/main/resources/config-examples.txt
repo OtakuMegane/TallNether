@@ -1,0 +1,44 @@
+This file provides examples of a config.yml for both Minecraft 1.16+ and for earlier versions. The only layout change for 1.16 and later is the addition of biome subsections. If a 1.16 config is used on an earlier version of Minecraft, TallNether will simply ignore the biome subsections. Settings related to the world in general such as lava sea level are in the same location under the world section.
+
+The only setting required to have TallNether work on a world is having 'enabled' set to true. All other settings will use default values if nothing is given in the config.
+
+The biome subsections are:
+nether-wastes
+basalt-deltas
+crimson-forest
+warped-forest
+soul-sand-valley
+
+#1.15.2 and earlier:
+
+worlds:
+  world1:
+   enabled: true
+   farlands: true
+   lava-sea-level: 40
+   fire-attempts: 20
+   fire-min-height: 10
+   fire-max-height: 200
+  world2:
+    enabled: true
+    lava-sea-level: 64
+
+
+1.16+:
+
+worlds:
+  world1:
+    enabled: true
+    farlands: true
+    lava-sea-level: 40
+    nether-wastes:
+      fire-attempts: 20
+      fire-min-height: 10
+      fire-max-height: 200
+      ancient-debris1-attempts: 3
+    soul-sand-valley:
+     soul-fire-attempts: 25
+      ancient-debris1-attempts: 3
+  world2:
+    enabled: true
+    lava-sea-level: 64

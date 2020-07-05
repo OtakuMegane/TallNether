@@ -64,10 +64,10 @@ public class BiomeBasaltDeltas extends BiomeValues {
         values.put("lavafall-attempts", setDecoration("lavafall-attempts", 0, false));
         values.put("lavafall-min-height", setDecoration("lavafall-min-height", 0, true));
         values.put("lavafall-max-height", setDecoration("lavafall-max-height", 0, true));
-        values.put("glowstone1-attempts", setDecoration("glowstone1-attempts", 10, false));
+        values.put("glowstone1-attempts", setDecoration("glowstone1-attempts", 20, false));
         values.put("glowstone1-min-height", setDecoration("glowstone1-min-height", 4, true));
         values.put("glowstone1-max-height", setDecoration("glowstone1-max-height", 248, true));
-        values.put("glowstone2-attempts", setDecoration("glowstone1-max-height", 248, true));
+        values.put("glowstone2-attempts", setDecoration("glowstone2-attempts", 20, false));
         values.put("glowstone2-min-height", setDecoration("glowstone2-min-height", 0, true));
         values.put("glowstone2-max-height", setDecoration("glowstone2-max-height", 256, true));
         values.put("fire-attempts", setDecoration("fire-attempts", 20, false));

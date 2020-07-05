@@ -38,7 +38,6 @@ public class TallNether_WorldGenDecoratorNetherHeight extends TallNether_WorldGe
         int max;
         int min;
 
-
         if (this.blockType.equals("quartz")) {
             attempts = biomeConfig.values.get("quartz-attempts");
             max = biomeConfig.values.get("quartz-max-height");
