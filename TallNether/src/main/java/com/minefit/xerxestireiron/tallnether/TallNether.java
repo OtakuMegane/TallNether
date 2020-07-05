@@ -38,7 +38,7 @@ public class TallNether extends JavaPlugin implements Listener {
             return;
         }
 
-        new ConfigAccessor().setMainConfig(this.getConfig());
+        new ConfigAccessor(this.getConfig());
 
         // Catches the /reload command or other things that may bypass the WorldInitEvent
         for (World world : Bukkit.getWorlds()) {

@@ -13,7 +13,8 @@ import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.ObjectList;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.ObjectListIterator;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
+import com.minefit.xerxestireiron.tallnether.WorldConfig;
+import com.minefit.xerxestireiron.tallnether.WorldValues;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -106,7 +107,8 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
     private final int x;
 
     private final ConfigAccessor configAccessor = new ConfigAccessor();
-    private final ConfigValues configValues;
+    private final WorldConfig worldConfig;
+    private final WorldValues worldValues;
     private final int lowX;
     private final int lowZ;
     private final int highX;
@@ -123,12 +125,13 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
 
     private TallNether_ChunkGenerator(World world, WorldChunkManager worldchunkmanager, WorldChunkManager worldchunkmanager1, long i, GeneratorSettingBase generatorsettingbase) {
         super(worldchunkmanager, worldchunkmanager1, generatorsettingbase.a(), i);
-        this.configValues = this.configAccessor.getConfig(world.getWorld().getName());
-        this.lowX = configValues.farLandsLowX / 4;
-        this.lowZ = configValues.farLandsLowZ / 4;
-        this.highX = configValues.farLandsHighX / 4;
-        this.highZ = configValues.farLandsHighZ / 4;
-        this.generateFarLands = this.configValues.generateFarLands;
+        this.worldConfig = this.configAccessor.getWorldConfig(world.getWorld().getName());
+        this.worldValues = worldConfig.getWorldValues();
+        this.lowX = worldValues.farLandsLowX / 4;
+        this.lowZ = worldValues.farLandsLowZ / 4;
+        this.highX = worldValues.farLandsHighX / 4;
+        this.highZ = worldValues.farLandsHighZ / 4;
+        this.generateFarLands = this.worldValues.generateFarLands;
 
         this.w = i;
         this.h = generatorsettingbase;
@@ -463,7 +466,7 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
                 // TallNether: Modified for flat bedrock
                 if (flag1) {
                     for (i1 = 0; i1 < 5; ++i1) {
-                        if (i1 <= (this.configValues.flatBedrockCeiling ? 0 : random.nextInt(5))) {
+                        if (i1 <= (this.worldValues.flatBedrockCeiling ? 0 : random.nextInt(5))) {
                             ichunkaccess.setType(blockposition_mutableblockposition.d(blockposition.getX(), l - i1, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
                         }
                     }
@@ -471,7 +474,7 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
 
                 if (flag2) {
                     for (i1 = 4; i1 >= 0; --i1) {
-                        if (i1 <= (this.configValues.flatBedrockCeiling ? 0 : random.nextInt(5))) {
+                        if (i1 <= (this.worldValues.flatBedrockCeiling ? 0 : random.nextInt(5))) {
                             ichunkaccess.setType(blockposition_mutableblockposition.d(blockposition.getX(), k + i1, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
                         }
                     }
@@ -678,7 +681,7 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
     // TallNether: Minecraft default is 32, change to use lava sea level from config
     @Override
     public int getSeaLevel() {
-        return this.configValues.lavaSeaLevel;
+        return this.worldValues.lavaSeaLevel;
     }
 
     @Override

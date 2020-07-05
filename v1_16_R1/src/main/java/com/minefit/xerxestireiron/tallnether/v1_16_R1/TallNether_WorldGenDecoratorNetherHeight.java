@@ -1,10 +1,10 @@
 package com.minefit.xerxestireiron.tallnether.v1_16_R1;
 
+import com.minefit.xerxestireiron.tallnether.BiomeValues;
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
+import com.minefit.xerxestireiron.tallnether.WorldConfig;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.server.v1_16_R1.BiomeBase;
 import net.minecraft.server.v1_16_R1.BlockPosition;
 import net.minecraft.server.v1_16_R1.GeneratorAccess;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureChanceDecoratorCountConfiguration;
@@ -26,55 +26,91 @@ public class TallNether_WorldGenDecoratorNetherHeight extends TallNether_WorldGe
     // TallNether: Methods added to allow per-world config access through GeneratorAccess
     public Stream<BlockPosition> a(GeneratorAccess generatoraccess, Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition) {
         String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
-        BiomeBase blockBiome = generatoraccess.getBiome(blockposition);
-        ConfigValues worldConfig = this.configAccessor.getConfig(worldName);
-        int attempts;
-        int innerRand;
-        int outerRand;
+        WorldConfig worldConfig = this.configAccessor.getWorldConfig(worldName);
 
-        if(this.blockType.equals("quartz")) {
-            attempts = worldConfig.quartzAttempts;
-            innerRand = worldConfig.quartzMaxHeight - worldConfig.quartzMaxMinus;
-            outerRand = worldConfig.quartzMinHeight;
-        } else if(this.blockType.equals("glowstone")) {
-            attempts = worldConfig.glowstone2Attempts;
-            innerRand = worldConfig.glowstone2MaxHeight - worldConfig.glowstone2MaxMinus;
-            outerRand = worldConfig.glowstone2MinHeight;
-        } else if(this.blockType.equals("hidden-lava")) {
-            attempts = worldConfig.hiddenLavaAttempts;
-            innerRand = worldConfig.hiddenLavaMaxHeight - worldConfig.hiddenLavaMaxMinus;
-            outerRand = worldConfig.hiddenLavaMinHeight;
-        } else if(this.blockType.equals("lavafall")) {
-            attempts = worldConfig.lavafallAttempts;
-            innerRand = worldConfig.lavafallMaxHeight - worldConfig.lavafallMaxMinus;
-            outerRand = worldConfig.lavafallMinHeight;
-        } else {
-            attempts = worldgenfeaturechancedecoratorcountconfiguration.b;
-            innerRand = worldgenfeaturechancedecoratorcountconfiguration.e - worldgenfeaturechancedecoratorcountconfiguration.d;
-            outerRand = worldgenfeaturechancedecoratorcountconfiguration.c;
+        if (worldConfig == null || worldConfig.isVanilla) {
+            return a(random, worldgenfeaturechancedecoratorcountconfiguration, blockposition);
         }
 
-        innerRand = innerRand > 0 ? innerRand : 1;
-        outerRand = outerRand > 0 ? outerRand : 1;
+        String biomeName = this.configAccessor.biomeClassToConfig(generatoraccess.getBiome(blockposition).getClass().getSimpleName());
+        BiomeValues biomeConfig = worldConfig.getBiomeValues(biomeName);
+        int attempts;
+        int max;
+        int min;
 
-        return a(random, worldgenfeaturechancedecoratorcountconfiguration, blockposition, attempts, innerRand, outerRand);
+
+        if (this.blockType.equals("quartz")) {
+            attempts = biomeConfig.values.get("quartz-attempts");
+            max = biomeConfig.values.get("quartz-max-height");
+            min = biomeConfig.values.get("quartz-min-height");
+        } else if (this.blockType.equals("glowstone2")) {
+            attempts = biomeConfig.values.get("glowstone2-attempts");
+            max = biomeConfig.values.get("glowstone2-max-height");
+            min = biomeConfig.values.get("glowstone2-min-height");
+        } else if (this.blockType.equals("hidden-lava")) {
+            attempts = biomeConfig.values.get("hidden-lava-attempts");
+            max = biomeConfig.values.get("hidden-lava-max-height");
+            min = biomeConfig.values.get("hidden-lava-min-height");
+        } else if (this.blockType.equals("lavafall")) {
+            attempts = biomeConfig.values.get("lavafall-attempts");
+            max = biomeConfig.values.get("lavafall-max-height");
+            min = biomeConfig.values.get("lavafall-min-height");
+        } else if (this.blockType.equals("nether-gold")) {
+            attempts = biomeConfig.values.get("nether-gold-attempts");
+            max = biomeConfig.values.get("nether-gold-max-height");
+            min = biomeConfig.values.get("nether-gold-min-height");
+        } else if(this.blockType.equals("soul-sand-patch")) {
+            attempts = 24;
+            max = 256;
+            min = 0;
+        } else if(this.blockType.equals("ancient-debris")) {
+            attempts = biomeConfig.values.get("ancient-debris2-attempts");
+            max = biomeConfig.values.get("ancient-debris2-max-height");
+            min = biomeConfig.values.get("ancient-debris2-min-height");
+        } else if(this.blockType.equals("gravel-patch")) {
+            attempts = biomeConfig.values.get("gravel-patch-attempts");
+            max = biomeConfig.values.get("gravel-patch-max-height");
+            min = biomeConfig.values.get("gravel-patch-min-height");
+        } else if(this.blockType.equals("blackstone-patch")) {
+            attempts = biomeConfig.values.get("blackstone-patch-attempts");
+            max = biomeConfig.values.get("blackstone-patch-max-height");
+            min = biomeConfig.values.get("blackstone-patch-min-height");
+        } else if (this.blockType.equals("twisting-vines")) {
+            attempts = 20;
+            max = 256;
+            min = 0;
+        } else if (this.blockType.equals("weeping-vines")) {
+            attempts = 20;
+            max = 256;
+            min = 0;
+        } else {
+            return a(random, worldgenfeaturechancedecoratorcountconfiguration, blockposition);
+        }
+
+        max = max > 0 ? max : 1;
+        attempts = attempts > 0 ? attempts : 1;
+        return a(random, worldgenfeaturechancedecoratorcountconfiguration, blockposition, attempts, max, min);
     }
 
-    public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition, int attempts, int innerRand, int outerRand) {
+    public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition, int attempts, int max, int min) {
         return IntStream.range(0, attempts).mapToObj((i) -> {
-            int j = random.nextInt(16);
-            int k = random.nextInt(16);
-            int l = random.nextInt(innerRand) + outerRand;
+            int j = random.nextInt(16) + blockposition.getX();
+            int k = random.nextInt(16) + blockposition.getZ();
+            int l = random.nextInt(max) + min;
 
-            return blockposition.b(j, l, k);
+            return new BlockPosition(j, l, k);
         });
     }
 
-    // TallNether: Override default gen so it doesn't actually do anything
+    // TallNether: Vanilla generation
     @Override
     public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition) {
-        return IntStream.empty().mapToObj((i) -> {
-            return blockposition.b(0, 0, 0);
+        return IntStream.range(0, worldgenfeaturechancedecoratorcountconfiguration.b).mapToObj((i) -> {
+            int j = random.nextInt(16) + blockposition.getX();
+            int k = random.nextInt(16) + blockposition.getZ();
+            int l = random.nextInt(worldgenfeaturechancedecoratorcountconfiguration.e - worldgenfeaturechancedecoratorcountconfiguration.d) + worldgenfeaturechancedecoratorcountconfiguration.c;
+
+            return new BlockPosition(j, l, k);
         });
     }
 }

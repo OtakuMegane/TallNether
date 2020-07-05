@@ -19,9 +19,11 @@ import com.mojang.serialization.Codec;
 import net.minecraft.server.v1_16_R1.Biomes;
 import net.minecraft.server.v1_16_R1.Blocks;
 import net.minecraft.server.v1_16_R1.ChunkGenerator;
+import net.minecraft.server.v1_16_R1.DimensionManager;
 import net.minecraft.server.v1_16_R1.GeneratorSettingBase;
 import net.minecraft.server.v1_16_R1.GeneratorSettingBase.a;
 import net.minecraft.server.v1_16_R1.IRegistry;
+import net.minecraft.server.v1_16_R1.IRegistryCustom;
 import net.minecraft.server.v1_16_R1.MinecraftKey;
 import net.minecraft.server.v1_16_R1.StructureGenerator;
 import net.minecraft.server.v1_16_R1.StructureSettings;
@@ -32,20 +34,17 @@ import net.minecraft.server.v1_16_R1.WorldGenFeatureEmptyConfiguration;
 
 public class LoadHell {
     private final Messages messages;
-    private final Decorators decorators;
     private final RegisterFortress registerFortress = new RegisterFortress();
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final HashMap<String, WorldInfo> worldInfos;
+    private final HashMap<String, Boolean> generatorsDone;
     private final StructureGenerator<WorldGenFeatureEmptyConfiguration> vanillaFortress = StructureGenerator.FORTRESS;
     private boolean decoratorsDone = false;
 
     public LoadHell(ConfigurationSection worldConfig, String pluginName) {
         this.messages = new Messages(pluginName);
-        this.decorators = new Decorators();
         this.worldInfos = new HashMap<>();
-        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, new PaperSpigot().getSettingsMap()));
-        // Because of how we modify the vanilla generator, we need vanilla settings even for worlds not enabled
-        this.configAccessor.setVanillaConfig(new PaperSpigot().getSettingsMap());
+        this.generatorsDone = new HashMap<>();
     }
 
     // Returns whether or not decorators were successfully overriden
@@ -54,12 +53,14 @@ public class LoadHell {
             return false;
         }
 
-        this.decoratorsDone = new DecoratorsNetherWastes().set();
+        this.decoratorsDone = (new DecoratorsNetherWastes().set() && new DecoratorsWarpedForest().set()
+                && new DecoratorsCrimsonForest().set() && new DecoratorsBasaltDeltas().set()
+                && new DecoratorsSoulSandValley().set());
         return this.decoratorsDone;
     }
 
     public boolean restoreDecorators() {
-        return this.decorators.restore();
+        return true;
     }
 
     public boolean registerFortress() {
@@ -75,13 +76,16 @@ public class LoadHell {
     public void addWorld(World world, ConfigurationSection worldConfig) {
         String worldName = world.getName();
         this.configAccessor.newWorldConfig(worldName, new PaperSpigot().getSettingsMap(), true);
-        this.configAccessor.addConfig(worldName,
-                new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName).getSettingsMap()));
         this.worldInfos.putIfAbsent(worldName, new WorldInfo(world));
     }
 
     public void overrideGenerator(World world) {
         String worldName = world.getName();
+
+        if (generatorsDone.containsKey(worldName)) {
+            return;
+        }
+
         WorldInfo worldInfo = this.worldInfos.get(worldName);
         Environment environment = world.getEnvironment();
 
@@ -133,6 +137,7 @@ public class LoadHell {
         }
 
         if (setGenerator(worldInfo, tallNetherGenerator, false)) {
+            this.generatorsDone.put(worldName, true);
             this.messages.enableSuccess(worldName);
         } else {
             this.messages.enableFailed(worldName);

@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public class WorldValues {
 
     private final Map<String, Boolean> paperConfig;
+    public final boolean vanillaValues;
     public final boolean generateFortress;
     public final int fortressMin;
     public final int fortressMax;
@@ -22,9 +23,8 @@ public class WorldValues {
     // Vanilla
     public WorldValues(Map<String, Boolean> paperConfig) {
         this.paperConfig = paperConfig;
-        this.generateFortress = (this.paperConfig.containsKey("generateFortress")
-                ? this.paperConfig.get("generateFortress")
-                : true);
+        this.vanillaValues = true;
+        this.generateFortress = this.paperConfig.get("generateFortress");
         this.fortressMin = 48;
         this.fortressMax = 70;
         this.generateFarLands = false;
@@ -33,18 +33,14 @@ public class WorldValues {
         this.farLandsHighX = 12550824;
         this.farLandsHighZ = 12550824;
         this.lavaSeaLevel = 32;
-        this.flatBedrockCeiling = (this.paperConfig.containsKey("generateFlatBedrock")
-                ? this.paperConfig.get("generateFlatBedrock")
-                : false);
-        this.flatBedrockFloor = (this.paperConfig.containsKey("generateFlatBedrock")
-                ? this.paperConfig.get("generateFlatBedrock")
-                : false);
+        this.flatBedrockCeiling = this.paperConfig.get("generateFlatBedrock");
+        this.flatBedrockFloor = this.paperConfig.get("generateFlatBedrock");
     }
 
     public WorldValues(ConfigurationSection worldSettings, Map<String, Boolean> paperConfig) {
         this.paperConfig = paperConfig;
-        this.generateFortress = worldSettings.getBoolean("generate-fortress",
-                (this.paperConfig.containsKey("generateFortress")) ? this.paperConfig.get("generateFortress") : true);
+        this.vanillaValues = false;
+        this.generateFortress = worldSettings.getBoolean("generate-fortress", this.paperConfig.get("generateFortress"));
         this.fortressMin = setDecoration(worldSettings, "fortress-min", 64, true);
         this.fortressMax = setDecoration(worldSettings, "fortress-max", 90, true);
         this.generateFarLands = worldSettings.getBoolean("farlands", false);
@@ -54,11 +50,9 @@ public class WorldValues {
         this.farLandsHighZ = worldSettings.getInt("highZ", 12550824);
         this.lavaSeaLevel = setDecoration(worldSettings, "lava-sea-level", 48, true);
         this.flatBedrockCeiling = worldSettings.getBoolean("flat-bedrock-ceiling",
-                (this.paperConfig.containsKey("generateFlatBedrock")) ? this.paperConfig.get("generateFlatBedrock")
-                        : true);
+                this.paperConfig.get("generateFlatBedrock"));
         this.flatBedrockFloor = worldSettings.getBoolean("flat-bedrock-floor",
-                (this.paperConfig.containsKey("generateFlatBedrock")) ? this.paperConfig.get("generateFlatBedrock")
-                        : true);
+                this.paperConfig.get("generateFlatBedrock"));
     }
 
     private int setDecoration(ConfigurationSection worldConfig, String setting, int defaultValue, boolean safetyMax) {

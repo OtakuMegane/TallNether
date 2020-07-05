@@ -6,46 +6,47 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ConfigAccessor {
-    private static Map<String, ConfigValues> worldConfigs = new HashMap<>();
+    private static Map<String, ConfigValues> worldConfigs = new HashMap<>(); // Pre 1.16
+    private static ConfigValues vanilla; // Pre 1.16
     private static Map<String, WorldConfig> newWorldConfigs = new HashMap<>();
-    private static WorldConfig vanillaConfig;
-    private static ConfigValues vanilla;
     private static ConfigurationSection mainConfig;
 
     public ConfigAccessor() {
     }
 
-    public void setMainConfig(ConfigurationSection mainConfig) {
+    public ConfigAccessor(ConfigurationSection mainConfig) {
         ConfigAccessor.mainConfig = mainConfig;
     }
 
-    public WorldConfig setVanillaConfig(Map<String, Boolean> paperConfig) {
-        ConfigAccessor.vanillaConfig = new WorldConfig(null, paperConfig);
-        return ConfigAccessor.vanillaConfig;
-    }
-
-    public WorldConfig newWorldConfig(String worldName, Map<String, Boolean> paperConfig, boolean store) {
+    public WorldConfig newWorldConfig(String worldName, Map<String, Boolean> paperConfig, boolean vanilla) {
         ConfigurationSection worldSettings = ConfigAccessor.mainConfig.getConfigurationSection("worlds." + worldName);
         WorldConfig worldConfig = new WorldConfig(worldSettings, paperConfig);
-
-        if(store) {
-            ConfigAccessor.newWorldConfigs.put(worldName, worldConfig);
-        }
-
+        ConfigAccessor.newWorldConfigs.put(worldName, worldConfig);
         return worldConfig;
     }
 
     public WorldConfig getWorldConfig(String worldName) {
-        if (ConfigAccessor.worldConfigs.containsKey(worldName)) {
-            return ConfigAccessor.newWorldConfigs.get(worldName);
-        }
-
-        return ConfigAccessor.vanillaConfig;
-
+        WorldConfig worldConfig = ConfigAccessor.newWorldConfigs.get(worldName);
+        return worldConfig;
     }
 
+    public String biomeClassToConfig(String biomeClass) {
+        if (biomeClass.equals("BiomeHell")) {
+            return "nether-wastes";
+        } else if (biomeClass.equals("BiomeCrimsonForest")) {
+            return "crimson-forest";
+        } else if (biomeClass.equals("BiomeWarpedForest")) {
+            return "warped-forest";
+        } else if (biomeClass.equals("BiomeBasaltDeltas")) {
+            return "basalt-deltas";
+        } else if (biomeClass.equals("BiomeSoulSandValley")) {
+            return "soul-sand-valley";
+        } else {
+            return "";
+        }
+    }
 
-
+    // Pre 1.16
     public void addConfig(String worldName, ConfigValues config) {
         if (worldName == null) {
             ConfigAccessor.vanilla = config;
@@ -54,16 +55,8 @@ public class ConfigAccessor {
         }
     }
 
+    // Pre 1.16
     public ConfigValues getConfig(String worldName) {
-        if (ConfigAccessor.worldConfigs.containsKey(worldName)) {
-            return ConfigAccessor.worldConfigs.get(worldName);
-        }
-
-        return ConfigAccessor.vanilla;
-
-    }
-
-    public ConfigValues getConfig(String worldName, String biome) {
         if (ConfigAccessor.worldConfigs.containsKey(worldName)) {
             return ConfigAccessor.worldConfigs.get(worldName);
         }

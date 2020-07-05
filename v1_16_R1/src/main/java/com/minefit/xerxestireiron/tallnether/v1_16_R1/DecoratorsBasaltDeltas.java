@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
+import net.minecraft.server.v1_16_R1.BiomeBasaltDeltas;
 import net.minecraft.server.v1_16_R1.BiomeBase;
 import net.minecraft.server.v1_16_R1.BiomeDecoratorGroups;
 import net.minecraft.server.v1_16_R1.BiomeHell;
+import net.minecraft.server.v1_16_R1.BiomeWarpedForest;
 import net.minecraft.server.v1_16_R1.Biomes;
 import net.minecraft.server.v1_16_R1.Blocks;
 import net.minecraft.server.v1_16_R1.IRegistry;
@@ -20,6 +23,7 @@ import net.minecraft.server.v1_16_R1.WorldGenCarverWrapper;
 import net.minecraft.server.v1_16_R1.WorldGenDecorator;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorDungeonConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorFrequencyConfiguration;
+import net.minecraft.server.v1_16_R1.WorldGenDecoratorHeight;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorHeightAverageConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureBastionPieces;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureBastionRemnantConfiguration;
@@ -30,6 +34,7 @@ import net.minecraft.server.v1_16_R1.WorldGenFeatureConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureConfigurationChance;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureConfigured;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureEmptyConfiguration;
+import net.minecraft.server.v1_16_R1.WorldGenFeatureHugeFungiConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureOreConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureRuinedPortal;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureRuinedPortalConfiguration;
@@ -37,18 +42,19 @@ import net.minecraft.server.v1_16_R1.WorldGenStage;
 import net.minecraft.server.v1_16_R1.WorldGenSurface;
 import net.minecraft.server.v1_16_R1.WorldGenSurfaceComposite;
 import net.minecraft.server.v1_16_R1.WorldGenSurfaceConfigurationBase;
+import net.minecraft.server.v1_16_R1.WorldGenSurfaceNetherForest;
 import net.minecraft.server.v1_16_R1.WorldGenerator;
 
 @SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
-public class DecoratorsNetherWastes {
+public class DecoratorsBasaltDeltas {
 
-    private final BiomeHell biome;
+    private final BiomeBasaltDeltas biome;
     private List<WorldGenFeatureConfigured> originalDecoratorsUnderground;
     private List<WorldGenFeatureConfigured> originalDecoratorsVegetal;
     private List<WorldGenFeatureComposite> originalFeaturesAir;
 
-    public DecoratorsNetherWastes() {
-        this.biome = (BiomeHell) Biomes.NETHER_WASTES;
+    public DecoratorsBasaltDeltas() {
+        this.biome = (BiomeBasaltDeltas) Biomes.BASALT_DELTAS;
         List<WorldGenFeatureConfigured> underground = getDecoratorsList(
                 WorldGenStage.Decoration.UNDERGROUND_DECORATION);
         this.originalDecoratorsUnderground = new ArrayList<>(underground);
@@ -157,7 +163,7 @@ public class DecoratorsNetherWastes {
     }
 
     private void setNewDecorators() {
-        // Taken from BiomeHell.java
+        // Taken from BiomeWarpedForest.java
         // Some type casts used in the decompiled code are not necessary when done here
         // Trial and error is involved
         // NMS methods in the early/dev releases of Spigot will sometimes change without a version update, so wait until stable release to be safe
@@ -173,28 +179,46 @@ public class DecoratorsNetherWastes {
                 (WorldGenCarverConfiguration) (new WorldGenFeatureConfigurationChance(0.2F)));
         this.biome.a(WorldGenStage.Features.AIR, caves);
 
+        // We curently do not clear SURFACE_STRUCTURES so no need to register decorators
+        /*// ???
+        WorldGenFeatureConfigured<?, ?> delta = WorldGenerator.DELTA_FEATURE.b(BiomeDecoratorGroups.aV)
+                .a(WorldGenDecorator.b.a(new WorldGenDecoratorFrequencyConfiguration(40)));
+        this.biome.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, delta);*/
+
         // Not sure exactly
         WorldGenFeatureConfigured<?, ?> dunno = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.aL)
-                .a(WorldGenDecorator.p.a(new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+                .a(WorldGenDecorator.p.a(new WorldGenFeatureChanceDecoratorCountConfiguration(40, 8, 16, 256)));
         this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, dunno);
 
-        // The following two are from BiomeDecoratorGroups.ab(this)
-        // They gen pretty rarely
-        // Red shrooms
-        WorldGenFeatureConfigured<?, ?> redShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.at)
-                .a(WorldGenDecorator.j.a(new WorldGenDecoratorDungeonConfiguration(4)));
-        this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, redShrooms);
+        // We curently do not clear SURFACE_STRUCTURES so no need to register decorators
+        /*// Basalt Column ???
+        WorldGenFeatureConfigured<?, ?> basalt_column1 = WorldGenerator.BASALT_COLUMNS.b(BiomeDecoratorGroups.aR)
+                .a(WorldGenDecorator.b.a(new WorldGenDecoratorFrequencyConfiguration(4)));
+        this.biome.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, basalt_column1);
 
-        // Brown shrooms
-        WorldGenFeatureConfigured<?, ?> brownShrooms = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.as)
-                .a(WorldGenDecorator.j.a(new WorldGenDecoratorDungeonConfiguration(8)));
-        this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, brownShrooms);
+        // TODO: Decode
+        // Basalt Column
+        WorldGenFeatureConfigured<?, ?> basalt_column2 = WorldGenerator.BASALT_COLUMNS.b(BiomeDecoratorGroups.aS)
+                .a(WorldGenDecorator.b.a(new WorldGenDecoratorFrequencyConfiguration(2)));
+        this.biome.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, basalt_column2);*/
 
-        // Lavafalls (lavafall)
-        WorldGenFeatureConfigured<?, ?> lavaFalls = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.aM)
+        // Replace netherrack with basalt
+        WorldGenFeatureConfigured<?, ?> replace_blob1 = WorldGenerator.NETHERRACK_REPLACE_BLOBS
+                .b(BiomeDecoratorGroups.aT)
+                .a(WorldGenDecorator.n.a(new WorldGenFeatureChanceDecoratorCountConfiguration(75, 0, 0, 128)));
+        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, replace_blob1);
+
+        // Replace netherrack with blackstone
+        WorldGenFeatureConfigured<?, ?> replace_blob2 = WorldGenerator.NETHERRACK_REPLACE_BLOBS
+                .b(BiomeDecoratorGroups.aU)
+                .a(WorldGenDecorator.n.a(new WorldGenFeatureChanceDecoratorCountConfiguration(25, 0, 0, 128)));
+        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, replace_blob2);
+
+        // Surface lava pools (?)
+        WorldGenFeatureConfigured<?, ?> lavaFalls2 = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.aN)
                 .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "lavafall").a(new WorldGenFeatureChanceDecoratorCountConfiguration(8, 4, 8, 128)));
-        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, lavaFalls);
+                        "lavafall").a(new WorldGenFeatureChanceDecoratorCountConfiguration(16, 4, 8, 128)));
+        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, lavaFalls2);
 
         // Fire (fire)
         WorldGenFeatureConfigured<?, ?> fire = WorldGenerator.RANDOM_PATCH.b(BiomeDecoratorGroups.ap)
@@ -232,24 +256,6 @@ public class DecoratorsNetherWastes {
                         "brown-shroom").a(new WorldGenFeatureChanceDecoratorRangeConfiguration(0.5F, 0, 0, 128)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, brownShrooms2);
 
-        // Set from BiomeDecoratorGroups.a method
-        // Nether Gold Ore (nether-gold)
-        WorldGenFeatureConfigured<?, ?> nether_gold = WorldGenerator.ORE
-                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
-                        Blocks.NETHER_GOLD_ORE.getBlockData(), 10))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "nether-gold").a(new WorldGenFeatureChanceDecoratorCountConfiguration(10, 10, 20, 128)));
-        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, nether_gold);
-
-        // Set from BiomeDecoratorGroups.a method
-        // Nether Quartz (quartz)
-        WorldGenFeatureConfigured<?, ?> quartz = WorldGenerator.ORE
-                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
-                        Blocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "quartz").a(new WorldGenFeatureChanceDecoratorCountConfiguration(16, 10, 20, 128)));
-        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, quartz);
-
         // Magma Block (magma)
         WorldGenFeatureConfigured<?, ?> magma = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
@@ -261,8 +267,26 @@ public class DecoratorsNetherWastes {
         // Hidden Lava (hidden-lava)
         WorldGenFeatureConfigured<?, ?> hiddenLava = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.aO)
                 .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "hidden-lava").a(new WorldGenFeatureChanceDecoratorCountConfiguration(16, 10, 20, 128)));
+                        "hidden-lava").a(new WorldGenFeatureChanceDecoratorCountConfiguration(32, 10, 20, 128)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, hiddenLava);
+
+        // Set from BiomeDecoratorGroups.a method
+        // Nether Gold Ore (nether-gold)
+        WorldGenFeatureConfigured<?, ?> nether_gold = WorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
+                        Blocks.NETHER_GOLD_ORE.getBlockData(), 10))
+                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
+                        "nether-gold").a(new WorldGenFeatureChanceDecoratorCountConfiguration(20, 10, 20, 128)));
+        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, nether_gold);
+
+        // Set from BiomeDecoratorGroups.a method
+        // Nether Quartz (quartz)
+        WorldGenFeatureConfigured<?, ?> quartz = WorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
+                        Blocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
+                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
+                        "quartz").a(new WorldGenFeatureChanceDecoratorCountConfiguration(32, 10, 20, 128)));
+        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, quartz);
 
         // Set from BiomeDecoratorGroups.at method
         // Ancient Debris 1
@@ -279,38 +303,20 @@ public class DecoratorsNetherWastes {
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHER_ORE_REPLACEABLES,
                         Blocks.ANCIENT_DEBRIS.getBlockData(), 2))
                 .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "ancient-debris").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 0, 37)));
+                        "ancient-debris").a(new WorldGenFeatureChanceDecoratorCountConfiguration(1, 8, 16, 128)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, ancient_debris2);
-
-        // Set from BiomeDecoratorGroups.a method
-        // Gravel Patches
-        WorldGenFeatureConfigured<?, ?> gravel_patch = WorldGenerator.ORE
-                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
-                        Blocks.GRAVEL.getBlockData(), 33))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "gravel-patch").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 0, 37)));
-        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, gravel_patch);
-
-     // Set from BiomeDecoratorGroups.a method
-        // Blackstone Patches
-        WorldGenFeatureConfigured<?, ?> blackstone_patch = WorldGenerator.ORE
-                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
-                        Blocks.BLACKSTONE.getBlockData(), 33))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "blackstone-patch").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 10, 37)));
-        this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, blackstone_patch);
     }
 
     private boolean doFixes(boolean restore) {
         // WorldGenSurfaces are hardcoded, I dunno why. All this shit is to change one number
-        TallNether_WorldGenSurfaceNether tnwgs = new TallNether_WorldGenSurfaceNether(
+        TallNether_WorldGenSurfaceBasaltDeltas tnwgs = new TallNether_WorldGenSurfaceBasaltDeltas(
                 WorldGenSurfaceConfigurationBase.a);
-        WorldGenSurface<WorldGenSurfaceConfigurationBase> asdfg = IRegistry.a(IRegistry.SURFACE_BUILDER, "nether",
-                tnwgs);
-        WorldGenSurfaceComposite wgsc = new WorldGenSurfaceComposite<>(asdfg, WorldGenSurface.M);
+        WorldGenSurface<WorldGenSurfaceConfigurationBase> asdfg = IRegistry.a(IRegistry.SURFACE_BUILDER,
+                "basalt_deltas", tnwgs);
+        WorldGenSurfaceComposite wgsc = new WorldGenSurfaceComposite<>(asdfg, WorldGenSurface.R);
 
         try {
-            Field mField = ReflectionHelper.getField(BiomeHell.class, "m", true);
+            Field mField = ReflectionHelper.getField(BiomeBasaltDeltas.class, "m", true);
             ReflectionHelper.setFinal(mField, this.biome, wgsc);
         } catch (Exception e) {
             return false;
