@@ -26,7 +26,7 @@ public class TallNether_WorldGenDecoratorHeightBiased extends WorldGenDecorator<
         String worldName = generatoraccess.getMinecraftWorld().getWorld().getName();
 
         if(this.blockType.equals("quartz")) {
-            int innerRand = this.configAccessor.getConfig(worldName).quartzMaxHeight - this.configAccessor.getConfig(worldName).quartzMaxMinus;
+            int innerRand = this.configAccessor.getConfig(worldName).quartzMaxHeight;
             innerRand = innerRand > 0 ? innerRand : 1;
             int outerRand = this.configAccessor.getConfig(worldName).quartzMinHeight;
             outerRand = outerRand > 0 ? outerRand : 1;
@@ -39,7 +39,7 @@ public class TallNether_WorldGenDecoratorHeightBiased extends WorldGenDecorator<
                 worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(j, k, l), c0);
             }
         } else if(this.blockType.equals("glowstone")) {
-            int innerRand = this.configAccessor.getConfig(worldName).glowstone2MaxHeight - this.configAccessor.getConfig(worldName).glowstone2MaxMinus;
+            int innerRand = this.configAccessor.getConfig(worldName).glowstone2MaxHeight;
             innerRand = innerRand > 0 ? innerRand : 1;
             int outerRand = this.configAccessor.getConfig(worldName).glowstone2MinHeight;
             outerRand = outerRand > 0 ? outerRand : 1;
@@ -52,7 +52,7 @@ public class TallNether_WorldGenDecoratorHeightBiased extends WorldGenDecorator<
                 worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(j, k, l), c0);
             }
         } else if(this.blockType.equals("hidden-lava")) {
-            int innerRand = this.configAccessor.getConfig(worldName).hiddenLavaMaxHeight - this.configAccessor.getConfig(worldName).hiddenLavaMaxMinus;
+            int innerRand = this.configAccessor.getConfig(worldName).hiddenLavaMaxHeight;
             innerRand = innerRand > 0 ? innerRand : 1;
             int outerRand = this.configAccessor.getConfig(worldName).hiddenLavaMinHeight;
             outerRand = outerRand > 0 ? outerRand : 1;
@@ -65,7 +65,7 @@ public class TallNether_WorldGenDecoratorHeightBiased extends WorldGenDecorator<
                 worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(j, k, l), c0);
             }
         } else if(this.blockType.equals("lavafall")) {
-            int innerRand = this.configAccessor.getConfig(worldName).lavafallMaxHeight - this.configAccessor.getConfig(worldName).lavafallMaxMinus;
+            int innerRand = this.configAccessor.getConfig(worldName).lavafallMaxHeight;
             innerRand = innerRand > 0 ? innerRand : 1;
             int outerRand = this.configAccessor.getConfig(worldName).lavafallMinHeight;
             outerRand = outerRand > 0 ? outerRand : 1;

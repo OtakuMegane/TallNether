@@ -33,11 +33,11 @@ public class TallNether_WorldGenDecoratorNetherChance extends TallNether_WorldGe
 
         if(this.blockType.equals("red-shroom")) {
             attempts = worldConfig.redShroomAttempts;
-            innerRand = worldConfig.redShroomMaxHeight - worldConfig.redShroomMaxMinus;
+            innerRand = worldConfig.redShroomMaxHeight;
             outerRand = worldConfig.redShroomMinHeight;
         } else if(this.blockType.equals("brown-shroom")) {
             attempts = worldConfig.brownShroomAttempts;
-            innerRand = worldConfig.brownShroomMaxHeight - worldConfig.brownShroomMaxMinus;
+            innerRand = worldConfig.brownShroomMaxHeight;
             outerRand = worldConfig.brownShroomMinHeight;
         } else {
             return a(random, worldgenfeaturechancedecoratorrangeconfiguration, blockposition);

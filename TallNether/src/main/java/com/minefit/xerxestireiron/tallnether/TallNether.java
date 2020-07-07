@@ -14,8 +14,6 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.minefit.xerxestireiron.tallnether.Messages;
-
 public class TallNether extends JavaPlugin implements Listener {
     private String name;
     protected String version;
@@ -23,7 +21,7 @@ public class TallNether extends JavaPlugin implements Listener {
     private ManageHell manageHell = new ManageHell(this);
     protected final ServerVersion serverVersion = new ServerVersion(this);
     private final List<String> compatibleVersions = Arrays.asList("v1_12_R1", "v1_13_R1", "v1_13_R2", "v1_14_R1",
-            "v1_15_R1");
+            "v1_15_R1", "v1_16_R1");
     private HashMap<String, ManageHell> legacy_worlds;
 
     @Override
@@ -39,6 +37,8 @@ public class TallNether extends JavaPlugin implements Listener {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
+        new ConfigAccessor(this.getConfig());
 
         // Catches the /reload command or other things that may bypass the WorldInitEvent
         for (World world : Bukkit.getWorlds()) {
@@ -59,17 +59,17 @@ public class TallNether extends JavaPlugin implements Listener {
         this.messages.pluginDisable();
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onWorldInit(WorldInitEvent event) {
         prepareWorld(event.getWorld());
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onWorldLoad(WorldLoadEvent event) {
         prepareWorld(event.getWorld());
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onWorldUnload(WorldUnloadEvent event) {
         World world = event.getWorld();
 

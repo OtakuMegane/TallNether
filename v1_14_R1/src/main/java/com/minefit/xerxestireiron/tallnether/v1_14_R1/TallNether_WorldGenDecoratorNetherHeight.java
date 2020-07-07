@@ -33,19 +33,19 @@ public class TallNether_WorldGenDecoratorNetherHeight extends TallNether_WorldGe
 
         if(this.blockType.equals("quartz")) {
             attempts = worldConfig.quartzAttempts;
-            innerRand = worldConfig.quartzMaxHeight - worldConfig.quartzMaxMinus;
+            innerRand = worldConfig.quartzMaxHeight;
             outerRand = worldConfig.quartzMinHeight;
         } else if(this.blockType.equals("glowstone")) {
             attempts = worldConfig.glowstone2Attempts;
-            innerRand = worldConfig.glowstone2MaxHeight - worldConfig.glowstone2MaxMinus;
+            innerRand = worldConfig.glowstone2MaxHeight;
             outerRand = worldConfig.glowstone2MinHeight;
         } else if(this.blockType.equals("hidden-lava")) {
             attempts = worldConfig.hiddenLavaAttempts;
-            innerRand = worldConfig.hiddenLavaMaxHeight - worldConfig.hiddenLavaMaxMinus;
+            innerRand = worldConfig.hiddenLavaMaxHeight;
             outerRand = worldConfig.hiddenLavaMinHeight;
         } else if(this.blockType.equals("lavafall")) {
             attempts = worldConfig.lavafallAttempts;
-            innerRand = worldConfig.lavafallMaxHeight - worldConfig.lavafallMaxMinus;
+            innerRand = worldConfig.lavafallMaxHeight;
             outerRand = worldConfig.lavafallMinHeight;
         } else {
             attempts = worldgenfeaturechancedecoratorcountconfiguration.a;

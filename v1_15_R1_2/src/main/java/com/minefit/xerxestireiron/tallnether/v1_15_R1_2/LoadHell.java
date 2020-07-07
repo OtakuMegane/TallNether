@@ -64,6 +64,7 @@ public class LoadHell {
 
     public void overrideGenerator(World world) {
         String worldName = world.getName();
+        world.setKeepSpawnInMemory(false);
         WorldInfo worldInfo = this.worldInfos.get(worldName);
         GeneratorSettingsNether generatorsettingsnether = new TallNether_GeneratorSettingsNether();
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());

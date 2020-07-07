@@ -22,6 +22,9 @@ public class ConfigValues {
     public final int fireAttempts;
     public final int fireMinHeight;
     public final int fireMaxHeight;
+    public final int soulfireAttempts;
+    public final int soulfireMinHeight;
+    public final int soulfireMaxHeight;
     public final int brownShroomAttempts;
     public final int brownShroomMinHeight;
     public final int brownShroomMaxHeight;
@@ -77,6 +80,9 @@ public class ConfigValues {
             this.fireAttempts = 10;
             this.fireMinHeight = 4;
             this.fireMaxHeight = 120;
+            this.soulfireAttempts = 10;
+            this.soulfireMinHeight = 4;
+            this.soulfireMaxHeight = 120;
             this.brownShroomAttempts = 1;
             this.brownShroomMinHeight = 0;
             this.brownShroomMaxHeight = 128;
@@ -96,7 +102,7 @@ public class ConfigValues {
             this.magmaRangeMedian = (int) (this.magmaRangeSize / 2);
             this.hiddenLavaAttempts = 16;
             this.hiddenLavaMinHeight = 10;
-            this.hiddenLavaMaxHeight = 108;
+            this.hiddenLavaMaxHeight = 118;
             this.hiddenLavaMaxMinus = 0;
             this.generateFortress = (this.paperConfig.containsKey("generateFortress") ? this.paperConfig.get("generateFortress") : true);
             this.fortressMin = setDecoration("fortress-min", 48, true);
@@ -127,6 +133,9 @@ public class ConfigValues {
             this.fireAttempts = setDecoration("fire-attempts", 20, false);
             this.fireMinHeight = setDecoration("fire-min-height", 4, true);
             this.fireMaxHeight = setDecoration("fire-max-height", 248, true);
+            this.soulfireAttempts = setDecoration("soulfire-attempts", 20, false);
+            this.soulfireMinHeight = setDecoration("soulfire-min-height", 4, true);
+            this.soulfireMaxHeight = setDecoration("soulfire-max-height", 248, true);
             this.brownShroomAttempts = setDecoration("brown-shroom-attempts", 2, false);
             this.brownShroomMinHeight = setDecoration("brown-shroom-min-height", 0, true);
             this.brownShroomMaxHeight = setDecoration("brown-shroom-max-height", 256, true);

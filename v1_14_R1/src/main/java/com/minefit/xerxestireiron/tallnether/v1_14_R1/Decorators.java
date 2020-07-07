@@ -33,6 +33,10 @@ import net.minecraft.server.v1_14_R1.WorldGenFeatureMushroomConfiguration;
 import net.minecraft.server.v1_14_R1.WorldGenFeatureOreConfiguration;
 import net.minecraft.server.v1_14_R1.WorldGenStage;
 import net.minecraft.server.v1_14_R1.WorldGenerator;
+import net.minecraft.server.v1_14_R1.IRegistry;
+import net.minecraft.server.v1_14_R1.WorldGenSurface;
+import net.minecraft.server.v1_14_R1.WorldGenSurfaceComposite;
+import net.minecraft.server.v1_14_R1.WorldGenSurfaceConfigurationBase;
 
 @SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
 public class Decorators {
@@ -279,6 +283,20 @@ public class Decorators {
     }
 
     private boolean doFixes(boolean restore) {
+        // WorldGenSurfaces are hardcoded, I dunno why. All this shit is to change one number
+        TallNether_WorldGenSurfaceNether tnwgs = new TallNether_WorldGenSurfaceNether(
+                WorldGenSurfaceConfigurationBase::a);
+        WorldGenSurface<WorldGenSurfaceConfigurationBase> asdfg = IRegistry.a(IRegistry.SURFACE_BUILDER, "nether",
+                tnwgs);
+        WorldGenSurfaceComposite wgsc = new WorldGenSurfaceComposite<>(asdfg, WorldGenSurface.E);
+
+        try {
+            Field nField = ReflectionHelper.getField(BiomeHell.class, "n", true);
+            ReflectionHelper.setFinal(nField, this.biomeHell, wgsc);
+        } catch (Exception e) {
+            return false;
+        }
+
         return true;
     }
 }

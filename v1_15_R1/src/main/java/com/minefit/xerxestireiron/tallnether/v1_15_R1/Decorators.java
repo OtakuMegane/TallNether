@@ -14,6 +14,7 @@ import net.minecraft.server.v1_15_R1.Biomes;
 import net.minecraft.server.v1_15_R1.Blocks;
 import net.minecraft.server.v1_15_R1.IRegistry;
 import net.minecraft.server.v1_15_R1.StructureGenerator;
+import net.minecraft.server.v1_15_R1.World;
 import net.minecraft.server.v1_15_R1.WorldGenCarverAbstract;
 import net.minecraft.server.v1_15_R1.WorldGenCarverConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenCarverWrapper;
@@ -29,6 +30,9 @@ import net.minecraft.server.v1_15_R1.WorldGenFeatureConfigured;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureEmptyConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenFeatureOreConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenStage;
+import net.minecraft.server.v1_15_R1.WorldGenSurface;
+import net.minecraft.server.v1_15_R1.WorldGenSurfaceComposite;
+import net.minecraft.server.v1_15_R1.WorldGenSurfaceConfigurationBase;
 import net.minecraft.server.v1_15_R1.WorldGenerator;
 
 @SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
@@ -52,7 +56,8 @@ public class Decorators {
     }
 
     public boolean alreadySet() {
-        return WorldGenerator.ao.get("Fortress".toLowerCase(Locale.ROOT)).getClass().getSimpleName().equals("TallNether_WorldGenNether");
+        return WorldGenerator.ao.get("Fortress".toLowerCase(Locale.ROOT)).getClass().getSimpleName()
+                .equals("TallNether_WorldGenNether");
     }
 
     public boolean set() {
@@ -260,6 +265,20 @@ public class Decorators {
     }
 
     private boolean doFixes(boolean restore) {
+        // WorldGenSurfaces are hardcoded, I dunno why. All this shit is to change one number
+        TallNether_WorldGenSurfaceNether tnwgs = new TallNether_WorldGenSurfaceNether(
+                WorldGenSurfaceConfigurationBase::a);
+        WorldGenSurface<WorldGenSurfaceConfigurationBase> asdfg = IRegistry.a(IRegistry.SURFACE_BUILDER, "nether",
+                tnwgs);
+        WorldGenSurfaceComposite wgsc = new WorldGenSurfaceComposite<>(asdfg, WorldGenSurface.E);
+
+        try {
+            Field nField = ReflectionHelper.getField(BiomeHell.class, "n", true);
+            ReflectionHelper.setFinal(nField, this.biomeHell, wgsc);
+        } catch (Exception e) {
+            return false;
+        }
+
         return true;
     }
 }

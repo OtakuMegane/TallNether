@@ -4,18 +4,6 @@
 # All other settings will use default values if nothing is given in the config
 # All worlds not in the config will be ignored
 #
-# Example config
-#
-# worlds:
-#   world1:
-#     enabled: true
-#     farlands: true
-#     lava-sea-level: 40
-#     gravel-soulsand-limit: 92
-#     fire-min-height: 4
-#     fire-max-height: 128
-#     fire-attempts: 15
-#   world2:
-#     enabled: true
+# See the file config-examples.txt to see examples of config layouts
 
 worlds:
