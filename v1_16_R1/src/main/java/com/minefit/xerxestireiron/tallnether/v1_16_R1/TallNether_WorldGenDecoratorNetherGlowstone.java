@@ -45,7 +45,6 @@ public class TallNether_WorldGenDecoratorNetherGlowstone extends TallNether_Worl
         } else {
             return a(random, worldgendecoratorfrequencyconfiguration, blockposition);
         }
-        System.out.println("BIOME: " + biomeName + "  blocktype: " + this.blockType + "  attempts height: " + attempts);
 
         max = max > 0 ? max : 1;
         attempts = attempts > 0 ? attempts : 1;

@@ -9,16 +9,16 @@ crimson-forest
 warped-forest
 soul-sand-valley
 
-#1.15.2 and earlier:
+1.15.2 and earlier:
 
 worlds:
   world1:
-   enabled: true
-   farlands: true
-   lava-sea-level: 40
-   fire-attempts: 20
-   fire-min-height: 10
-   fire-max-height: 200
+    enabled: true
+    farlands: true
+    lava-sea-level: 40
+    fire-attempts: 20
+    fire-min-height: 10
+    fire-max-height: 200
   world2:
     enabled: true
     lava-sea-level: 64
@@ -37,7 +37,7 @@ worlds:
       fire-max-height: 200
       ancient-debris1-attempts: 3
     soul-sand-valley:
-     soul-fire-attempts: 25
+      soul-fire-attempts: 25
       ancient-debris1-attempts: 3
   world2:
     enabled: true

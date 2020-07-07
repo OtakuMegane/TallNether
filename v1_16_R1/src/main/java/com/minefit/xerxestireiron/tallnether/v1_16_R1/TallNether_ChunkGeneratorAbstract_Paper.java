@@ -1,5 +1,6 @@
 package com.minefit.xerxestireiron.tallnether.v1_16_R1;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -8,16 +9,15 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.ObjectList;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.ObjectListIterator;
-
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
 import com.minefit.xerxestireiron.tallnether.WorldValues;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
+import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import net.minecraft.server.v1_16_R1.BiomeBase;
 import net.minecraft.server.v1_16_R1.BlockColumn;
 import net.minecraft.server.v1_16_R1.BlockPosition;
@@ -44,6 +44,7 @@ import net.minecraft.server.v1_16_R1.ProtoChunk;
 import net.minecraft.server.v1_16_R1.RegionLimitedWorldAccess;
 import net.minecraft.server.v1_16_R1.SectionPosition;
 import net.minecraft.server.v1_16_R1.SeededRandom;
+import net.minecraft.server.v1_16_R1.SpawnerCreature;
 import net.minecraft.server.v1_16_R1.StructureBoundingBox;
 import net.minecraft.server.v1_16_R1.StructureGenerator;
 import net.minecraft.server.v1_16_R1.StructureManager;
@@ -56,15 +57,15 @@ import net.minecraft.server.v1_16_R1.WorldGenFeatureDefinedStructureJigsawJuncti
 import net.minecraft.server.v1_16_R1.WorldGenFeatureDefinedStructurePoolTemplate;
 import net.minecraft.server.v1_16_R1.WorldGenFeaturePillagerOutpostPoolPiece;
 
-public final class TallNether_ChunkGenerator extends ChunkGenerator {
-    public static final Codec<TallNether_ChunkGenerator> d = RecordCodecBuilder.create((instance) -> {
+public final class TallNether_ChunkGeneratorAbstract_Paper extends ChunkGenerator {
+    public static final Codec<TallNether_ChunkGeneratorAbstract_Paper> d = RecordCodecBuilder.create((instance) -> {
         return instance.group(WorldChunkManager.a.fieldOf("biome_source").forGetter((chunkgeneratorabstract) -> {
             return chunkgeneratorabstract.b;
         }), Codec.LONG.fieldOf("seed").stable().forGetter((chunkgeneratorabstract) -> {
             return chunkgeneratorabstract.w;
         }), GeneratorSettingBase.b.fieldOf("settings").forGetter((chunkgeneratorabstract) -> {
             return chunkgeneratorabstract.h;
-        })).apply(instance, instance.stable(TallNether_ChunkGenerator::new));
+        })).apply(instance, instance.stable(TallNether_ChunkGeneratorAbstract_Paper::new));
     });
     private static final float[] i = (float[]) SystemUtils.a((new float[13824]), (afloat) -> { // CraftBukkit - decompile error
         for (int i = 0; i < 24; ++i) {
@@ -114,16 +115,17 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
     private final int highX;
     private final int highZ;
     private final boolean generateFarLands;
+    private boolean mobH;
 
-    public TallNether_ChunkGenerator(WorldChunkManager worldchunkmanager, long i, GeneratorSettingBase generatorsettingbase) {
+    public TallNether_ChunkGeneratorAbstract_Paper(WorldChunkManager worldchunkmanager, long i, GeneratorSettingBase generatorsettingbase) {
         this(null, worldchunkmanager, worldchunkmanager, i, generatorsettingbase);
     }
 
-    public TallNether_ChunkGenerator(World world, WorldChunkManager worldchunkmanager, long i, GeneratorSettingBase generatorsettingbase) {
+    public TallNether_ChunkGeneratorAbstract_Paper(World world, WorldChunkManager worldchunkmanager, long i, GeneratorSettingBase generatorsettingbase) {
         this(world, worldchunkmanager, worldchunkmanager, i, generatorsettingbase);
     }
 
-    private TallNether_ChunkGenerator(World world, WorldChunkManager worldchunkmanager, WorldChunkManager worldchunkmanager1, long i, GeneratorSettingBase generatorsettingbase) {
+    private TallNether_ChunkGeneratorAbstract_Paper(World world, WorldChunkManager worldchunkmanager, WorldChunkManager worldchunkmanager1, long i, GeneratorSettingBase generatorsettingbase) {
         super(worldchunkmanager, worldchunkmanager1, generatorsettingbase.a(), i);
         this.worldConfig = this.configAccessor.getWorldConfig(world.getWorld().getName());
         this.worldValues = worldConfig.getWorldValues();
@@ -163,11 +165,18 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
             this.v = null;
         }
 
+        try {
+            Field jField = ReflectionHelper.getField(this.h.getClass(), "j", true);
+            jField.setAccessible(true);
+            this.mobH = jField.getBoolean(this.h);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
     }
 
     @Override
     protected Codec<? extends ChunkGenerator> a() {
-        return ChunkGeneratorAbstract.d;
+        return TallNether_ChunkGeneratorAbstract.d;
     }
 
     public boolean a(long i, GeneratorSettingBase.a generatorsettingbase_a) {
@@ -276,7 +285,7 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
                     // CraftBukkit end
 
                     float f8 = f4 > f3 ? 0.5F : 1.0F;
-                    float f9 = f8 * TallNether_ChunkGenerator.j[l + 2 + (i1 + 2) * 5] / (f6 + 2.0F);
+                    float f9 = f8 * TallNether_ChunkGeneratorAbstract_Paper.j[l + 2 + (i1 + 2) * 5] / (f6 + 2.0F);
 
                     f += f7 * f9;
                     f1 += f6 * f9;
@@ -411,7 +420,7 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
         } else if (i < this.getSeaLevel()) {
             iblockdata = this.g;
         } else {
-            iblockdata = TallNether_ChunkGenerator.k;
+            iblockdata = TallNether_ChunkGeneratorAbstract_Paper.k;
         }
 
         return iblockdata;
@@ -629,7 +638,7 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
                                 objectlistiterator1.back(objectlist1.size());
                                 IBlockData iblockdata = this.a(d18, j2);
 
-                                if (iblockdata != TallNether_ChunkGenerator.k) {
+                                if (iblockdata != TallNether_ChunkGeneratorAbstract_Paper.k) {
                                     if (iblockdata.f() != 0) {
                                         blockposition_mutableblockposition.d(j3, j2, i4);
                                         protochunk.j(blockposition_mutableblockposition);
@@ -660,7 +669,7 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
         int i1 = j + 12;
         int j1 = k + 12;
 
-        return l >= 0 && l < 24 ? (i1 >= 0 && i1 < 24 ? (j1 >= 0 && j1 < 24 ? (double) TallNether_ChunkGenerator.i[j1 * 24 * 24 + l * 24 + i1] : 0.0D) : 0.0D) : 0.0D;
+        return l >= 0 && l < 24 ? (i1 >= 0 && i1 < 24 ? (j1 >= 0 && j1 < 24 ? (double) TallNether_ChunkGeneratorAbstract_Paper.i[j1 * 24 * 24 + l * 24 + i1] : 0.0D) : 0.0D) : 0.0D;
     }
 
     private static double b(int i, int j, int k) {
@@ -713,10 +722,11 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
         return super.getMobsFor(biomebase, structuremanager, enumcreaturetype, blockposition);
     }
 
-    // TODO: Figure this out?
-    /*@Override
+    @Override
     public void addMobs(RegionLimitedWorldAccess regionlimitedworldaccess) {
-        if (!this.h.h()) {
+        // TallNether: Whatever this is, it's protected so we gotta work around
+        //if (!this.h.h()) {
+        if (!this.mobH) {
             int i = regionlimitedworldaccess.a();
             int j = regionlimitedworldaccess.b();
             BiomeBase biomebase = regionlimitedworldaccess.getBiome((new ChunkCoordIntPair(i, j)).l());
@@ -725,5 +735,5 @@ public final class TallNether_ChunkGenerator extends ChunkGenerator {
             seededrandom.a(regionlimitedworldaccess.getSeed(), i << 4, j << 4);
             SpawnerCreature.a(regionlimitedworldaccess, biomebase, i, j, seededrandom);
         }
-    }*/
+    }
 }

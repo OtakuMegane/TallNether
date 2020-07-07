@@ -8,9 +8,6 @@ public class WorldValues {
 
     private final Map<String, Boolean> paperConfig;
     public final boolean vanillaValues;
-    public final boolean generateFortress;
-    public final int fortressMin;
-    public final int fortressMax;
     public final boolean generateFarLands;
     public final int farLandsLowX;
     public final int farLandsLowZ;
@@ -24,9 +21,6 @@ public class WorldValues {
     public WorldValues(Map<String, Boolean> paperConfig) {
         this.paperConfig = paperConfig;
         this.vanillaValues = true;
-        this.generateFortress = this.paperConfig.get("generateFortress");
-        this.fortressMin = 48;
-        this.fortressMax = 70;
         this.generateFarLands = false;
         this.farLandsLowX = -12550824;
         this.farLandsLowZ = -12550824;
@@ -40,9 +34,6 @@ public class WorldValues {
     public WorldValues(ConfigurationSection worldSettings, Map<String, Boolean> paperConfig) {
         this.paperConfig = paperConfig;
         this.vanillaValues = false;
-        this.generateFortress = worldSettings.getBoolean("generate-fortress", this.paperConfig.get("generateFortress"));
-        this.fortressMin = setDecoration(worldSettings, "fortress-min", 64, true);
-        this.fortressMax = setDecoration(worldSettings, "fortress-max", 90, true);
         this.generateFarLands = worldSettings.getBoolean("farlands", false);
         this.farLandsLowX = worldSettings.getInt("lowX", -12550824);
         this.farLandsLowZ = worldSettings.getInt("lowZ", -12550824);

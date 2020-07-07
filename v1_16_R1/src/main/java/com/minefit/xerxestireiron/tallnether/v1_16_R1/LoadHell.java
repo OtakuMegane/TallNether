@@ -3,6 +3,7 @@ package com.minefit.xerxestireiron.tallnether.v1_16_R1;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,19 +13,18 @@ import com.minefit.xerxestireiron.tallnether.Messages;
 
 import net.minecraft.server.v1_16_R1.ChunkGenerator;
 import net.minecraft.server.v1_16_R1.GeneratorSettingBase;
-import net.minecraft.server.v1_16_R1.WorldChunkManager;
 
 public class LoadHell {
     private final Messages messages;
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final HashMap<String, WorldInfo> worldInfos;
-    private final HashMap<String, Boolean> generatorsDone;
     private boolean decoratorsDone = false;
+    private final boolean isPaper;
 
     public LoadHell(ConfigurationSection worldConfig, String pluginName) {
         this.messages = new Messages(pluginName);
         this.worldInfos = new HashMap<>();
-        this.generatorsDone = new HashMap<>();
+        this.isPaper = Bukkit.getName().contains("Paper");
     }
 
     // Returns whether or not decorators were successfully overriden
@@ -55,12 +55,8 @@ public class LoadHell {
 
     public void overrideGenerator(World world) {
         String worldName = world.getName();
-
-        if (generatorsDone.containsKey(worldName)) {
-            return;
-        }
-
         WorldInfo worldInfo = this.worldInfos.get(worldName);
+
         Environment environment = world.getEnvironment();
 
         if (environment != Environment.NETHER) {
@@ -68,7 +64,8 @@ public class LoadHell {
             return;
         }
 
-        if (worldInfo.originalGenName.equals("TallNether_ChunkGenerator")) {
+        if (worldInfo.originalGenName.equals("TallNether_ChunkGeneratorAbstract")
+                || worldInfo.originalGenName.equals("TallNether_ChunkGeneratorAbstract_Paper")) {
             this.messages.alreadyEnabled(worldName);
             return;
         }
@@ -78,28 +75,32 @@ public class LoadHell {
             return;
         }
 
-        WorldChunkManager chunkManager = worldInfo.chunkServer.chunkGenerator.getWorldChunkManager();
-        ChunkGenerator chunkGen = worldInfo.chunkServer.chunkGenerator;
-        TallNether_ChunkGenerator tallNetherGenerator = null;
-
         try {
-            Field wField = ReflectionHelper.getField(chunkGen.getClass(), "w", true);
-            wField.setAccessible(true);
-            long i = wField.getLong(chunkGen);
-            Field hField = ReflectionHelper.getField(chunkGen.getClass(), "h", true);
+            Field hField = ReflectionHelper.getField(worldInfo.originalGenerator.getClass(), "h", true);
             hField.setAccessible(true);
             GeneratorSettingBase h;
-            h = (GeneratorSettingBase) hField.get(chunkGen);
-            tallNetherGenerator = new TallNether_ChunkGenerator(worldInfo.nmsWorld, chunkManager, i, h);
+            h = (GeneratorSettingBase) hField.get(worldInfo.originalGenerator);
+
+            // They've done it again with the fastutil stuff
+            // Paper and Spigot, get your shit together and match
+            // I don't care who
+            if (this.isPaper) {
+                if (setGenerator(worldInfo, new TallNether_ChunkGeneratorAbstract_Paper(worldInfo.nmsWorld,
+                        worldInfo.originalChunkManager, worldInfo.nmsWorld.getSeed(), h), false)) {
+                    this.messages.enableSuccess(worldName);
+                } else {
+                    this.messages.enableFailed(worldName);
+                }
+            } else {
+                if (setGenerator(worldInfo, new TallNether_ChunkGeneratorAbstract(worldInfo.nmsWorld,
+                        worldInfo.originalChunkManager, worldInfo.nmsWorld.getSeed(), h), false)) {
+                    this.messages.enableSuccess(worldName);
+                } else {
+                    this.messages.enableFailed(worldName);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        if (setGenerator(worldInfo, tallNetherGenerator, false)) {
-            this.generatorsDone.put(worldName, true);
-            this.messages.enableSuccess(worldName);
-        } else {
-            this.messages.enableFailed(worldName);
         }
     }
 
@@ -121,6 +122,13 @@ public class LoadHell {
             Field chunkGenerator = ReflectionHelper.getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
             ReflectionHelper.setFinal(chunkGenerator, worldInfo.chunkServer, generator);
+
+            if (heightValue) {
+                Field logicalHeight = ReflectionHelper.getField(worldInfo.dimensionManager.getClass(), "logicalHeight",
+                        true);
+                logicalHeight.setAccessible(true);
+                logicalHeight.setInt(worldInfo.dimensionManager, 256);
+            }
 
             Field chunkMapGenerator = ReflectionHelper.getField(worldInfo.chunkServer.playerChunkMap.getClass(),
                     "chunkGenerator", true);
