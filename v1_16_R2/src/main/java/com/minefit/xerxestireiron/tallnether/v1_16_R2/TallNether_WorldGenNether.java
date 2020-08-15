@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R1;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -7,20 +7,21 @@ import java.util.Random;
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.server.v1_16_R1.BiomeBase;
-import net.minecraft.server.v1_16_R1.ChunkCoordIntPair;
-import net.minecraft.server.v1_16_R1.ChunkGenerator;
-import net.minecraft.server.v1_16_R1.DefinedStructureManager;
-import net.minecraft.server.v1_16_R1.GeneratorAccess;
-import net.minecraft.server.v1_16_R1.SeededRandom;
-import net.minecraft.server.v1_16_R1.StructureBoundingBox;
-import net.minecraft.server.v1_16_R1.StructureGenerator;
-import net.minecraft.server.v1_16_R1.StructurePiece;
-import net.minecraft.server.v1_16_R1.StructureStart;
-import net.minecraft.server.v1_16_R1.WorldChunkManager;
-import net.minecraft.server.v1_16_R1.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.server.v1_16_R1.WorldGenNether;
-import net.minecraft.server.v1_16_R1.WorldGenNetherPieces;
+import net.minecraft.server.v1_16_R2.BiomeBase;
+import net.minecraft.server.v1_16_R2.ChunkCoordIntPair;
+import net.minecraft.server.v1_16_R2.ChunkGenerator;
+import net.minecraft.server.v1_16_R2.DefinedStructureManager;
+import net.minecraft.server.v1_16_R2.GeneratorAccess;
+import net.minecraft.server.v1_16_R2.IRegistryCustom;
+import net.minecraft.server.v1_16_R2.SeededRandom;
+import net.minecraft.server.v1_16_R2.StructureBoundingBox;
+import net.minecraft.server.v1_16_R2.StructureGenerator;
+import net.minecraft.server.v1_16_R2.StructurePiece;
+import net.minecraft.server.v1_16_R2.StructureStart;
+import net.minecraft.server.v1_16_R2.WorldChunkManager;
+import net.minecraft.server.v1_16_R2.WorldGenFeatureEmptyConfiguration;
+import net.minecraft.server.v1_16_R2.WorldGenNether;
+import net.minecraft.server.v1_16_R2.WorldGenNetherPieces;
 
 @SuppressWarnings({ "rawtypes" })
 public class TallNether_WorldGenNether extends WorldGenNether {
@@ -47,7 +48,7 @@ public class TallNether_WorldGenNether extends WorldGenNether {
         }
 
         @Override
-        public void a(ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        public void a(IRegistryCustom iregistrycustom, ChunkGenerator chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
             WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15 = new WorldGenNetherPieces.WorldGenNetherPiece15(this.d, (i << 4) + 2, (j << 4) + 2);
             GeneratorAccess generatoraccess = null;
 
