@@ -33,6 +33,7 @@ public class TallNether_WorldGenDecoratorNetherMagma extends WorldGenDecorator<W
             a.setAccessible(true);
             generatoraccessseed = (GeneratorAccessSeed) a.get(worldgendecoratorcontext);
         } catch (Exception e) {
+            // TallNether: Vanilla generation
             int i = worldgendecoratorcontext.b();
             int j = i - 5 + random.nextInt(10);
 
@@ -43,6 +44,7 @@ public class TallNether_WorldGenDecoratorNetherMagma extends WorldGenDecorator<W
         WorldConfig worldConfig = this.configAccessor.getWorldConfig(worldName);
 
         if (worldConfig == null || worldConfig.isVanilla) {
+            // TallNether: Vanilla generation
             int i = worldgendecoratorcontext.b();
             int j = i - 5 + random.nextInt(10);
 

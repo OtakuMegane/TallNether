@@ -18,40 +18,36 @@ import net.minecraft.server.v1_16_R2.WorldGenFeatureDecoratorConfiguration;
 public abstract class TallNether_WorldGenDecoratorFeatureSimple<DC extends WorldGenFeatureDecoratorConfiguration> extends WorldGenDecorator<DC> {
 
     private final ConfigAccessor configAccessor = new ConfigAccessor();
-    private final String biomeName;
+    private final String biome;
 
-    public TallNether_WorldGenDecoratorFeatureSimple(Codec<DC> codec, String biomeName) {
+    public TallNether_WorldGenDecoratorFeatureSimple(Codec<DC> codec, String biome) {
         super(codec);
-        this.biomeName = biomeName;
+        this.biome = biome;
     }
 
     @Override
     public final Stream<BlockPosition> a(WorldGenDecoratorContext worldgendecoratorcontext, Random random, DC dc, BlockPosition blockposition) {
-        GeneratorAccessSeed generatoraccessseed;
+        GeneratorAccessSeed generatoraccessseed = null;
 
         try {
             Field a = worldgendecoratorcontext.getClass().getDeclaredField("a");
             a.setAccessible(true);
             generatoraccessseed = (GeneratorAccessSeed) a.get(worldgendecoratorcontext);
         } catch (Exception e) {
-            return this.a(random, dc, blockposition);
+            e.printStackTrace();
         }
 
         String worldName = generatoraccessseed.getMinecraftWorld().getWorld().getName();
         WorldConfig worldConfig = this.configAccessor.getWorldConfig(worldName);
-
-        if (worldConfig == null || worldConfig.isVanilla) {
-            return this.a(random, dc, blockposition);
-        }
-
-        return this.a(random, dc, blockposition, getBiomeValues(worldName));
+        boolean vanilla = worldConfig == null || worldConfig.isVanilla;
+        return this.a(random, dc, blockposition, getBiomeValues(worldName), vanilla);
     }
 
     private BiomeValues getBiomeValues(String worldName) {
-        return this.configAccessor.getWorldConfig(worldName).getBiomeValues(this.biomeName);
+        return this.configAccessor.getWorldConfig(worldName).getBiomeValues(this.biome);
     }
 
-    protected abstract Stream<BlockPosition> a(Random random, DC dc, BlockPosition blockposition, BiomeValues biomeValues);
+    protected abstract Stream<BlockPosition> a(Random random, DC dc, BlockPosition blockposition, BiomeValues biomeValues, boolean vanilla);
 
     protected abstract Stream<BlockPosition> a(Random random, DC dc, BlockPosition blockposition);
 }

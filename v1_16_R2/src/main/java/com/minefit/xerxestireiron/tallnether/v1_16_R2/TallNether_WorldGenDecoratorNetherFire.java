@@ -13,21 +13,24 @@ import net.minecraft.server.v1_16_R2.WorldGenDecoratorFrequencyConfiguration;
 
 public class TallNether_WorldGenDecoratorNetherFire extends TallNether_WorldGenDecoratorFeatureSimple<WorldGenDecoratorFrequencyConfiguration> {
 
-    private final String blockType;
+    private final String block;
 
-    public TallNether_WorldGenDecoratorNetherFire(Codec<WorldGenDecoratorFrequencyConfiguration> codec, String biomeName, String blockType) {
-        super(codec, biomeName);
-        this.blockType = blockType;
+    public TallNether_WorldGenDecoratorNetherFire(Codec<WorldGenDecoratorFrequencyConfiguration> codec, String biome, String block) {
+        super(codec, biome);
+        this.block = block;
     }
 
-    public Stream<BlockPosition> a(Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition, BiomeValues biomeValues)             {
+    public Stream<BlockPosition> a(Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition, BiomeValues biomevalues, boolean vanilla)             {
+        if (vanilla) {
+            return a(random, worldgendecoratorfrequencyconfiguration, blockposition);
+        }
 
         List<BlockPosition> list = Lists.newArrayList();
-        int attempts = biomeValues.values.get(this.blockType + "-attempts");
+        int attempts = biomevalues.values.get(this.block + "-attempts");
         attempts = attempts > 1 ? attempts : 1;
-        int maxHeight = biomeValues.values.get(this.blockType + "-max-height");
+        int maxHeight = biomevalues.values.get(this.block + "-max-height");
         maxHeight = maxHeight > 0 ? maxHeight : 1;
-        int minHeight = biomeValues.values.get(this.blockType + "-min-height");
+        int minHeight = biomevalues.values.get(this.block + "-min-height");
 
         for (int i = 0; i < random.nextInt(random.nextInt(attempts) + 1) + 1; ++i) {
             int j = random.nextInt(16) + blockposition.getX();
@@ -40,6 +43,7 @@ public class TallNether_WorldGenDecoratorNetherFire extends TallNether_WorldGenD
         return list.stream();
     }
 
+    // TallNether: Vanilla generation
     public Stream<BlockPosition> a(Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
         List<BlockPosition> list = Lists.newArrayList();
 
