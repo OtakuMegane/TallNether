@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.WorldGenSurfaces;
 
 import java.util.Random;
 

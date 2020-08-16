@@ -27,8 +27,14 @@ public class WorldValues {
         this.farLandsHighX = 12550824;
         this.farLandsHighZ = 12550824;
         this.lavaSeaLevel = 32;
-        this.flatBedrockCeiling = this.paperConfig.get("generateFlatBedrock");
-        this.flatBedrockFloor = this.paperConfig.get("generateFlatBedrock");
+
+        if (this.paperConfig == null) {
+            this.flatBedrockCeiling = false;
+            this.flatBedrockFloor = false;
+        } else {
+            this.flatBedrockCeiling = this.paperConfig.get("generateFlatBedrock");
+            this.flatBedrockFloor = this.paperConfig.get("generateFlatBedrock");
+        }
     }
 
     public WorldValues(ConfigurationSection worldSettings, Map<String, Boolean> paperConfig) {

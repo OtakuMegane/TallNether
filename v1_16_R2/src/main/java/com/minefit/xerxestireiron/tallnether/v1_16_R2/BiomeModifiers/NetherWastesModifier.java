@@ -1,21 +1,26 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers;
+
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeDecorators;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.SurfaceComposites;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.WorldInfo;
 
 import net.minecraft.server.v1_16_R2.BiomeBase;
 import net.minecraft.server.v1_16_R2.BiomeSettingsGeneration;
 import net.minecraft.server.v1_16_R2.StructureFeatures;
 import net.minecraft.server.v1_16_R2.WorldGenStage;
-import net.minecraft.server.v1_16_R2.WorldGenSurfaceComposites;
 
-public class CrimsonForestModifier extends BiomeModifier {
+public class NetherWastesModifier extends BiomeModifier {
     private BiomeBase biomeBase;
     private BiomeDecorators biomeDecorators;
     private BiomeSettingsGeneration originalBiomeSettings;
     private BiomeSettingsGeneration modifiedBiomeSettings;
+    private SurfaceComposites surfaceComposites;
 
-    public CrimsonForestModifier(WorldInfo worldInfo, BiomeBase biomeBase) {
+    public NetherWastesModifier(WorldInfo worldInfo, BiomeBase biomeBase) {
         this.biomeBase = biomeBase;
         this.originalBiomeSettings = biomeBase.e();
-        this.biomeDecorators = new BiomeDecorators(worldInfo, "crimson-forest");
+        this.biomeDecorators = new BiomeDecorators(worldInfo, "nether-wastes");
+        this.surfaceComposites = new SurfaceComposites();
         this.modifiedBiomeSettings = createModifiedSettings();
     }
 
@@ -24,13 +29,14 @@ public class CrimsonForestModifier extends BiomeModifier {
     }
 
     @SuppressWarnings("unchecked")
-    private BiomeSettingsGeneration createModifiedSettings() {
+    private BiomeSettingsGeneration createModifiedSettings () {
         BiomeSettingsGeneration.a biomeSettingsGeneration_a = new BiomeSettingsGeneration.a();
 
-        biomeSettingsGeneration_a.a(WorldGenSurfaceComposites.c);
+        biomeSettingsGeneration_a.a(this.surfaceComposites.NETHER_WASTES);
         biomeSettingsGeneration_a.a(StructureFeatures.E);
+        biomeSettingsGeneration_a.a(StructureFeatures.o);
+        biomeSettingsGeneration_a.a(StructureFeatures.s);
         biomeSettingsGeneration_a.a(WorldGenStage.Features.AIR, this.biomeDecorators.CAVES_HELL); // WorldGenCarvers.f
-        biomeSettingsGeneration_a.a(StructureFeatures.o).a(StructureFeatures.s);
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.SPRING_LAVA);
 
         // BiomeSettings.Z(biomesettingsgeneration_a)
@@ -39,14 +45,14 @@ public class CrimsonForestModifier extends BiomeModifier {
 
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.SPRING_OPEN);
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.PATCH_FIRE);
+        biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.PATCH_SOUL_FIRE);
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.GLOWSTONE_EXTRA);
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.GLOWSTONE);
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE);
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_MAGMA);
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.SPRING_CLOSED);
-        biomeSettingsGeneration_a.a(WorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.WEEPING_VINES);
-        biomeSettingsGeneration_a.a(WorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.CRIMSON_FUNGI);
-        biomeSettingsGeneration_a.a(WorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.CRIMSON_FOREST_VEGETATION);
+        biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.BROWN_MUSHROOM_NETHER);
+        biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.RED_MUSHROOM_NETHER);
 
         // BiomeSettings.ao(biomesettingsgeneration_a)
         biomeSettingsGeneration_a.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_GRAVEL_NETHER);

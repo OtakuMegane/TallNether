@@ -2,7 +2,6 @@ package com.minefit.xerxestireiron.tallnether.v1_16_R2;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
@@ -13,16 +12,15 @@ import org.bukkit.configuration.ConfigurationSection;
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
-import net.minecraft.server.v1_16_R2.BiomeBase;
 import net.minecraft.server.v1_16_R2.ChunkGenerator;
 import net.minecraft.server.v1_16_R2.GeneratorSettingBase;
-import net.minecraft.server.v1_16_R2.WorldChunkManagerMultiNoise;
 
 public class LoadHell {
     private final Messages messages;
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final HashMap<String, WorldInfo> worldInfos;
     private final boolean isPaper;
+    private boolean decoratorsModified;
 
     public LoadHell(ConfigurationSection worldConfig, String pluginName) {
         this.messages = new Messages(pluginName);
@@ -45,9 +43,17 @@ public class LoadHell {
     }
 
     public void addWorld(World world, ConfigurationSection worldConfig) {
+        System.out.println("ADDING WORLD: " + world.getName());
         String worldName = world.getName();
-        this.configAccessor.newWorldConfig(worldName, new PaperSpigot().getSettingsMap(), true);
-        this.worldInfos.putIfAbsent(worldName, new WorldInfo(world));
+        System.out.println(this.configAccessor.newWorldConfig(worldName, new PaperSpigot().getSettingsMap(), true));
+        WorldInfo worldInfo = new WorldInfo(world);
+        this.worldInfos.putIfAbsent(worldName, worldInfo);
+
+        // For the moment Minecraft still shares a single biome instance for all worlds
+        // Otherwise this would go in the constructor
+        if(!this.decoratorsModified) {
+            this.decoratorsModified = overrideDecorators(worldInfo);
+        }
     }
 
     public void removeWorld(World world) {
@@ -87,13 +93,11 @@ public class LoadHell {
             Supplier<GeneratorSettingBase> h;
             h = (Supplier<GeneratorSettingBase>) hField.get(worldInfo.originalGenerator);
 
-            // They've done it again with the fastutil stuff
-            // Paper and Spigot, get your shit together and match
-            // I don't care who
             if (this.isPaper) {
                 if (setGenerator(worldInfo, new TallNether_ChunkGeneratorAbstract_Paper(worldInfo.nmsWorld,
                         worldInfo.originalChunkManager, worldInfo.nmsWorld.getSeed(), h), false)) {
                     this.messages.enableSuccess(worldName);
+                    worldInfo.modified = true;
                 } else {
                     this.messages.enableFailed(worldName);
                 }
@@ -101,6 +105,7 @@ public class LoadHell {
                 if (setGenerator(worldInfo, new TallNether_ChunkGeneratorAbstract(worldInfo.nmsWorld,
                         worldInfo.originalChunkManager, worldInfo.nmsWorld.getSeed(), h), false)) {
                     this.messages.enableSuccess(worldName);
+                    worldInfo.modified = true;
                 } else {
                     this.messages.enableFailed(worldName);
                 }
@@ -108,10 +113,6 @@ public class LoadHell {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // This MUST go after new generator is in place, otherwise we're modifying vanilla
-        overrideDecorators(worldInfo);
-        worldInfo.modified = true;
     }
 
     public boolean restoreGenerator(World world) {

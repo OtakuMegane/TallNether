@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators;
 
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -21,6 +21,11 @@ public class TallNether_WorldGenDecoratorRange extends TallNether_WorldGenDecora
 
     public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorRangeConfiguration worldgenfeaturechancedecoratorrangeconfiguration, BlockPosition blockposition, BiomeValues biomevalues, boolean vanilla)             {
         if (vanilla) {
+            // TallNether: Ignore this decorator if vanilla
+            if(this.block.equals("glowstone2")) {
+                return Stream.empty();
+            }
+
             return a(random, worldgenfeaturechancedecoratorrangeconfiguration, blockposition);
         }
 
@@ -30,9 +35,10 @@ public class TallNether_WorldGenDecoratorRange extends TallNether_WorldGenDecora
         int maxHeight = max > 0 ? max : 1;
         int maxOffset = biomevalues.values.get(this.block + "-max-offset");
 
-        return IntStream.range(0, attempts).mapToObj((i) -> {
-            int j = random.nextInt(16) + blockposition.getX();
-            int k = random.nextInt(16) + blockposition.getZ();
+        // TallNether: Double the attempts to scale with the extra height
+        return IntStream.range(0, 2).mapToObj((i) -> {
+            int j = blockposition.getX();
+            int k = blockposition.getZ();
             int l = random.nextInt(maxHeight - maxOffset) + minHeight;
 
             return new BlockPosition(j, l, k);

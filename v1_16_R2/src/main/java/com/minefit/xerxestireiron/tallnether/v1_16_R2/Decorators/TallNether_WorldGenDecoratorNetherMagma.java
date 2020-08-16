@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators;
 
 import java.lang.reflect.Field;
 import java.util.Random;

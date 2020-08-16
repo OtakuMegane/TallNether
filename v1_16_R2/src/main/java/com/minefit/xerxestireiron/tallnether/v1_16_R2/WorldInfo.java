@@ -3,6 +3,12 @@ package com.minefit.xerxestireiron.tallnether.v1_16_R2;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers.BasaltDeltasModifier;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers.CrimsonForestModifier;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers.NetherWastesModifier;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers.SoulSandValleyModifier;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers.WarpedForestModifier;
+
 import net.minecraft.server.v1_16_R2.ChunkGenerator;
 import net.minecraft.server.v1_16_R2.ChunkProviderServer;
 import net.minecraft.server.v1_16_R2.DimensionManager;

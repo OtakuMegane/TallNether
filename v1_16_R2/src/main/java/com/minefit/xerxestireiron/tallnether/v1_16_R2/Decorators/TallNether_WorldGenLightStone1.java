@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators;
 
 import java.util.Random;
 
@@ -32,7 +32,7 @@ public class TallNether_WorldGenLightStone1 extends WorldGenerator<WorldGenFeatu
             if (!iblockdata.a(Blocks.NETHERRACK) && !iblockdata.a(Blocks.BASALT) && !iblockdata.a(Blocks.BLACKSTONE)) {
                 return false;
             } else {
-                // Ignore this decorator if not vanilla
+                // TallNether: Ignore this decorator if not vanilla
                 String worldName = generatoraccessseed.getMinecraftWorld().getWorld().getName();
                 WorldConfig worldConfig = this.configAccessor.getWorldConfig(worldName);
 

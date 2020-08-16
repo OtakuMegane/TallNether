@@ -10,8 +10,9 @@ public class ConfigAccessor {
     private static ConfigValues vanilla; // Pre 1.16
     private static Map<String, WorldConfig> newWorldConfigs = new HashMap<>();
     private static ConfigurationSection mainConfig;
+    private static WorldConfig emptyWorldConfig = new WorldConfig(null, null);
 
-    public ConfigAccessor() {
+    public ConfigAccessor() {;
     }
 
     public ConfigAccessor(ConfigurationSection mainConfig) {
@@ -27,6 +28,11 @@ public class ConfigAccessor {
 
     public WorldConfig getWorldConfig(String worldName) {
         WorldConfig worldConfig = ConfigAccessor.newWorldConfigs.get(worldName);
+
+        if(worldConfig == null) {
+            worldConfig = ConfigAccessor.emptyWorldConfig;
+        }
+
         return worldConfig;
     }
 

@@ -1,6 +1,8 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers;
 
 import java.lang.reflect.Field;
+
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.ReflectionHelper;
 
 import net.minecraft.server.v1_16_R2.BiomeBase;
 import net.minecraft.server.v1_16_R2.BiomeSettingsGeneration;

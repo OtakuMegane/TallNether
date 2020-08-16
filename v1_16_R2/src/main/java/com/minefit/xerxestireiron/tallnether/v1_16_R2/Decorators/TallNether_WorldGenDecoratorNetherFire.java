@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators;
 
 import com.google.common.collect.Lists;
 import com.minefit.xerxestireiron.tallnether.BiomeValues;

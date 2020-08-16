@@ -1,22 +1,27 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeModifiers;
+
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.BiomeDecorators;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.SurfaceComposites;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.WorldInfo;
 
 import net.minecraft.server.v1_16_R2.BiomeBase;
 import net.minecraft.server.v1_16_R2.BiomeDecoratorGroups;
 import net.minecraft.server.v1_16_R2.BiomeSettingsGeneration;
 import net.minecraft.server.v1_16_R2.StructureFeatures;
 import net.minecraft.server.v1_16_R2.WorldGenStage;
-import net.minecraft.server.v1_16_R2.WorldGenSurfaceComposites;
 
 public class BasaltDeltasModifier extends BiomeModifier {
     private BiomeBase biomeBase;
     private BiomeDecorators biomeDecorators;
     private BiomeSettingsGeneration originalBiomeSettings;
     private BiomeSettingsGeneration modifiedBiomeSettings;
+    private SurfaceComposites surfaceComposites;
 
     public BasaltDeltasModifier(WorldInfo worldInfo, BiomeBase biomeBase) {
         this.biomeBase = biomeBase;
         this.originalBiomeSettings = biomeBase.e();
         this.biomeDecorators = new BiomeDecorators(worldInfo, "basalt-deltas");
+        this.surfaceComposites = new SurfaceComposites();
         this.modifiedBiomeSettings = createModifiedSettings();
     }
 
@@ -28,7 +33,7 @@ public class BasaltDeltasModifier extends BiomeModifier {
     private BiomeSettingsGeneration createModifiedSettings () {
         BiomeSettingsGeneration.a biomeSettingsGeneration_a = new BiomeSettingsGeneration.a();
 
-        biomeSettingsGeneration_a.a(WorldGenSurfaceComposites.b);
+        biomeSettingsGeneration_a.a(this.surfaceComposites.BASALT_DELTAS);
         biomeSettingsGeneration_a.a(StructureFeatures.E);
         biomeSettingsGeneration_a.a(WorldGenStage.Features.AIR, this.biomeDecorators.CAVES_HELL); // WorldGenCarvers.f
         biomeSettingsGeneration_a.a(StructureFeatures.o);

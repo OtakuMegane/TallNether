@@ -1,4 +1,4 @@
-package com.minefit.xerxestireiron.tallnether.v1_16_R2;
+package com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators;
 
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -29,7 +29,8 @@ public class TallNether_WorldGenDecoratorDepthAverage extends TallNether_WorldGe
         int size = biomevalues.values.get(this.block + "-range-size");
         int rangeSize = size > 0 ? size : 1;
 
-        return IntStream.range(0, attempts).mapToObj((l) -> {
+        // TallNether: Double the attempts to scale with the extra height
+        return IntStream.range(0, 2).mapToObj((l) -> {
             int i1 = random.nextInt(16) + blockposition.getX();
             int j1 = random.nextInt(16) + blockposition.getZ();
             int k1 = minHeight + random.nextInt(rangeSize);

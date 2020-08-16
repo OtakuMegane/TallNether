@@ -4,6 +4,13 @@ import com.google.common.collect.ImmutableSet;
 import com.minefit.xerxestireiron.tallnether.BiomeValues;
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators.TallNether_WorldGenCavesHell;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators.TallNether_WorldGenDecoratorDepthAverage;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators.TallNether_WorldGenDecoratorNetherFire;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators.TallNether_WorldGenDecoratorNetherGlowstone;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators.TallNether_WorldGenDecoratorNetherMagma;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators.TallNether_WorldGenDecoratorRange;
+import com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators.TallNether_WorldGenLightStone1;
 
 import net.minecraft.server.v1_16_R2.BiomeDecoratorGroups;
 import net.minecraft.server.v1_16_R2.Blocks;
@@ -16,7 +23,6 @@ import net.minecraft.server.v1_16_R2.WorldGenCarverWrapper;
 import net.minecraft.server.v1_16_R2.WorldGenDecorator;
 import net.minecraft.server.v1_16_R2.WorldGenDecoratorFrequencyConfiguration;
 import net.minecraft.server.v1_16_R2.WorldGenDecoratorHeightAverageConfiguration;
-import net.minecraft.server.v1_16_R2.WorldGenDecoratorRange;
 import net.minecraft.server.v1_16_R2.WorldGenFeatureBasaltColumnsConfiguration;
 import net.minecraft.server.v1_16_R2.WorldGenFeatureChanceDecoratorRangeConfiguration;
 import net.minecraft.server.v1_16_R2.WorldGenFeatureConfiguration;
@@ -62,10 +68,10 @@ public class BiomeDecorators {
     public final WorldGenFeatureConfigured<?, ?> ORE_DEBRIS_SMALL; // Setting ancient-debris2
     public final WorldGenFeatureConfigured<?, ?> ORE_GOLD_NETHER;
     public final WorldGenFeatureConfigured<?, ?> ORE_GOLD_DELTAS;
-    public final WorldGenFeatureConfigured<?, ?> SPRING_OPEN;
-    public final WorldGenFeatureConfigured<?, ?> SPRING_DELTA;
-    public final WorldGenFeatureConfigured<?, ?> SPRING_CLOSED;
-    public final WorldGenFeatureConfigured<?, ?> SPRING_CLOSED_DOUBLE;
+    public final WorldGenFeatureConfigured<?, ?> SPRING_OPEN; // Setting lavafall
+    public final WorldGenFeatureConfigured<?, ?> SPRING_DELTA; // Setting lavafall (Basalt Deltas variant)
+    public final WorldGenFeatureConfigured<?, ?> SPRING_CLOSED; // Setting hidden-lava
+    public final WorldGenFeatureConfigured<?, ?> SPRING_CLOSED_DOUBLE; // Setting hidden-lava (Basalt Deltas variant)
     public final WorldGenFeatureConfigured<?, ?> BROWN_MUSHROOM_NETHER = BiomeDecoratorGroups.BROWN_MUSHROOM_NETHER;
     public final WorldGenFeatureConfigured<?, ?> RED_MUSHROOM_NETHER = BiomeDecoratorGroups.RED_MUSHROOM_NETHER;
     public final WorldGenFeatureConfigured<?, ?> BROWN_MUSHROOM_NORMAL = BiomeDecoratorGroups.BROWN_MUSHROOM_NORMAL;
