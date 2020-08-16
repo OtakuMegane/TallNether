@@ -699,9 +699,10 @@ public final class TallNether_ChunkGeneratorAbstract extends ChunkGenerator {
         return this.x;
     }
 
+    // TallNether: Minecraft default is 32, change to use lava sea level from config
     @Override
     public int getSeaLevel() {
-        return ((GeneratorSettingBase) this.h.get()).g();
+        return this.worldValues.lavaSeaLevel;
     }
 
     @Override

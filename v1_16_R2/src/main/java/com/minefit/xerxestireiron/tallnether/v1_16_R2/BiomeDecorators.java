@@ -40,7 +40,7 @@ public class BiomeDecorators {
                     .a(ImmutableSet.of(Blocks.NETHERRACK)).b().d();
     private final WorldGenFeatureRandomPatchConfiguration PATCH_SOUL_FIRE_CONFIG = new WorldGenFeatureRandomPatchConfiguration.a(
             new WorldGenFeatureStateProviderSimpl(Blocks.SOUL_FIRE.getBlockData()), WorldGenBlockPlacerSimple.c).a(64)
-                    .a(ImmutableSet.of(Blocks.NETHERRACK)).b().d();
+                    .a(ImmutableSet.of(Blocks.SOUL_SOIL)).b().d();
     private final WorldGenFeatureHellFlowingLavaConfiguration SPRING_DELTA_CONFIG = new WorldGenFeatureHellFlowingLavaConfiguration(
             FluidTypes.LAVA.h(), true, 4, 1,
             ImmutableSet.of(Blocks.NETHERRACK, Blocks.SOUL_SAND, Blocks.GRAVEL, Blocks.MAGMA_BLOCK, Blocks.BLACKSTONE));
@@ -92,11 +92,11 @@ public class BiomeDecorators {
                 WorldGenFeatureConfigurationChance.b)))
                         .a((WorldGenCarverConfiguration) (new WorldGenFeatureConfigurationChance(0.2F)));
         this.PATCH_FIRE = WorldGenerator.RANDOM_PATCH.b(this.PATCH_FIRE_CONFIG)
-                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, "fire")
+                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, biome, "fire")
                         .b(new WorldGenDecoratorFrequencyConfiguration(10)));
         this.PATCH_SOUL_FIRE = WorldGenerator.RANDOM_PATCH.b(this.PATCH_SOUL_FIRE_CONFIG)
-                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, "soul-fire")
-                        .b(new WorldGenDecoratorFrequencyConfiguration(10)));
+                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, biome,
+                        "soul-fire").b(new WorldGenDecoratorFrequencyConfiguration(10)));
         this.GLOWSTONE = WorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k)
                 .a(new WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a)
                         .b(new WorldGenFeatureChanceDecoratorRangeConfiguration(
@@ -104,14 +104,17 @@ public class BiomeDecorators {
                                 this.biomeConfig.values.get("glowstone2-max-offset"),
                                 this.biomeConfig.values.get("glowstone2-max-height")))
                         .b(this.biomeConfig.values.get("glowstone2-attempts")));
-        this.GLOWSTONE_EXTRA = WorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k).a(
-                new TallNether_WorldGenDecoratorNetherGlowstone(WorldGenDecoratorFrequencyConfiguration.a, "glowstone1")
-                        .b(new WorldGenDecoratorFrequencyConfiguration(10)));
+        this.GLOWSTONE_EXTRA = WorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k)
+                .a(new TallNether_WorldGenDecoratorNetherGlowstone(WorldGenDecoratorFrequencyConfiguration.a,
+                        this.biomeConfig.values.get("glowstone1-min-height"),
+                        this.biomeConfig.values.get("glowstone1-min-height"))
+                                .b(new WorldGenDecoratorFrequencyConfiguration(
+                                        this.biomeConfig.values.get("glowstone1-attempts"))));
         this.ORE_MAGMA = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.MAGMA_BLOCK.getBlockData(), 33))
-                .a(new TallNether_WorldGenDecoratorNetherMagma(WorldGenFeatureEmptyConfiguration2.a)
-                        .b(WorldGenFeatureEmptyConfiguration2.c))
+                .a(new TallNether_WorldGenDecoratorNetherMagma(WorldGenFeatureEmptyConfiguration2.a, biome)
+                        .b(WorldGenFeatureEmptyConfiguration2.c).a())
                 .b(4);
         this.ORE_QUARTZ_NETHER = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
@@ -122,11 +125,20 @@ public class BiomeDecorators {
                                 this.biomeConfig.values.get("quartz-max-offset"),
                                 this.biomeConfig.values.get("quartz-max-height")))
                         .b(this.biomeConfig.values.get("quartz-attempts")));
+        // Normally this would be using WorldGenDecoratorDepthAverage but adapting settings would be a pain
         this.ORE_DEBRIS_LARGE = WorldGenerator.NO_SURFACE_ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHER_ORE_REPLACEABLES,
                         Blocks.ANCIENT_DEBRIS.getBlockData(), 3))
+                .a(new WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a)
+                        .b(new WorldGenFeatureChanceDecoratorRangeConfiguration(
+                                this.biomeConfig.values.get("ancient-debris1-min-height"), 0,
+                                this.biomeConfig.values.get("ancient-debris1-max-height")))
+                        .b(this.biomeConfig.values.get("ancient-debris1-attempts")));
+        /*this.ORE_DEBRIS_LARGE = WorldGenerator.NO_SURFACE_ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHER_ORE_REPLACEABLES,
+                        Blocks.ANCIENT_DEBRIS.getBlockData(), 3))
                 .a(new TallNether_WorldGenDecoratorDepthAverage(WorldGenDecoratorHeightAverageConfiguration.a,
-                        "ancient-debris").b(new WorldGenDecoratorHeightAverageConfiguration(16, 8)));
+                        "ancient-debris").b(new WorldGenDecoratorHeightAverageConfiguration(16, 8)));*/
         this.ORE_DEBRIS_SMALL = WorldGenerator.NO_SURFACE_ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHER_ORE_REPLACEABLES,
                         Blocks.ANCIENT_DEBRIS.getBlockData(), 2))

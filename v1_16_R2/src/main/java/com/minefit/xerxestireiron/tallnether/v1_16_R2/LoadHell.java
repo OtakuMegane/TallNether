@@ -2,6 +2,7 @@ package com.minefit.xerxestireiron.tallnether.v1_16_R2;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
@@ -12,8 +13,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.Messages;
 
+import net.minecraft.server.v1_16_R2.BiomeBase;
 import net.minecraft.server.v1_16_R2.ChunkGenerator;
 import net.minecraft.server.v1_16_R2.GeneratorSettingBase;
+import net.minecraft.server.v1_16_R2.WorldChunkManagerMultiNoise;
 
 public class LoadHell {
     private final Messages messages;
@@ -28,6 +31,7 @@ public class LoadHell {
     }
 
     public boolean overrideDecorators(WorldInfo worldInfo) {
+        worldInfo.collectBiomeData();
         worldInfo.basaltDeltasModifier.modify();
         worldInfo.crimsonForestModifier.modify();
         worldInfo.warpedForestModifier.modify();
@@ -55,6 +59,10 @@ public class LoadHell {
         String worldName = world.getName();
         WorldInfo worldInfo = this.worldInfos.get(worldName);
 
+        if(worldInfo.modified) {
+            return;
+        }
+
         Environment environment = world.getEnvironment();
 
         if (environment != Environment.NETHER) {
@@ -72,8 +80,6 @@ public class LoadHell {
             this.messages.unknownGenerator(worldName, worldInfo.originalGenName);
             return;
         }
-
-        overrideDecorators(worldInfo);
 
         try {
             Field hField = ReflectionHelper.getField(worldInfo.originalGenerator.getClass(), "h", true);
@@ -102,6 +108,10 @@ public class LoadHell {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // This MUST go after new generator is in place, otherwise we're modifying vanilla
+        overrideDecorators(worldInfo);
+        worldInfo.modified = true;
     }
 
     public boolean restoreGenerator(World world) {

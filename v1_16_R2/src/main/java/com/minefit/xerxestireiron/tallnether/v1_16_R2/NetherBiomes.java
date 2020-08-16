@@ -22,7 +22,7 @@ public class NetherBiomes {
     }
 
     private void collectBiomes() {
-        List<BiomeBase> biomeList = this.worldInfo.originalChunkManager.b();
+        List<BiomeBase> biomeList = this.worldInfo.chunkServer.getChunkGenerator().getWorldChunkManager().b();
         Iterator<BiomeBase> biomeIterator = biomeList.iterator();
 
         while (biomeIterator.hasNext()) {

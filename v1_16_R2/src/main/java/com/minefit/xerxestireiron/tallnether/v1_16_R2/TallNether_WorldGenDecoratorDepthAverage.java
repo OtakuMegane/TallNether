@@ -11,9 +11,10 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.server.v1_16_R2.BlockPosition;
 import net.minecraft.server.v1_16_R2.GeneratorAccessSeed;
+import net.minecraft.server.v1_16_R2.WorldGenDecoratorFeatureSimple;
 import net.minecraft.server.v1_16_R2.WorldGenDecoratorHeightAverageConfiguration;
 
-public class TallNether_WorldGenDecoratorDepthAverage extends TallNether_WorldGenDecoratorFeatureSimple<WorldGenDecoratorHeightAverageConfiguration> {
+public class TallNether_WorldGenDecoratorDepthAverage extends WorldGenDecoratorFeatureSimple<WorldGenDecoratorHeightAverageConfiguration> {
 
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final String blockType;
@@ -63,8 +64,6 @@ public class TallNether_WorldGenDecoratorDepthAverage extends TallNether_WorldGe
         });
     }
 
-    // TallNether: Vanilla generation
-    @Override
     public Stream<BlockPosition> a(Random random, WorldGenDecoratorHeightAverageConfiguration worldgendecoratorheightaverageconfiguration, BlockPosition blockposition) {
         int i = worldgendecoratorheightaverageconfiguration.c;
         int j = worldgendecoratorheightaverageconfiguration.d;
