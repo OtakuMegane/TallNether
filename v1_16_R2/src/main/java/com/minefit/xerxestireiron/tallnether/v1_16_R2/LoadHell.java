@@ -19,7 +19,6 @@ public class LoadHell {
     private final Messages messages;
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final HashMap<String, WorldInfo> worldInfos;
-    private boolean decoratorsDone = false;
     private final boolean isPaper;
 
     public LoadHell(ConfigurationSection worldConfig, String pluginName) {
@@ -28,19 +27,16 @@ public class LoadHell {
         this.isPaper = Bukkit.getName().contains("Paper");
     }
 
-    // Returns whether or not decorators were successfully overriden
-    public boolean overrideDecorators(boolean check) {
-        if (this.decoratorsDone) {
-            return false;
-        }
-
-        this.decoratorsDone = (new DecoratorsNetherWastes().set() && new DecoratorsWarpedForest().set()
-                && new DecoratorsCrimsonForest().set() && new DecoratorsBasaltDeltas().set()
-                && new DecoratorsSoulSandValley().set());
-        return this.decoratorsDone;
+    public boolean overrideDecorators(WorldInfo worldInfo) {
+        worldInfo.basaltDeltasModifier.modify();
+        worldInfo.crimsonForestModifier.modify();
+        worldInfo.warpedForestModifier.modify();
+        worldInfo.netherWastesModifier.modify();
+        worldInfo.soulSandValleyModifier.modify();
+        return true;
     }
 
-    public boolean restoreDecorators() {
+    public boolean restoreDecorators(WorldInfo worldInfo) {
         return true;
     }
 
@@ -76,6 +72,8 @@ public class LoadHell {
             this.messages.unknownGenerator(worldName, worldInfo.originalGenName);
             return;
         }
+
+        overrideDecorators(worldInfo);
 
         try {
             Field hField = ReflectionHelper.getField(worldInfo.originalGenerator.getClass(), "h", true);

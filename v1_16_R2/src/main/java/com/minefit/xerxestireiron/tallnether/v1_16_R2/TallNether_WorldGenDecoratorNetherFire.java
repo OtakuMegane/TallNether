@@ -33,7 +33,9 @@ public class TallNether_WorldGenDecoratorNetherFire extends TallNether_WorldGenD
             return a(random, worldgendecoratorfrequencyconfiguration, blockposition);
         }
 
-        String biomeName = this.configAccessor.biomeClassToConfig(generatoraccessseed.getBiome(blockposition).getClass().getSimpleName());
+        String biomeName = this.configAccessor.biomeClassToConfig(generatoraccessseed.getBiome(blockposition).toString());
+        System.out.println(biomeName);
+        System.out.println(worldConfig);
         BiomeValues biomeConfig = worldConfig.getBiomeValues(biomeName);
         int attempts;
         int min;

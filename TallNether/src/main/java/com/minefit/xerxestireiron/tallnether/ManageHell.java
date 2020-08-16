@@ -15,6 +15,7 @@ public class ManageHell {
     private com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell LH15R1;
     private com.minefit.xerxestireiron.tallnether.v1_15_R1_2.LoadHell LH15R1_2;
     private com.minefit.xerxestireiron.tallnether.v1_16_R1.LoadHell LH16R1;
+    private com.minefit.xerxestireiron.tallnether.v1_16_R2.LoadHell LH16R2;
 
     public ManageHell(TallNether instance) {
         this.plugin = instance;
@@ -98,7 +99,15 @@ public class ManageHell {
 
             this.LH16R1.addWorld(world, worldConfig);
             this.LH16R1.overrideGenerator(world);
+    } else if (this.plugin.version.equals("v1_16_R2")) {
+        if (this.LH16R2 == null) {
+            this.LH16R2 = new com.minefit.xerxestireiron.tallnether.v1_16_R2.LoadHell(worldConfig,
+                    this.plugin.getName());
         }
+
+        this.LH16R2.addWorld(world, worldConfig);
+        this.LH16R2.overrideGenerator(world);
+    }
     }
 
     public void removeWorld(World world) {
@@ -122,6 +131,8 @@ public class ManageHell {
             }
         } else if (this.plugin.version.equals("v1_16_R1")) {
             this.LH16R1.removeWorld(world);
+        } else if (this.plugin.version.equals("v1_16_R2")) {
+            this.LH16R2.removeWorld(world);
         }
     }
 
@@ -146,6 +157,8 @@ public class ManageHell {
             }
         } else if (this.plugin.version.equals("v1_16_R1")) {
             this.LH16R1.restoreGenerator(world);
+        } else if (this.plugin.version.equals("v1_16_R2")) {
+            this.LH16R2.restoreGenerator(world);
         }
     }
 
@@ -171,6 +184,8 @@ public class ManageHell {
             }
         } else if (this.plugin.version.equals("v1_16_R1")) {
             this.LH16R1 = null;
+        } else if (this.plugin.version.equals("v1_16_R2")) {
+            this.LH16R2 = null;
         }
     }
 }
