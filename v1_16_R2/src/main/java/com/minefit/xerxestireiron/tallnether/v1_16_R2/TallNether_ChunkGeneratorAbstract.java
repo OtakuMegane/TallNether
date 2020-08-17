@@ -203,12 +203,14 @@ public final class TallNether_ChunkGeneratorAbstract extends ChunkGenerator {
         int iMultiX = 1;
         int kMultiZ = 1;
 
-        if (i >= this.highX || i <= this.lowX) {
-            iMultiX = 3137706;
-        }
+        if (this.generateFarLands) {
+            if (i >= this.highX || i <= this.lowX) {
+                iMultiX = 3137706;
+            }
 
-        if (k >= this.highZ || k <= this.lowZ) {
-            kMultiZ = 3137706;
+            if (k >= this.highZ || k <= this.lowZ) {
+                kMultiZ = 3137706;
+            }
         }
 
         for (int l = 0; l < 16; ++l) {

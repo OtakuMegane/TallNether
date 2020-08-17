@@ -44,11 +44,12 @@ public class LoadHell {
 
     public void addWorld(World world, ConfigurationSection worldConfig) {
         String worldName = world.getName();
+        this.configAccessor.newWorldConfig(worldName, new PaperSpigot().getSettingsMap(), true);
         WorldInfo worldInfo = new WorldInfo(world);
         this.worldInfos.putIfAbsent(worldName, worldInfo);
 
         // For the moment Minecraft still shares a single biome instance for all worlds
-        // Otherwise this would go in the constructor
+        // We need the chunk manager to get them
         if(!this.decoratorsModified) {
             this.decoratorsModified = overrideDecorators(worldInfo);
         }

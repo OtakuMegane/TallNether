@@ -202,12 +202,14 @@ public final class TallNether_ChunkGeneratorAbstract_Paper extends ChunkGenerato
         int iMultiX = 1;
         int kMultiZ = 1;
 
-        if (i >= this.highX || i <= this.lowX) {
-            iMultiX = 3137706;
-        }
+        if (this.generateFarLands) {
+            if (i >= this.highX || i <= this.lowX) {
+                iMultiX = 3137706;
+            }
 
-        if (k >= this.highZ || k <= this.lowZ) {
-            kMultiZ = 3137706;
+            if (k >= this.highZ || k <= this.lowZ) {
+                kMultiZ = 3137706;
+            }
         }
 
         for (int l = 0; l < 16; ++l) {
@@ -698,9 +700,10 @@ public final class TallNether_ChunkGeneratorAbstract_Paper extends ChunkGenerato
         return this.x;
     }
 
+    // TallNether: Minecraft default is 32, change to use lava sea level from config
     @Override
     public int getSeaLevel() {
-        return ((GeneratorSettingBase) this.h.get()).g();
+        return this.worldValues.lavaSeaLevel;
     }
 
     @Override
