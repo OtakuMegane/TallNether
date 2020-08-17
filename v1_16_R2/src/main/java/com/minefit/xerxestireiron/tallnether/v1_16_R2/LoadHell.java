@@ -43,9 +43,7 @@ public class LoadHell {
     }
 
     public void addWorld(World world, ConfigurationSection worldConfig) {
-        System.out.println("ADDING WORLD: " + world.getName());
         String worldName = world.getName();
-        System.out.println(this.configAccessor.newWorldConfig(worldName, new PaperSpigot().getSettingsMap(), true));
         WorldInfo worldInfo = new WorldInfo(world);
         this.worldInfos.putIfAbsent(worldName, worldInfo);
 

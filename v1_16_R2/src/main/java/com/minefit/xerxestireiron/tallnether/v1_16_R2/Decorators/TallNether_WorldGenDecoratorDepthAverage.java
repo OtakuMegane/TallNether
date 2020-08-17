@@ -21,7 +21,7 @@ public class TallNether_WorldGenDecoratorDepthAverage extends TallNether_WorldGe
 
     public Stream<BlockPosition> a(Random random, WorldGenDecoratorHeightAverageConfiguration worldgendecoratorheightaverageconfiguration, BlockPosition blockposition, BiomeValues biomevalues, boolean vanilla) {
         if (vanilla) {
-            return a(random, worldgendecoratorheightaverageconfiguration, blockposition);
+            //return a(random, worldgendecoratorheightaverageconfiguration, blockposition);
         }
 
         int attempts = biomevalues.values.get(this.block + "-attempts");
@@ -30,7 +30,7 @@ public class TallNether_WorldGenDecoratorDepthAverage extends TallNether_WorldGe
         int rangeSize = size > 0 ? size : 1;
 
         // TallNether: Double the attempts to scale with the extra height
-        return IntStream.range(0, 2).mapToObj((l) -> {
+        return IntStream.range(0, attempts).mapToObj((l) -> {
             int i1 = random.nextInt(16) + blockposition.getX();
             int j1 = random.nextInt(16) + blockposition.getZ();
             int k1 = minHeight + random.nextInt(rangeSize);

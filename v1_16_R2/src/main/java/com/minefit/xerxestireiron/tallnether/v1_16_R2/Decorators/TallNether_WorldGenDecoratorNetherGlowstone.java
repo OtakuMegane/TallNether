@@ -21,7 +21,7 @@ public class TallNether_WorldGenDecoratorNetherGlowstone extends TallNether_Worl
 
     public Stream<BlockPosition> a(Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition, BiomeValues biomevalues, boolean vanilla) {
         if (vanilla) {
-            return Stream.empty();
+            return a(random, worldgendecoratorfrequencyconfiguration, blockposition);
         }
 
         int minHeight = biomevalues.values.get(this.block + "-min-height");

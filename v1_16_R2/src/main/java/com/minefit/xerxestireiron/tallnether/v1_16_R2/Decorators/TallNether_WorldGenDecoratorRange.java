@@ -26,7 +26,7 @@ public class TallNether_WorldGenDecoratorRange extends TallNether_WorldGenDecora
                 return Stream.empty();
             }
 
-            return a(random, worldgenfeaturechancedecoratorrangeconfiguration, blockposition);
+            //return a(random, worldgenfeaturechancedecoratorrangeconfiguration, blockposition);
         }
 
         int attempts = biomevalues.values.get(this.block + "-attempts");
@@ -36,7 +36,7 @@ public class TallNether_WorldGenDecoratorRange extends TallNether_WorldGenDecora
         int maxOffset = biomevalues.values.get(this.block + "-max-offset");
 
         // TallNether: Double the attempts to scale with the extra height
-        return IntStream.range(0, 2).mapToObj((i) -> {
+        return IntStream.range(0, attempts).mapToObj((i) -> {
             int j = blockposition.getX();
             int k = blockposition.getZ();
             int l = random.nextInt(maxHeight - maxOffset) + minHeight;

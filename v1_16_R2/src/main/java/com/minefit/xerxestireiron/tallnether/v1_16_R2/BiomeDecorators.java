@@ -87,8 +87,8 @@ public class BiomeDecorators {
     public final WorldGenFeatureConfigured<?, ?> WARPED_FOREST_VEGETATION = BiomeDecoratorGroups.WARPED_FOREST_VEGETATION;
     public final WorldGenFeatureConfigured<?, ?> NETHER_SPROUTS = BiomeDecoratorGroups.NETHER_SPROUTS;
     public final WorldGenFeatureConfigured<?, ?> TWISTING_VINES = BiomeDecoratorGroups.TWISTING_VINES;
-    public final WorldGenFeatureConfigured<?, ?> SMALL_BASALT_COLUMNS;
-    public final WorldGenFeatureConfigured<?, ?> LARGE_BASALT_COLUMNS;
+    public final WorldGenFeatureConfigured<?, ?> SMALL_BASALT_COLUMNS = BiomeDecoratorGroups.SMALL_BASALT_COLUMNS;
+    public final WorldGenFeatureConfigured<?, ?> LARGE_BASALT_COLUMNS = BiomeDecoratorGroups.LARGE_BASALT_COLUMNS;
     public final WorldGenFeatureConfigured<?, ?> ORE_SOUL_SAND = BiomeDecoratorGroups.ORE_SOUL_SAND;
     public final WorldGenFeatureConfigured<?, ?> ORE_GRAVEL_NETHER = BiomeDecoratorGroups.ORE_GRAVEL_NETHER;
     public final WorldGenFeatureConfigured<?, ?> ORE_BLACKSTONE = BiomeDecoratorGroups.ORE_BLACKSTONE;
@@ -112,8 +112,7 @@ public class BiomeDecorators {
                 WorldGenFeatureEmptyConfiguration.a)).b(WorldGenFeatureConfiguration.k).d(128)).a()).b(10);
         this.TALLNETHER_GLOWSTONE = WorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k)
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "glowstone2").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a())
-                .b(10);
+                        "glowstone2").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(10)
         this.GLOWSTONE_EXTRA = WorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k)
                 .a(new TallNether_WorldGenDecoratorNetherGlowstone(WorldGenDecoratorFrequencyConfiguration.a, biome,
                         "glowstone1").b(new WorldGenDecoratorFrequencyConfiguration(10)));
@@ -127,14 +126,12 @@ public class BiomeDecorators {
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "quartz").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a())
-                .b(16);
+                        "quartz").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(16)
         this.ORE_QUARTZ_DELTAS = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "quartz").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a())
-                .b(32);
+                        "quartz").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(32)
         this.ORE_DEBRIS_LARGE = WorldGenerator.NO_SURFACE_ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHER_ORE_REPLACEABLES,
                         Blocks.ANCIENT_DEBRIS.getBlockData(), 3))
@@ -149,35 +146,23 @@ public class BiomeDecorators {
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.NETHER_GOLD_ORE.getBlockData(), 10))
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "nether-gold").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a())
-                .b(10);
+                        "nether-gold").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(10)
         this.ORE_GOLD_DELTAS = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.NETHER_GOLD_ORE.getBlockData(), 10))
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "nether-gold").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a())
-                .b(20);
+                        "nether-gold").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // b(20)
         this.SPRING_OPEN = WorldGenerator.SPRING_FEATURE.b(this.SPRING_OPEN_CONFIG)
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "lavafall").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(4, 8, 128)).a())
-                .b(8);
+                        "lavafall").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(4, 8, 128)).a()); // .b(8)
         this.SPRING_DELTA = WorldGenerator.SPRING_FEATURE.b(this.SPRING_DELTA_CONFIG)
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "lavafall").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(4, 8, 128)).a())
-                .b(16);
+                        "lavafall").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(4, 8, 128)).a()); // .b(16)
         this.SPRING_CLOSED = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.a.j)
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "hidden-lava").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a())
-                .b(16);
+                        "hidden-lava").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(16)
         this.SPRING_CLOSED_DOUBLE = WorldGenerator.SPRING_FEATURE.b(BiomeDecoratorGroups.a.j)
                 .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
-                        "hidden-lava").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a())
-                .b(32);
-        this.SMALL_BASALT_COLUMNS = WorldGenerator.BASALT_COLUMNS
-                .b(new WorldGenFeatureBasaltColumnsConfiguration(IntSpread.a(1), IntSpread.a(1, 3)))
-                .a(WorldGenDecorator.C.b(new WorldGenDecoratorFrequencyConfiguration(2))); // Double frequency?
-        this.LARGE_BASALT_COLUMNS = WorldGenerator.BASALT_COLUMNS
-                .b(new WorldGenFeatureBasaltColumnsConfiguration(IntSpread.a(2, 1), IntSpread.a(5, 5)))
-                .a(WorldGenDecorator.C.b(new WorldGenDecoratorFrequencyConfiguration(2))); // Double frequency?
+                        "hidden-lava").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(32)
     }
 }
