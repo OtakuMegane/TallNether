@@ -96,4 +96,13 @@ public class TallNether extends JavaPlugin implements Listener {
             }
         }
     }
+
+    public boolean isPaper() {
+        try {
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 }

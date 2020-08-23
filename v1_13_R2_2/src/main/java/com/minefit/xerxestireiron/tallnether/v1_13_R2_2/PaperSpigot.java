@@ -3,8 +3,6 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R2_2;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
-
 public class PaperSpigot {
     public final boolean generateCanyon;
     public final boolean generateCaves;
@@ -16,11 +14,6 @@ public class PaperSpigot {
     public final boolean generateTemple;
     public final boolean generateVillage;
     public final boolean generateFlatBedrock;
-
-    // Used for vanilla
-    public PaperSpigot() {
-        this(null, Bukkit.getName().contains("Paper"));
-    }
 
     public PaperSpigot(String worldName, boolean isPaper) {
         if(worldName != null) {
@@ -37,10 +30,6 @@ public class PaperSpigot {
         this.generateTemple = true;
         this.generateVillage = true;
         this.generateFlatBedrock = false;
-    }
-
-    public PaperSpigot(String worldName) {
-        this(worldName, Bukkit.getName().contains("Paper"));
     }
 
     public Map<String, Boolean> getSettingsMap() {

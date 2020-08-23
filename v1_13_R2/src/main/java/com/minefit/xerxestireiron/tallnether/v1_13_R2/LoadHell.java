@@ -24,10 +24,12 @@ public class LoadHell {
     private final Decorators decorators;
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final HashMap<String, WorldInfo> worldInfos;
+    private final boolean isPaper;
 
-    public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
+    public LoadHell(World world, ConfigurationSection worldConfig, boolean isPaper, String pluginName) {
+        this.isPaper = isPaper;
         // Add vanilla values
-        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, new PaperSpigot().getSettingsMap()));
+        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, new PaperSpigot(null, this.isPaper).getSettingsMap()));
         this.messages = new Messages(pluginName);
         this.decorators = new Decorators();
         this.worldInfos = new HashMap<>();
@@ -44,7 +46,7 @@ public class LoadHell {
     public void addWorld(World world, ConfigurationSection worldConfig) {
         String worldName = world.getName();
         this.configAccessor.addConfig(worldName,
-                new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName).getSettingsMap()));
+                new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName, this.isPaper).getSettingsMap()));
         this.worldInfos.putIfAbsent(worldName, new WorldInfo(world, worldConfig));
     }
 

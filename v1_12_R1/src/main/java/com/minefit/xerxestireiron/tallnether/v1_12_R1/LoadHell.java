@@ -28,12 +28,14 @@ public class LoadHell {
     public final ConfigValues configValues;
     private boolean enabled = false;
     private final PaperSpigot paperSpigot;
+    private final boolean isPaper;
 
-    public LoadHell(World world, ConfigurationSection worldConfig, String pluginName) {
+    public LoadHell(World world, ConfigurationSection worldConfig, boolean isPaper, String pluginName) {
         this.world = world;
         this.nmsWorld = ((CraftWorld) world).getHandle();
         this.worldName = this.world.getName();
-        this.paperSpigot = new PaperSpigot(this.worldName);
+        this.isPaper = isPaper;
+        this.paperSpigot = new PaperSpigot(this.worldName, this.isPaper);
         this.configValues = new ConfigValues(this.worldName, worldConfig, this.paperSpigot.getSettingsMap());
         this.messages = new Messages(pluginName);
         this.chunkServer = this.nmsWorld.getChunkProviderServer();

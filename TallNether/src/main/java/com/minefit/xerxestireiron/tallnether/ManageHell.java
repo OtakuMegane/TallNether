@@ -27,14 +27,14 @@ public class ManageHell {
         if (this.plugin.version.equals("v1_12_R1")) {
             if (this.LH12R1 == null) {
                 this.LH12R1 = new com.minefit.xerxestireiron.tallnether.v1_12_R1.LoadHell(world, worldConfig,
-                        this.plugin.getName());
+                        this.plugin.isPaper(), this.plugin.getName());
             }
 
             this.LH12R1.overrideGenerator(world);
         } else if (this.plugin.version.equals("v1_13_R1")) {
             if (this.LH13R1 == null) {
                 this.LH13R1 = new com.minefit.xerxestireiron.tallnether.v1_13_R1.LoadHell(world, worldConfig,
-                        this.plugin.getName());
+                        this.plugin.isPaper(), this.plugin.getName());
                 this.LH13R1.overrideDecorators();
             }
 
@@ -44,7 +44,7 @@ public class ManageHell {
             if (Bukkit.getVersion().contains("1.13.2")) {
                 if (this.LH13R2_2 == null) {
                     this.LH13R2_2 = new com.minefit.xerxestireiron.tallnether.v1_13_R2_2.LoadHell(world, worldConfig,
-                            this.plugin.getName());
+                            this.plugin.isPaper(), this.plugin.getName());
                     this.LH13R2_2.overrideDecorators();
                 }
 
@@ -53,7 +53,7 @@ public class ManageHell {
             } else {
                 if (this.LH13R2 == null) {
                     this.LH13R2 = new com.minefit.xerxestireiron.tallnether.v1_13_R2.LoadHell(world, worldConfig,
-                            this.plugin.getName());
+                            this.plugin.isPaper(), this.plugin.getName());
                     this.LH13R2.overrideDecorators();
                 }
 
@@ -63,7 +63,7 @@ public class ManageHell {
         } else if (this.plugin.version.equals("v1_14_R1")) {
             if (this.LH14R1 == null) {
                 this.LH14R1 = new com.minefit.xerxestireiron.tallnether.v1_14_R1.LoadHell(worldConfig,
-                        this.plugin.getName());
+                        this.plugin.isPaper(), this.plugin.getName());
                 this.LH14R1.overrideDecorators(true);
             }
 
@@ -73,7 +73,7 @@ public class ManageHell {
             if (Bukkit.getVersion().contains("1.15.2")) {
                 if (this.LH15R1_2 == null) {
                     this.LH15R1_2 = new com.minefit.xerxestireiron.tallnether.v1_15_R1_2.LoadHell(worldConfig,
-                            this.plugin.getName());
+                            this.plugin.isPaper(), this.plugin.getName());
                     this.LH15R1_2.overrideDecorators(true);
                 }
 
@@ -82,7 +82,7 @@ public class ManageHell {
             } else {
                 if (this.LH15R1 == null) {
                     this.LH15R1 = new com.minefit.xerxestireiron.tallnether.v1_15_R1.LoadHell(worldConfig,
-                            this.plugin.getName());
+                            this.plugin.isPaper(), this.plugin.getName());
                     this.LH15R1.overrideDecorators(true);
                 }
 
@@ -93,21 +93,21 @@ public class ManageHell {
         } else if (this.plugin.version.equals("v1_16_R1")) {
             if (this.LH16R1 == null) {
                 this.LH16R1 = new com.minefit.xerxestireiron.tallnether.v1_16_R1.LoadHell(worldConfig,
-                        this.plugin.getName());
+                        this.plugin.isPaper(), this.plugin.getName());
                 this.LH16R1.overrideDecorators(true);
             }
 
             this.LH16R1.addWorld(world, worldConfig);
             this.LH16R1.overrideGenerator(world);
-    } else if (this.plugin.version.equals("v1_16_R2")) {
-        if (this.LH16R2 == null) {
-            this.LH16R2 = new com.minefit.xerxestireiron.tallnether.v1_16_R2.LoadHell(worldConfig,
-                    this.plugin.getName());
-        }
+        } else if (this.plugin.version.equals("v1_16_R2")) {
+            if (this.LH16R2 == null) {
+                this.LH16R2 = new com.minefit.xerxestireiron.tallnether.v1_16_R2.LoadHell(worldConfig,
+                        this.plugin.isPaper(), this.plugin.getName());
+            }
 
-        this.LH16R2.addWorld(world, worldConfig);
-        this.LH16R2.overrideGenerator(world);
-    }
+            this.LH16R2.addWorld(world, worldConfig);
+            this.LH16R2.overrideGenerator(world);
+        }
     }
 
     public void removeWorld(World world) {

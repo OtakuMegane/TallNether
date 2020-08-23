@@ -3,7 +3,6 @@ package com.minefit.xerxestireiron.tallnether.v1_16_R1;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
@@ -21,10 +20,10 @@ public class LoadHell {
     private boolean decoratorsDone = false;
     private final boolean isPaper;
 
-    public LoadHell(ConfigurationSection worldConfig, String pluginName) {
+    public LoadHell(ConfigurationSection worldConfig, boolean isPaper, String pluginName) {
         this.messages = new Messages(pluginName);
         this.worldInfos = new HashMap<>();
-        this.isPaper = Bukkit.getName().contains("Paper");
+        this.isPaper = isPaper;
     }
 
     // Returns whether or not decorators were successfully overriden
@@ -45,7 +44,7 @@ public class LoadHell {
 
     public void addWorld(World world, ConfigurationSection worldConfig) {
         String worldName = world.getName();
-        this.configAccessor.newWorldConfig(worldName, new PaperSpigot().getSettingsMap(), true);
+        this.configAccessor.newWorldConfig(worldName, new PaperSpigot(worldName, this.isPaper).settingsMap, true);
         this.worldInfos.putIfAbsent(worldName, new WorldInfo(world));
     }
 
@@ -81,9 +80,6 @@ public class LoadHell {
             GeneratorSettingBase h;
             h = (GeneratorSettingBase) hField.get(worldInfo.originalGenerator);
 
-            // They've done it again with the fastutil stuff
-            // Paper and Spigot, get your shit together and match
-            // I don't care who
             if (this.isPaper) {
                 if (setGenerator(worldInfo, new TallNether_ChunkGeneratorAbstract_Paper(worldInfo.nmsWorld,
                         worldInfo.originalChunkManager, worldInfo.nmsWorld.getSeed(), h), false)) {

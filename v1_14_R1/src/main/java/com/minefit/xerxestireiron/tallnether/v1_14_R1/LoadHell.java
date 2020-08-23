@@ -22,10 +22,13 @@ public class LoadHell {
     private final Decorators decorators;
     private final ConfigAccessor configAccessor = new ConfigAccessor();
     private final HashMap<String, WorldInfo> worldInfos;
+    private final boolean isPaper;
 
-    public LoadHell(ConfigurationSection worldConfig, String pluginName) {
+    public LoadHell(ConfigurationSection worldConfig, boolean isPaper, String pluginName) {
+        this.isPaper = isPaper;
         // Add vanilla values
-        this.configAccessor.addConfig(null, new ConfigValues(null, worldConfig, new PaperSpigot().getSettingsMap()));
+        this.configAccessor.addConfig(null,
+                new ConfigValues(null, worldConfig, new PaperSpigot(null, this.isPaper).getSettingsMap()));
         this.messages = new Messages(pluginName);
         this.decorators = new Decorators();
         this.worldInfos = new HashMap<>();
@@ -36,11 +39,11 @@ public class LoadHell {
 
         // Check if decorators were already modified
         // If we set decorators a second time it causes null errors
-        if(check) {
+        if (check) {
             alreadySet = this.decorators.alreadySet();
         }
 
-        if(!alreadySet) {
+        if (!alreadySet) {
             return this.decorators.set();
         }
 
@@ -54,7 +57,7 @@ public class LoadHell {
     public void addWorld(World world, ConfigurationSection worldConfig) {
         String worldName = world.getName();
         this.configAccessor.addConfig(worldName,
-                new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName).getSettingsMap()));
+                new ConfigValues(worldName, worldConfig, new PaperSpigot(worldName, this.isPaper).getSettingsMap()));
         this.worldInfos.putIfAbsent(worldName, new WorldInfo(world, worldConfig));
     }
 
@@ -118,7 +121,8 @@ public class LoadHell {
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(worldInfo.worldProvider, heightValue);
 
-            Field chunkMapGenerator = ReflectionHelper.getField(worldInfo.chunkServer.playerChunkMap.getClass(), "chunkGenerator", true);
+            Field chunkMapGenerator = ReflectionHelper.getField(worldInfo.chunkServer.playerChunkMap.getClass(),
+                    "chunkGenerator", true);
             chunkMapGenerator.setAccessible(true);
             ReflectionHelper.setFinal(chunkMapGenerator, worldInfo.chunkServer.playerChunkMap, generator);
         } catch (Exception e) {

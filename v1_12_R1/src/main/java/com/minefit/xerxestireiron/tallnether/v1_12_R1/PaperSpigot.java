@@ -3,7 +3,6 @@ package com.minefit.xerxestireiron.tallnether.v1_12_R1;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.spigotmc.SpigotWorldConfig;
 
 public class PaperSpigot {
@@ -44,10 +43,6 @@ public class PaperSpigot {
             this.generateVillage = true;
             this.generateFlatBedrock = false;
         }
-    }
-
-    public PaperSpigot(String worldName) {
-        this(worldName, Bukkit.getName().contains("Paper"));
     }
 
     public Map<String, Boolean> getSettingsMap() {
