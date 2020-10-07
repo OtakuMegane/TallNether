@@ -1,16 +1,22 @@
 package com.minefit.xerxestireiron.tallnether.v1_16_R2;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
+
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
 
 import net.minecraft.server.v1_16_R2.BiomeBase;
+import net.minecraft.server.v1_16_R2.Biomes;
+import net.minecraft.server.v1_16_R2.DedicatedServer;
 import net.minecraft.server.v1_16_R2.IRegistry;
+import net.minecraft.server.v1_16_R2.IRegistryCustom;
 import net.minecraft.server.v1_16_R2.MinecraftKey;
-import net.minecraft.server.v1_16_R2.WorldGenFeatureCompositeConfiguration;
-import net.minecraft.server.v1_16_R2.WorldGenFeatureConfigured;
+import net.minecraft.server.v1_16_R2.MinecraftServer;
 
 public class NetherBiomes {
     private WorldInfo worldInfo;
@@ -27,44 +33,40 @@ public class NetherBiomes {
 
         while (biomeIterator.hasNext()) {
             BiomeBase biomeBase = biomeIterator.next();
-            int forest_count = 0;
-            int random_count = 0;
-            boolean basalt_found = false;
+            MinecraftKey biomeKey = getBiomeBaseKey(biomeBase);
 
-            for (List<Supplier<WorldGenFeatureConfigured<?, ?>>> wut : biomeBase.e().c()) { // Immutable
-                for (Supplier<WorldGenFeatureConfigured<?, ?>> wut2 : wut) {
-                    WorldGenFeatureCompositeConfiguration wut3 = (WorldGenFeatureCompositeConfiguration) wut2.get().c();
-                    MinecraftKey minecraft_key = IRegistry.FEATURE.getKey(wut3.b.get().b());
-
-                    if (minecraft_key.toString().equals("minecraft:basalt_columns")) {
-                        basalt_found = true;
-                    }
-
-                    if (minecraft_key.toString().equals("minecraft:nether_forest_vegetation")) {
-                        ++forest_count;
-                    }
-
-                    if (minecraft_key.toString().equals("minecraft:random_patch")) {
-                        ++random_count;
-                    }
-                }
-            }
-
-            if (basalt_found) {
+            if(biomeKey == Biomes.BASALT_DELTAS.a()) {
                 this.biomes.put("basalt_deltas", biomeBase);
-            } else if (forest_count > 0) {
-                if (forest_count == 1) {
-                    this.biomes.put("crimson_forest", biomeBase);
-                }
-
-                if (forest_count == 2) {
-                    this.biomes.put("warped_forest", biomeBase);
-                }
-            } else if (random_count == 2) {
+            } else if(biomeKey == Biomes.CRIMSON_FOREST.a()) {
+                this.biomes.put("crimson_forest", biomeBase);
+            } else if(biomeKey == Biomes.WARPED_FOREST.a()) {
+                this.biomes.put("warped_forest", biomeBase);
+            } else if(biomeKey == Biomes.NETHER_WASTES.a()) {
                 this.biomes.put("nether_wastes", biomeBase);
-            } else if (random_count == 3) {
+            } else if(biomeKey == Biomes.SOUL_SAND_VALLEY.a()) {
                 this.biomes.put("soul_sand_valley", biomeBase);
             }
         }
+    }
+
+    // Hopefully we can simplify this method or even get rid of it in 1.17+
+    public MinecraftKey getBiomeBaseKey(BiomeBase biomeBase) {
+        DedicatedServer dedicatedServer = ((CraftServer) Bukkit.getServer()).getServer();
+        IRegistryCustom customRegistry = null;
+
+        try {
+            customRegistry = dedicatedServer.aX(); // 1.16.2
+        } catch (NoSuchMethodError e) {
+            try {
+                Method getRegistryMethod;
+                getRegistryMethod = MinecraftServer.class.getDeclaredMethod("getCustomRegistry"); // 1.16.3
+                customRegistry = (IRegistryCustom) getRegistryMethod.invoke(dedicatedServer);
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return customRegistry.b(IRegistry.ay).getKey(biomeBase);
     }
 }
