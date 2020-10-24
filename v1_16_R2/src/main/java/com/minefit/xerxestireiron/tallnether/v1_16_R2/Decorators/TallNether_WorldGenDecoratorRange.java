@@ -37,8 +37,9 @@ public class TallNether_WorldGenDecoratorRange extends TallNether_WorldGenDecora
 
         // TallNether: Double the attempts to scale with the extra height
         return IntStream.range(0, attempts).mapToObj((i) -> {
-            int j = blockposition.getX();
-            int k = blockposition.getZ();
+            // TallNether: Note this is based on the old NetherChance decorator
+            int j = random.nextInt(16) + blockposition.getX();
+            int k = random.nextInt(16) + blockposition.getZ();
             int l = random.nextInt(maxHeight - maxOffset) + minHeight;
 
             return new BlockPosition(j, l, k);
