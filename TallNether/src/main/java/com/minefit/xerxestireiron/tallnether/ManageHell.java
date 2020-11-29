@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public class ManageHell {
 
     private final TallNether plugin;
+    private final Messages messages;
     private com.minefit.xerxestireiron.tallnether.v1_12_R1.LoadHell LH12R1;
     private com.minefit.xerxestireiron.tallnether.v1_13_R1.LoadHell LH13R1;
     private com.minefit.xerxestireiron.tallnether.v1_13_R2.LoadHell LH13R2;
@@ -21,10 +22,14 @@ public class ManageHell {
 
     public ManageHell(TallNether instance) {
         this.plugin = instance;
+        this.messages = new Messages(instance.getName());
     }
 
     public void overrideGenerator(World world) {
-        if (world.getEnvironment() != Environment.NETHER) {
+        Environment environment = world.getEnvironment();
+
+        if (environment != Environment.NETHER) {
+            this.messages.unknownEnvironment(world.getName(), environment.toString());
             return;
         }
 
