@@ -1,5 +1,6 @@
 package com.minefit.xerxestireiron.tallnether;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,8 @@ public class TallNether extends JavaPlugin implements Listener {
     protected final ServerVersion serverVersion = new ServerVersion(this);
     private final List<String> compatibleVersions = Arrays.asList("v1_12_R1", "v1_13_R1", "v1_13_R2", "v1_14_R1",
             "v1_15_R1", "v1_16_R1", "v1_16_R2", "v1_16_R3");
-    private HashMap<String, ManageHell> legacy_worlds;
+    private HashMap<String, ManageHell> legacyWorlds;
+    private List<World> checkedWorlds;
 
     @Override
     public void onEnable() {
@@ -30,7 +32,8 @@ public class TallNether extends JavaPlugin implements Listener {
         this.name = getServer().getClass().getPackage().getName();
         this.version = this.name.substring(this.name.lastIndexOf('.') + 1);
         this.getServer().getPluginManager().registerEvents(this, this);
-        this.legacy_worlds = new HashMap<>();
+        this.legacyWorlds = new HashMap<>();
+        this.checkedWorlds = new ArrayList<>();
 
         if (!this.serverVersion.compatibleVersion(this.compatibleVersions)) {
             this.messages.incompatibleVersion();
@@ -73,8 +76,14 @@ public class TallNether extends JavaPlugin implements Listener {
     public void onWorldUnload(WorldUnloadEvent event) {
         World world = event.getWorld();
 
+        if (!this.checkedWorlds.contains(world)) {
+            return;
+        } else {
+            this.checkedWorlds.remove(world);
+        }
+
         if (this.version.equals("v1_12_R1")) {
-            this.legacy_worlds.remove(world.getName());
+            this.legacyWorlds.remove(world.getName());
         } else {
             this.manageHell.removeWorld(event.getWorld());
         }
@@ -83,13 +92,19 @@ public class TallNether extends JavaPlugin implements Listener {
     public void prepareWorld(World world) {
         String worldName = world.getName();
 
+        if (this.checkedWorlds.contains(world)) {
+            return;
+        } else {
+            this.checkedWorlds.add(world);
+        }
+
         if (this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)) {
             //A bit lazy but should keep things working for 1.12
             if (this.version.equals("v1_12_R1")) {
-                if (!this.legacy_worlds.containsKey(worldName)) {
+                if (!this.legacyWorlds.containsKey(worldName)) {
                     ManageHell manageHell = new ManageHell(this);
                     manageHell.overrideGenerator(world);
-                    this.legacy_worlds.put(worldName, manageHell);
+                    this.legacyWorlds.put(worldName, manageHell);
                 }
             } else {
                 this.manageHell.overrideGenerator(world);
