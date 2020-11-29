@@ -2,7 +2,6 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R2_2;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -306,13 +305,5 @@ public class Decorators {
 
     private boolean doFixes(boolean restore) {
         return true;
-    }
-
-    private void setFinal(Field field, Object instance, Object obj) throws Exception {
-        field.setAccessible(true);
-        Field modifiers = Field.class.getDeclaredField("modifiers");
-        modifiers.setAccessible(true);
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(instance, obj);
     }
 }

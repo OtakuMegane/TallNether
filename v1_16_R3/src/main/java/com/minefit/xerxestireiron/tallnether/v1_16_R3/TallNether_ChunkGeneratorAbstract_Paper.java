@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
 import com.minefit.xerxestireiron.tallnether.WorldValues;
 import com.mojang.serialization.Codec;

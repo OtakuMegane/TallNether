@@ -1,5 +1,8 @@
 package com.minefit.xerxestireiron.tallnether.v1_16_R1;
 
+import java.util.Random;
+import java.util.stream.Stream;
+
 import com.mojang.serialization.Codec;
 
 import net.minecraft.server.v1_16_R1.BlockPosition;
@@ -7,9 +10,6 @@ import net.minecraft.server.v1_16_R1.ChunkGenerator;
 import net.minecraft.server.v1_16_R1.GeneratorAccess;
 import net.minecraft.server.v1_16_R1.WorldGenDecorator;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureDecoratorConfiguration;
-
-import java.util.Random;
-import java.util.stream.Stream;
 
 public abstract class TallNether_WorldGenDecoratorFeatureSimple<DC extends WorldGenFeatureDecoratorConfiguration> extends WorldGenDecorator<DC> {
 

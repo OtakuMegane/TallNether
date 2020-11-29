@@ -10,6 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.Messages;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 
 import net.minecraft.server.v1_16_R3.ChunkGenerator;
 import net.minecraft.server.v1_16_R3.GeneratorSettingBase;

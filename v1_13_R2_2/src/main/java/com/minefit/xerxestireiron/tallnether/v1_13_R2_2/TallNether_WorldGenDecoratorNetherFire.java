@@ -1,8 +1,8 @@
 package com.minefit.xerxestireiron.tallnether.v1_13_R2_2;
 
-import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
-
 import java.util.Random;
+
+import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 
 import net.minecraft.server.v1_13_R2.BlockPosition;
 import net.minecraft.server.v1_13_R2.ChunkGenerator;

@@ -1,14 +1,14 @@
 package com.minefit.xerxestireiron.tallnether.v1_14_R1;
 
-import com.google.common.collect.Lists;
-import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
-import com.mojang.datafixers.Dynamic;
-
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Lists;
+import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ConfigValues;
+import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.server.v1_14_R1.BlockPosition;
 import net.minecraft.server.v1_14_R1.GeneratorAccess;

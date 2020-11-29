@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
 import com.minefit.xerxestireiron.tallnether.WorldValues;
 import com.mojang.serialization.Codec;
@@ -24,7 +25,6 @@ import net.minecraft.server.v1_16_R1.BlockPosition;
 import net.minecraft.server.v1_16_R1.Blocks;
 import net.minecraft.server.v1_16_R1.ChunkCoordIntPair;
 import net.minecraft.server.v1_16_R1.ChunkGenerator;
-import net.minecraft.server.v1_16_R1.ChunkGeneratorAbstract;
 import net.minecraft.server.v1_16_R1.ChunkSection;
 import net.minecraft.server.v1_16_R1.EnumCreatureType;
 import net.minecraft.server.v1_16_R1.GeneratorAccess;

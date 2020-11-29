@@ -1,5 +1,8 @@
 package com.minefit.xerxestireiron.tallnether.v1_16_R1;
 
+import java.util.Random;
+import java.util.stream.Stream;
+
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
 import com.mojang.serialization.Codec;
@@ -7,9 +10,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.server.v1_16_R1.BlockPosition;
 import net.minecraft.server.v1_16_R1.GeneratorAccess;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureChanceDecoratorRangeConfiguration;
-
-import java.util.Random;
-import java.util.stream.Stream;
 
 public class TallNether_WorldGenDecoratorNetherChance extends TallNether_WorldGenDecoratorFeatureSimple<WorldGenFeatureChanceDecoratorRangeConfiguration> {
 

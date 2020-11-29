@@ -1,7 +1,6 @@
 package com.minefit.xerxestireiron.tallnether.v1_13_R2_2;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 import org.bukkit.World;
@@ -11,6 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.minefit.xerxestireiron.tallnether.Messages;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 
 import net.minecraft.server.v1_13_R2.BiomeLayout;
 import net.minecraft.server.v1_13_R2.Biomes;
@@ -103,56 +103,26 @@ public class LoadHell {
 
     private boolean setGenerator(WorldInfo worldInfo, ChunkGenerator<?> generator, boolean heightValue) {
         try {
-            Field chunkGenerator = getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
+            Field chunkGenerator = ReflectionHelper.getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
-            setFinal(chunkGenerator, worldInfo.chunkServer, generator);
+            ReflectionHelper.setFinal(chunkGenerator, worldInfo.chunkServer, generator);
 
-            Field worldHeight = getField(worldInfo.worldProvider.getClass(), "d", true);
+            Field worldHeight = ReflectionHelper.getField(worldInfo.worldProvider.getClass(), "d", true);
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(worldInfo.worldProvider, heightValue);
 
-            Field scheduler = getField(worldInfo.chunkServer.getClass(), "chunkScheduler", true);
+            Field scheduler = ReflectionHelper.getField(worldInfo.chunkServer.getClass(), "chunkScheduler", true);
             scheduler.setAccessible(true);
             ChunkTaskScheduler taskScheduler = (ChunkTaskScheduler) scheduler.get(worldInfo.chunkServer);
 
-            Field schedulerGenerator = getField(taskScheduler.getClass(), "d", true);
+            Field schedulerGenerator = ReflectionHelper.getField(taskScheduler.getClass(), "d", true);
             scheduler.setAccessible(true);
-            setFinal(schedulerGenerator, taskScheduler, generator);
+            ReflectionHelper.setFinal(schedulerGenerator, taskScheduler, generator);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
 
         return true;
-    }
-
-    private static Field getField(Class<?> baseClass, String fieldName, boolean declared) throws NoSuchFieldException {
-        Field field;
-
-        try {
-            if (declared) {
-                field = baseClass.getDeclaredField(fieldName);
-            } else {
-                field = baseClass.getField(fieldName);
-            }
-        } catch (NoSuchFieldException e) {
-            Class<?> superClass = baseClass.getSuperclass();
-
-            if (superClass != null) {
-                field = getField(superClass, fieldName, declared);
-            } else {
-                throw e;
-            }
-        }
-
-        return field;
-    }
-
-    private void setFinal(Field field, Object instance, Object obj) throws Exception {
-        field.setAccessible(true);
-        Field modifiers = Field.class.getDeclaredField("modifiers");
-        modifiers.setAccessible(true);
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(instance, obj);
     }
 }
