@@ -2,6 +2,7 @@ package com.minefit.xerxestireiron.tallnether;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ManageHell {
@@ -23,6 +24,10 @@ public class ManageHell {
     }
 
     public void overrideGenerator(World world) {
+        if (world.getEnvironment() != Environment.NETHER) {
+            return;
+        }
+
         ConfigurationSection worldConfig = this.plugin.getConfig().getConfigurationSection("worlds." + world.getName());
 
         if (this.plugin.version.equals("v1_12_R1")) {
