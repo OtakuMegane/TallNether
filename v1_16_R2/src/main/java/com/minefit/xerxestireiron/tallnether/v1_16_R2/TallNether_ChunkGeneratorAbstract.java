@@ -15,6 +15,7 @@ import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.ObjectList;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.objects.ObjectListIterator;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
 import com.minefit.xerxestireiron.tallnether.WorldValues;
 import com.mojang.serialization.Codec;

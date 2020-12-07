@@ -2,11 +2,12 @@ package com.minefit.xerxestireiron.tallnether.v1_13_R1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 
 import net.minecraft.server.v1_13_R1.BiomeBase;
 import net.minecraft.server.v1_13_R1.BiomeHell;
@@ -284,9 +285,9 @@ public class Decorators {
             ah.setAccessible(true);
 
             if (restore) {
-                setFinal(ah, this.biomeHell, new WorldGenMushrooms());
+                ReflectionHelper.setFinal(ah, this.biomeHell, new WorldGenMushrooms());
             } else {
-                setFinal(ah, this.biomeHell, new TallNether_WorldGenMushrooms());
+                ReflectionHelper.setFinal(ah, this.biomeHell, new TallNether_WorldGenMushrooms());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -294,13 +295,5 @@ public class Decorators {
         }
 
         return true;
-    }
-
-    private void setFinal(Field field, Object instance, Object obj) throws Exception {
-        field.setAccessible(true);
-        Field modifiers = Field.class.getDeclaredField("modifiers");
-        modifiers.setAccessible(true);
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(instance, obj);
     }
 }

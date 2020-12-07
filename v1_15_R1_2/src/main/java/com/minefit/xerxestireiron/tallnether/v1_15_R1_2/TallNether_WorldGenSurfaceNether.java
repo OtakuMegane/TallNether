@@ -3,8 +3,6 @@ package com.minefit.xerxestireiron.tallnether.v1_15_R1_2;
 import java.util.Random;
 import java.util.function.Function;
 
-import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
-import com.minefit.xerxestireiron.tallnether.ConfigValues;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.server.v1_15_R1.BiomeBase;
@@ -14,7 +12,6 @@ import net.minecraft.server.v1_15_R1.IBlockData;
 import net.minecraft.server.v1_15_R1.IChunkAccess;
 import net.minecraft.server.v1_15_R1.NoiseGeneratorOctaves;
 import net.minecraft.server.v1_15_R1.SeededRandom;
-import net.minecraft.server.v1_15_R1.World;
 import net.minecraft.server.v1_15_R1.WorldGenSurface;
 import net.minecraft.server.v1_15_R1.WorldGenSurfaceConfigurationBase;
 

@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.server.v1_14_R1.BiomeBase;

@@ -13,8 +13,6 @@ public class Messages {
     public void unknownGenerator(String worldName, String generatorName) {
         this.logger.info(
                 "[" + this.pluginName + " Error] The world '" + worldName + "' does not have a recognized generator.");
-        this.logger.info("[" + this.pluginName
-                + " Error] A custom generator may already be in place or Mojang changed something.");
         this.logger.info("[" + this.pluginName + " Error] The generator detected is: '" + generatorName + "'.");
         this.logger.info("[" + this.pluginName + " Error] For safety, TallNether will not be enabled on this world.");
     }

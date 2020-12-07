@@ -1,12 +1,12 @@
 package com.minefit.xerxestireiron.tallnether.v1_16_R2.Decorators;
 
-import com.google.common.collect.Lists;
-import com.minefit.xerxestireiron.tallnether.BiomeValues;
-import com.mojang.serialization.Codec;
-
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Lists;
+import com.minefit.xerxestireiron.tallnether.BiomeValues;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.server.v1_16_R2.BlockPosition;
 import net.minecraft.server.v1_16_R2.WorldGenDecoratorFrequencyConfiguration;

@@ -10,6 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.Messages;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 
 import net.minecraft.server.v1_16_R2.ChunkGenerator;
 import net.minecraft.server.v1_16_R2.GeneratorSettingBase;
@@ -42,6 +43,13 @@ public class LoadHell {
     }
 
     public void addWorld(World world, ConfigurationSection worldConfig) {
+        Environment environment = world.getEnvironment();
+
+        if (environment != Environment.NETHER) {
+            this.messages.unknownEnvironment(world.getName(), environment.toString());
+            return;
+        }
+
         String worldName = world.getName();
         this.configAccessor.newWorldConfig(worldName, new PaperSpigot(worldName, this.isPaper).settingsMap, true);
         WorldInfo worldInfo = new WorldInfo(world);
@@ -49,7 +57,7 @@ public class LoadHell {
 
         // For the moment Minecraft still shares a single biome instance for all worlds
         // We need the chunk manager to get them
-        if(!this.decoratorsModified) {
+        if (!this.decoratorsModified) {
             this.decoratorsModified = overrideDecorators(worldInfo);
         }
     }
@@ -63,7 +71,7 @@ public class LoadHell {
         String worldName = world.getName();
         WorldInfo worldInfo = this.worldInfos.get(worldName);
 
-        if(worldInfo.modified) {
+        if (worldInfo.modified) {
             return;
         }
 

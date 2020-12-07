@@ -8,11 +8,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
+
 import net.minecraft.server.v1_14_R1.BiomeBase;
 import net.minecraft.server.v1_14_R1.BiomeHell;
 import net.minecraft.server.v1_14_R1.Biomes;
 import net.minecraft.server.v1_14_R1.Blocks;
 import net.minecraft.server.v1_14_R1.FluidTypes;
+import net.minecraft.server.v1_14_R1.IRegistry;
 import net.minecraft.server.v1_14_R1.StructureGenerator;
 import net.minecraft.server.v1_14_R1.WorldGenCarverAbstract;
 import net.minecraft.server.v1_14_R1.WorldGenCarverConfiguration;
@@ -32,11 +35,10 @@ import net.minecraft.server.v1_14_R1.WorldGenFeatureHellFlowingLavaConfiguration
 import net.minecraft.server.v1_14_R1.WorldGenFeatureMushroomConfiguration;
 import net.minecraft.server.v1_14_R1.WorldGenFeatureOreConfiguration;
 import net.minecraft.server.v1_14_R1.WorldGenStage;
-import net.minecraft.server.v1_14_R1.WorldGenerator;
-import net.minecraft.server.v1_14_R1.IRegistry;
 import net.minecraft.server.v1_14_R1.WorldGenSurface;
 import net.minecraft.server.v1_14_R1.WorldGenSurfaceComposite;
 import net.minecraft.server.v1_14_R1.WorldGenSurfaceConfigurationBase;
+import net.minecraft.server.v1_14_R1.WorldGenerator;
 
 @SuppressWarnings({ "unchecked", "static-access", "rawtypes" })
 public class Decorators {

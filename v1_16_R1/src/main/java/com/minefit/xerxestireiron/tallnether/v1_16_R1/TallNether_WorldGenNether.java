@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.server.v1_16_R1.BiomeBase;

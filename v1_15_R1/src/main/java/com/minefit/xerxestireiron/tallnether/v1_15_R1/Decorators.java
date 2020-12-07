@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
+
 import net.minecraft.server.v1_15_R1.BiomeBase;
 import net.minecraft.server.v1_15_R1.BiomeDecoratorGroups;
 import net.minecraft.server.v1_15_R1.BiomeHell;
@@ -14,7 +16,6 @@ import net.minecraft.server.v1_15_R1.Biomes;
 import net.minecraft.server.v1_15_R1.Blocks;
 import net.minecraft.server.v1_15_R1.IRegistry;
 import net.minecraft.server.v1_15_R1.StructureGenerator;
-import net.minecraft.server.v1_15_R1.World;
 import net.minecraft.server.v1_15_R1.WorldGenCarverAbstract;
 import net.minecraft.server.v1_15_R1.WorldGenCarverConfiguration;
 import net.minecraft.server.v1_15_R1.WorldGenCarverWrapper;
