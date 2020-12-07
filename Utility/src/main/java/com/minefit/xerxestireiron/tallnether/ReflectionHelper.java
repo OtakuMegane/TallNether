@@ -29,14 +29,6 @@ public class ReflectionHelper {
         return field;
     }
 
-    /*public static void setFinal(Field field, Object instance, Object obj) throws Exception {
-        field.setAccessible(true);
-        Field modifiers = Field.class.getDeclaredField("modifiers");
-        modifiers.setAccessible(true);
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(instance, obj);
-    }*/
-
     public static void setFinal(Field field, Object instance, Object obj) throws Exception {
         try {
             field.setAccessible(true);
