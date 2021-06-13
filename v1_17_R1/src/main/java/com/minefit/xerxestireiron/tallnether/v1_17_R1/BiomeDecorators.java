@@ -1,0 +1,171 @@
+package com.minefit.xerxestireiron.tallnether.v1_17_R1;
+
+import com.google.common.collect.ImmutableSet;
+import com.minefit.xerxestireiron.tallnether.BiomeValues;
+import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
+import com.minefit.xerxestireiron.tallnether.WorldConfig;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.WorldInfo;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenCavesHell;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenDecoratorDepthAverage;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenDecoratorNetherFire;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenDecoratorNetherGlowstone;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenDecoratorNetherMagma;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenDecoratorRange;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenLightStone1;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TBiomeDecoratorGroups;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TBlocks;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TFluidTypes;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TWorldGenerator;
+
+import net.minecraft.data.worldgen.BiomeDecoratorGroups;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.carver.WorldGenCarverAbstract;
+import net.minecraft.world.level.levelgen.carver.WorldGenCarverWrapper;
+import net.minecraft.world.level.levelgen.feature.WorldGenFeatureConfigured;
+import net.minecraft.world.level.levelgen.feature.WorldGenerator;
+import net.minecraft.world.level.levelgen.feature.blockplacers.WorldGenBlockPlacerSimple;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenDecoratorFrequencyConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureChanceDecoratorRangeConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureConfigurationChance;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration2;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureHellFlowingLavaConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureOreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureRandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.WorldGenFeatureStateProviderSimpl;
+
+public class BiomeDecorators {
+    private final ConfigAccessor configAccessor = new ConfigAccessor();
+    private final WorldInfo worldInfo;
+    private final WorldConfig worldConfig;
+    private final BiomeValues biomeConfig;
+
+    private final WorldGenFeatureRandomPatchConfiguration PATCH_FIRE_CONFIG = new WorldGenFeatureRandomPatchConfiguration.a(
+            new WorldGenFeatureStateProviderSimpl(TBlocks.FIRE.getBlockData()), WorldGenBlockPlacerSimple.c).a(64)
+                    .a(ImmutableSet.of(TBlocks.NETHERRACK)).b().d();
+    private final WorldGenFeatureRandomPatchConfiguration PATCH_SOUL_FIRE_CONFIG = new WorldGenFeatureRandomPatchConfiguration.a(
+            new WorldGenFeatureStateProviderSimpl(TBlocks.SOUL_FIRE.getBlockData()), WorldGenBlockPlacerSimple.c).a(64)
+                    .a(ImmutableSet.of(TBlocks.SOUL_SOIL)).b().d();
+    private final WorldGenFeatureHellFlowingLavaConfiguration SPRING_DELTA_CONFIG = new WorldGenFeatureHellFlowingLavaConfiguration(
+            TFluidTypes.LAVA.h(), true, 4, 1,
+            ImmutableSet.of(TBlocks.NETHERRACK, TBlocks.SOUL_SAND, TBlocks.GRAVEL, TBlocks.MAGMA_BLOCK, TBlocks.BLACKSTONE));
+    private final WorldGenFeatureHellFlowingLavaConfiguration SPRING_OPEN_CONFIG = new WorldGenFeatureHellFlowingLavaConfiguration(
+            TFluidTypes.LAVA.h(), false, 4, 1, ImmutableSet.of(TBlocks.NETHERRACK));
+
+    @SuppressWarnings("rawtypes")
+    //public final WorldGenCarverWrapper CAVES_HELL;
+    public final WorldGenFeatureConfigured<?, ?> DELTA = TBiomeDecoratorGroups.DELTA;
+    public final WorldGenFeatureConfigured<?, ?> SMALL_BASALT_COLUMNS = TBiomeDecoratorGroups.SMALL_BASALT_COLUMNS;
+    public final WorldGenFeatureConfigured<?, ?> LARGE_BASALT_COLUMNS = TBiomeDecoratorGroups.LARGE_BASALT_COLUMNS;
+    public final WorldGenFeatureConfigured<?, ?> BASALT_BLOBS = TBiomeDecoratorGroups.BASALT_BLOBS;
+    public final WorldGenFeatureConfigured<?, ?> BLACKSTONE_BLOBS = TBiomeDecoratorGroups.BLACKSTONE_BLOBS;
+    public final WorldGenFeatureConfigured<?, ?> GLOWSTONE_EXTRA;
+    public final WorldGenFeatureConfigured<?, ?> GLOWSTONE;
+    public final WorldGenFeatureConfigured<?, ?> CRIMSON_FOREST_VEGETATION = TBiomeDecoratorGroups.CRIMSON_FOREST_VEGETATION;
+    public final WorldGenFeatureConfigured<?, ?> WARPED_FOREST_VEGETATION = TBiomeDecoratorGroups.WARPED_FOREST_VEGETATION;
+    public final WorldGenFeatureConfigured<?, ?> NETHER_SPROUTS = TBiomeDecoratorGroups.NETHER_SPROUTS;
+    public final WorldGenFeatureConfigured<?, ?> TWISTING_VINES = TBiomeDecoratorGroups.TWISTING_VINES;
+    public final WorldGenFeatureConfigured<?, ?> WEEPING_VINES = TBiomeDecoratorGroups.WEEPING_VINES;
+    public final WorldGenFeatureConfigured<?, ?> BASALT_PILLAR = TBiomeDecoratorGroups.BASALT_PILLAR;
+    public final WorldGenFeatureConfigured<?, ?> SPRING_LAVA_DOUBLE = TBiomeDecoratorGroups.SPRING_LAVA_DOUBLE;
+    public final WorldGenFeatureConfigured<?, ?> SPRING_LAVA = TBiomeDecoratorGroups.SPRING_LAVA;
+    public final WorldGenFeatureConfigured<?, ?> SPRING_DELTA; // Setting lavafall (Basalt Deltas variant)
+    public final WorldGenFeatureConfigured<?, ?> SPRING_CLOSED; // Setting hidden-lava
+    public final WorldGenFeatureConfigured<?, ?> SPRING_CLOSED_DOUBLE; // Setting hidden-lava (Basalt Deltas variant)
+    public final WorldGenFeatureConfigured<?, ?> SPRING_OPEN; // Setting lavafall
+    public final WorldGenFeatureConfigured<?, ?> PATCH_FIRE;
+    public final WorldGenFeatureConfigured<?, ?> PATCH_SOUL_FIRE;
+    public final WorldGenFeatureConfigured<?, ?> BROWN_MUSHROOM_NORMAL = TBiomeDecoratorGroups.BROWN_MUSHROOM_NORMAL;
+    public final WorldGenFeatureConfigured<?, ?> RED_MUSHROOM_NORMAL = TBiomeDecoratorGroups.RED_MUSHROOM_NORMAL;
+    public final WorldGenFeatureConfigured<?, ?> PATCH_CRIMSON_ROOTS = TBiomeDecoratorGroups.PATCH_CRIMSON_ROOTS;
+    public final WorldGenFeatureConfigured<?, ?> BROWN_MUSHROOM_NETHER = TBiomeDecoratorGroups.BROWN_MUSHROOM_NETHER;
+    public final WorldGenFeatureConfigured<?, ?> RED_MUSHROOM_NETHER = TBiomeDecoratorGroups.RED_MUSHROOM_NETHER;
+    public final WorldGenFeatureConfigured<?, ?> ORE_MAGMA; // Setting magma-block
+    public final WorldGenFeatureConfigured<?, ?> ORE_SOUL_SAND = TBiomeDecoratorGroups.ORE_SOUL_SAND;
+    public final WorldGenFeatureConfigured<?, ?> ORE_GOLD_DELTAS;
+    public final WorldGenFeatureConfigured<?, ?> ORE_QUARTZ_DELTAS;
+    public final WorldGenFeatureConfigured<?, ?> ORE_GOLD_NETHER;
+    public final WorldGenFeatureConfigured<?, ?> ORE_QUARTZ_NETHER;
+    public final WorldGenFeatureConfigured<?, ?> ORE_GRAVEL_NETHER = TBiomeDecoratorGroups.ORE_GRAVEL_NETHER;
+    public final WorldGenFeatureConfigured<?, ?> ORE_BLACKSTONE = TBiomeDecoratorGroups.ORE_BLACKSTONE;
+    public final WorldGenFeatureConfigured<?, ?> ORE_DEBRIS_LARGE; // Setting ancient-debris1
+    public final WorldGenFeatureConfigured<?, ?> ORE_DEBRIS_SMALL; // Setting ancient-debris2
+    public final WorldGenFeatureConfigured<?, ?> CRIMSON_FUNGI = TBiomeDecoratorGroups.CRIMSON_FUNGI;
+    public final WorldGenFeatureConfigured<?, ?> WARPED_FUNGI = TBiomeDecoratorGroups.WARPED_FUNGI;
+
+    public final WorldGenFeatureConfigured<?, ?> TALLNETHER_GLOWSTONE; // TallNether variant of GLOWSTONE
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public BiomeDecorators(WorldInfo worldInfo, String biome) {
+        this.worldInfo = worldInfo;
+        this.worldConfig = this.configAccessor.getWorldConfig(this.worldInfo.worldName);
+        this.biomeConfig = this.worldConfig.getBiomeValues(biome);
+        TWorldGenerator.SPRING.b(SPRING_DELTA_CONFIG).a(new WorldGenFeatureChanceDecoratorRangeConfiguration(null)).a().b(0);
+
+        /*this.CAVES_HELL = ((WorldGenCarverAbstract) (new TallNether_WorldGenCavesHell(
+                WorldGenFeatureConfigurationChance.b)))
+                        .a((WorldGenCarverConfiguration) (new WorldGenFeatureConfigurationChance(0.2F)));*/
+        this.PATCH_FIRE = TWorldGenerator.RANDOM_PATCH.b(this.PATCH_FIRE_CONFIG)
+                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, biome, "fire")
+                        .b(new WorldGenDecoratorFrequencyConfiguration(10)));
+        this.PATCH_SOUL_FIRE = TWorldGenerator.RANDOM_PATCH.b(this.PATCH_SOUL_FIRE_CONFIG)
+                .a(new TallNether_WorldGenDecoratorNetherFire(WorldGenDecoratorFrequencyConfiguration.a, biome,
+                        "soul-fire").b(new WorldGenDecoratorFrequencyConfiguration(10)));
+        this.GLOWSTONE = (WorldGenFeatureConfigured) ((WorldGenFeatureConfigured) ((WorldGenFeatureConfigured) (new TallNether_WorldGenLightStone1(
+                WorldGenFeatureEmptyConfiguration.a)).b(WorldGenFeatureConfiguration.k).d(128)).a()).b(10);
+        this.TALLNETHER_GLOWSTONE = TWorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k)
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "glowstone2").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(10)
+        this.GLOWSTONE_EXTRA = TWorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k)
+                .a(new TallNether_WorldGenDecoratorNetherGlowstone(WorldGenDecoratorFrequencyConfiguration.a, biome,
+                        "glowstone1").b(new WorldGenDecoratorFrequencyConfiguration(10)));
+        this.ORE_MAGMA = TWorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
+                        TBlocks.MAGMA_BLOCK.getBlockData(), 33))
+                .a(new TallNether_WorldGenDecoratorNetherMagma(WorldGenFeatureEmptyConfiguration2.a, biome)
+                        .b(WorldGenFeatureEmptyConfiguration2.c).a())
+                .b(4);
+        this.ORE_QUARTZ_NETHER = TWorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
+                        TBlocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "quartz").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(16)
+        this.ORE_QUARTZ_DELTAS = TWorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
+                        TBlocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "quartz").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(32)
+        this.ORE_DEBRIS_LARGE = TWorldGenerator.NO_SURFACE_ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.e,
+                        TBlocks.ANCIENT_DEBRIS.getBlockData(), 3))
+                .a(new TallNether_WorldGenDecoratorDepthAverage(WorldGenDecoratorHeightAverageConfiguration.a, biome,
+                        "ancient-debris1").b(new WorldGenDecoratorHeightAverageConfiguration(16, 8)).a());
+        this.ORE_DEBRIS_SMALL = TWorldGenerator.NO_SURFACE_ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.e,
+                        TBlocks.ANCIENT_DEBRIS.getBlockData(), 2))
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "ancient-debris2").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(8, 16, 128)).a());
+        this.ORE_GOLD_NETHER = TWorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
+                        TBlocks.NETHER_GOLD_ORE.getBlockData(), 10))
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "nether-gold").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(10)
+        this.ORE_GOLD_DELTAS = TWorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
+                        TBlocks.NETHER_GOLD_ORE.getBlockData(), 10))
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "nether-gold").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // b(20)
+        this.SPRING_OPEN = TWorldGenerator.SPRING.b(this.SPRING_OPEN_CONFIG)
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "lavafall").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(4, 8, 128)).a()); // .b(8)
+        this.SPRING_DELTA = TWorldGenerator.SPRING.b(this.SPRING_DELTA_CONFIG)
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "lavafall").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(4, 8, 128)).a()); // .b(16)
+        this.SPRING_CLOSED = TWorldGenerator.SPRING.b(BiomeDecoratorGroups.a.j)
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "hidden-lava").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(16)
+        this.SPRING_CLOSED_DOUBLE = TWorldGenerator.SPRING.b(BiomeDecoratorGroups.a.j)
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "hidden-lava").b(new WorldGenFeatureChanceDecoratorRangeConfiguration(10, 20, 128)).a()); // .b(32)
+    }
+}
