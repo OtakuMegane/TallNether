@@ -95,6 +95,12 @@
 			<version>1.0</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.minefit.xerxestireiron.tallnether</groupId>
+			<artifactId>v1_17_R1</artifactId>
+			<version>1.0</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

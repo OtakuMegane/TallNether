@@ -1,8 +1,15 @@
 package com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition;
 
-import net.minecraft.data.worldgen.BiomeDecoratorGroups;
-import net.minecraft.world.level.levelgen.feature.WorldGenFeatureConfigured;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.BiomeDecorators;
 
+import net.minecraft.data.worldgen.BiomeDecoratorGroups;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.WorldGenFeatureConfigured;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureChanceDecoratorRangeConfiguration;
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
+
+// Mojang: net.minecraft.data.worldgen.Features
+// Spigot: net.minecraft.data.worldgen.BiomeDecoratorGroups
 public class TBiomeDecoratorGroups {
     public static final WorldGenFeatureConfigured<?, ?> DELTA = BiomeDecoratorGroups.g;
     public static final WorldGenFeatureConfigured<?, ?> SMALL_BASALT_COLUMNS = BiomeDecoratorGroups.h;

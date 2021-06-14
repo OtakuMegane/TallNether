@@ -39,7 +39,8 @@ public class TallNether_WorldGenSurfaceNetherForest extends WorldGenSurface<Worl
         int k2 = -1;
         IBlockData iblockdata2 = worldgensurfaceconfigurationbase.b();
 
-        for (int l2 = 127; l2 >= i1; --l2) {
+     // TallNether: originally 127, changed to 255
+        for (int l2 = 255; l2 >= i1; --l2) {
             blockposition_mutableblockposition.d(l1, l2, i2);
             IBlockData iblockdata3 = worldgensurfaceconfigurationbase.a();
             IBlockData iblockdata4 = ichunkaccess.getType(blockposition_mutableblockposition);

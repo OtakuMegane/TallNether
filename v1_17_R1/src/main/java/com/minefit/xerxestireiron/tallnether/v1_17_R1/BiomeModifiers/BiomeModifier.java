@@ -11,9 +11,8 @@ public class BiomeModifier {
 
     public boolean injectSettings(BiomeBase biomeBase, BiomeSettingsGeneration biomeSettingsGeneration) {
         try {
-            Field f = biomeBase.getClass().getDeclaredField("k");
-            f.setAccessible(true);
-            ReflectionHelper.setFinal(f, biomeBase, biomeSettingsGeneration);
+            Field l = biomeBase.getClass().getDeclaredField("l"); // generationSettings
+            ReflectionHelper.setFinal(l, biomeBase, biomeSettingsGeneration);
         } catch (Exception e) {
             return false;
         }

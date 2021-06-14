@@ -1,0 +1,67 @@
+# This configures the worlds that will have TallNether enabled and the settings for each
+# Only worlds of the Nether type will be affected
+# The only required setting is having 'enabled' to be set to true
+# All other settings will use default values if nothing is given in the config
+# All worlds not in the config will be ignored
+#
+# Example config
+#
+# worlds:
+#   world1:
+#     enabled: true
+#     farlands: true
+#     lava-sea-level: 40
+#     gravel-soulsand-limit: 92
+#     fire-min-height: 4
+#     fire-max-height: 128
+#     fire-attempts: 15
+#   world2:
+#     enabled: true
+
+worlds:
+  ESSBOSS:
+    enabled: true
+  ESSBOSS_nether:
+    enabled: true
+    farlands: true
+    lavafall-attempts: 16
+    fire-attempts: 28
+    glowstone1-attempts: 50
+    glowstone2-attempts: 50
+    nether-wastes:
+      lavafall-attempts: 24
+      fire-attempts: 40
+      glowstone1-attempts: 40
+      glowstone2-attempts: 40
+      quartz-attempts-attempts: 40
+      nether-gold-attempts: 30
+      ancient-debris1-attempts: 3
+      ancient-debris2-attempts: 3
+    soul-sand-valley:
+      glowstone1-attempts: 30
+      glowstone2-attempts: 30
+      quartz-attempts-attempts: 40
+      nether-gold-attempts: 30
+      ancient-debris1-attempts: 3
+      ancient-debris2-attempts: 3
+    basalt-deltas:
+      glowstone1-attempts: 30
+      glowstone2-attempts: 30
+      quartz-attempts-attempts: 40
+      nether-gold-attempts: 30
+      ancient-debris1-attempts: 3
+      ancient-debris2-attempts: 3
+    crimson-forest:
+      glowstone1-attempts: 30
+      glowstone2-attempts: 30
+      quartz-attempts-attempts: 40
+      nether-gold-attempts: 30
+      nancient-debris1-attempts: 3
+      ancient-debris2-attempts: 3
+    warped-forest:
+      glowstone1-attempts: 30
+      glowstone2-attempts: 30
+      quartz-attempts-attempts: 40
+      nether-gold-attempts: 30
+      ancient-debris1-attempts: 3
+      ancient-debris2-attempts: 3

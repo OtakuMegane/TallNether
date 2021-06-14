@@ -6,11 +6,13 @@ import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeature
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureOreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureRandomPatchConfiguration;
 
-// net.minecraft.world.level.levelgen.feature.Feature
+// Mojang: net.minecraft.world.level.levelgen.feature.Feature
+// Spigot: net.minecraft.world.level.levelgen.feature.WorldGenerator
 public class TWorldGenerator {
 
     public static final WorldGenerator<WorldGenFeatureRandomPatchConfiguration> RANDOM_PATCH = WorldGenerator.j;
     public static final WorldGenerator<WorldGenFeatureHellFlowingLavaConfiguration> SPRING = WorldGenerator.l;
     public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> GLOWSTONE_BLOB = WorldGenerator.u;
     public static final WorldGenerator<WorldGenFeatureOreConfiguration> ORE = WorldGenerator.K;
+    public static final WorldGenerator<WorldGenFeatureOreConfiguration> SCATTERED_ORE = WorldGenerator.ag;
 }

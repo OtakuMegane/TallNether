@@ -3,7 +3,8 @@ package com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-// net.minecraft.world.level.block.Blocks
+// Mojang: net.minecraft.world.level.block.Blocks
+// Spigot: net.minecraft.world.level.block.Blocks
 public class TBlocks {
 
     public static final Block AIR = Blocks.a;
@@ -24,6 +25,8 @@ public class TBlocks {
     public static final Block SOUL_SAND = Blocks.cU;
     public static final Block SOUL_SOIL = Blocks.cV;
     public static final Block BASALT = Blocks.cW;
+
+    public static final Block GLOWSTONE = Blocks.da;
 
     public static final Block NETHER_QUARTZ_ORE = Blocks.fK;
 

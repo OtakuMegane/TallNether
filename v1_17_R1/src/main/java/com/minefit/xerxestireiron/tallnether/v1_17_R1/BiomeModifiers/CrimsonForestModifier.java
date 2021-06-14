@@ -3,6 +3,8 @@ package com.minefit.xerxestireiron.tallnether.v1_17_R1.BiomeModifiers;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.BiomeDecorators;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.SurfaceComposites;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.WorldInfo;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TStructureFeatures;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TWorldGenCarvers;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TWorldGenStage;
 
 import net.minecraft.data.worldgen.StructureFeatures;
@@ -21,7 +23,7 @@ public class CrimsonForestModifier extends BiomeModifier {
     public CrimsonForestModifier(WorldInfo worldInfo, BiomeBase biomeBase) {
         this.biomeBase = biomeBase;
         this.originalBiomeSettings = biomeBase.e();
-        this.biomeDecorators = new BiomeDecorators(worldInfo, "crimson-forest");
+        this.biomeDecorators = new BiomeDecorators("crimson-forest");
         this.surfaceComposites = new SurfaceComposites();
         this.modifiedBiomeSettings = createModifiedSettings();
     }
@@ -34,36 +36,42 @@ public class CrimsonForestModifier extends BiomeModifier {
     private BiomeSettingsGeneration createModifiedSettings() {
         BiomeSettingsGeneration.a biomeSettingsGeneration_a = new BiomeSettingsGeneration.a();
 
+        // BiomeSettingsDefault.v()
         biomeSettingsGeneration_a.a(this.surfaceComposites.CRIMSON_FOREST);
-        biomeSettingsGeneration_a.a(StructureFeatures.E);
-        biomeSettingsGeneration_a.a(TWorldGenStage.Features.AIR, WorldGenCarvers.h);
-        biomeSettingsGeneration_a.a(StructureFeatures.o).a(StructureFeatures.s);
+        biomeSettingsGeneration_a.a(TStructureFeatures.RUINED_PORTAL_NETHER);
+        biomeSettingsGeneration_a.a(TWorldGenStage.Features.AIR, TWorldGenCarvers.NETHER_CAVE);
+        biomeSettingsGeneration_a.a(TStructureFeatures.NETHER_BRIDGE);
+        biomeSettingsGeneration_a.a(TStructureFeatures.BASTION_REMNANT);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.SPRING_LAVA);
 
-        // BiomeSettings.Z(biomesettingsgeneration_a)
+        // BiomeSettings.ac(biomesettingsgeneration_a)
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.BROWN_MUSHROOM_NORMAL);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.RED_MUSHROOM_NORMAL);
 
+        // BiomeSettingsDefault.v()
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.SPRING_OPEN);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.PATCH_FIRE);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.GLOWSTONE_EXTRA);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.GLOWSTONE);
-        biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_MAGMA);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.SPRING_CLOSED);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.WEEPING_VINES);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.CRIMSON_FUNGI);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.VEGETAL_DECORATION, this.biomeDecorators.CRIMSON_FOREST_VEGETATION);
 
-        // BiomeSettings.ao(biomesettingsgeneration_a)
+        // BiomeSettings.ar(biomesettingsgeneration_a)
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_GRAVEL_NETHER);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_BLACKSTONE);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_GOLD_NETHER);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_QUARTZ_NETHER);
 
-        // BiomeSettings.ap(biomesettingsgeneration_a)
+        // BiomeSettings.as(biomesettingsgeneration_a)
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_DEBRIS_LARGE);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_DEBRIS_SMALL);
+
+        // TallNether
+        biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE1);
+        biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE2);
 
         return biomeSettingsGeneration_a.a();
     }

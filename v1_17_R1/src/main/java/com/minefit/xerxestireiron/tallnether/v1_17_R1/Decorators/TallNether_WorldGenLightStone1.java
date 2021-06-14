@@ -4,16 +4,16 @@ import java.util.Random;
 
 import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
+import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TBlocks;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.Blocks;
-import net.minecraft.server.v1_16_R3.ChunkGenerator;
-import net.minecraft.server.v1_16_R3.EnumDirection;
-import net.minecraft.server.v1_16_R3.GeneratorAccessSeed;
-import net.minecraft.server.v1_16_R3.IBlockData;
-import net.minecraft.server.v1_16_R3.WorldGenFeatureEmptyConfiguration;
-import net.minecraft.server.v1_16_R3.WorldGenerator;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.core.EnumDirection;
+import net.minecraft.world.level.GeneratorAccessSeed;
+import net.minecraft.world.level.block.state.IBlockData;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.WorldGenerator;
+import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 
 public class TallNether_WorldGenLightStone1 extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
@@ -23,13 +23,18 @@ public class TallNether_WorldGenLightStone1 extends WorldGenerator<WorldGenFeatu
         super(codec);
     }
 
-    public boolean generate(GeneratorAccessSeed generatoraccessseed, ChunkGenerator chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    @Override
+    public boolean generate(FeaturePlaceContext<WorldGenFeatureEmptyConfiguration> featureplacecontext) {
+        GeneratorAccessSeed generatoraccessseed = featureplacecontext.a();
+        BlockPosition blockposition = featureplacecontext.d();
+        Random random = featureplacecontext.c();
+
         if (!generatoraccessseed.isEmpty(blockposition)) {
             return false;
         } else {
             IBlockData iblockdata = generatoraccessseed.getType(blockposition.up());
 
-            if (!iblockdata.a(Blocks.NETHERRACK) && !iblockdata.a(Blocks.BASALT) && !iblockdata.a(Blocks.BLACKSTONE)) {
+            if (!iblockdata.a(TBlocks.NETHERRACK) && !iblockdata.a(TBlocks.BASALT) && !iblockdata.a(TBlocks.BLACKSTONE)) {
                 return false;
             } else {
                 // TallNether: Ignore this decorator if not vanilla
@@ -40,10 +45,10 @@ public class TallNether_WorldGenLightStone1 extends WorldGenerator<WorldGenFeatu
                     return false;
                 }
 
-                generatoraccessseed.setTypeAndData(blockposition, Blocks.GLOWSTONE.getBlockData(), 2);
+                generatoraccessseed.setTypeAndData(blockposition, TBlocks.GLOWSTONE.getBlockData(), 2);
 
                 for (int i = 0; i < 1500; ++i) {
-                    BlockPosition blockposition1 = blockposition.b(random.nextInt(8) - random.nextInt(8), -random.nextInt(12), random.nextInt(8) - random.nextInt(8));
+                    BlockPosition blockposition1 = blockposition.c(random.nextInt(8) - random.nextInt(8), -random.nextInt(12), random.nextInt(8) - random.nextInt(8));
 
                     if (generatoraccessseed.getType(blockposition1).isAir()) {
                         int j = 0;
@@ -53,7 +58,7 @@ public class TallNether_WorldGenLightStone1 extends WorldGenerator<WorldGenFeatu
                         for (int l = 0; l < k; ++l) {
                             EnumDirection enumdirection = aenumdirection[l];
 
-                            if (generatoraccessseed.getType(blockposition1.shift(enumdirection)).a(Blocks.GLOWSTONE)) {
+                            if (generatoraccessseed.getType(blockposition1.shift(enumdirection)).a(TBlocks.GLOWSTONE)) {
                                 ++j;
                             }
 
@@ -63,7 +68,7 @@ public class TallNether_WorldGenLightStone1 extends WorldGenerator<WorldGenFeatu
                         }
 
                         if (j == 1) {
-                            generatoraccessseed.setTypeAndData(blockposition1, Blocks.GLOWSTONE.getBlockData(), 2);
+                            generatoraccessseed.setTypeAndData(blockposition1, TBlocks.GLOWSTONE.getBlockData(), 2);
                         }
                     }
                 }
