@@ -134,7 +134,7 @@ public class ManageHell {
             }
 
             this.LH17R1.addWorld(world, worldConfig);
-            this.LH17R1.overrideGenerator(world);
+            //this.LH17R1.overrideGenerator(world);
         }
     }
 

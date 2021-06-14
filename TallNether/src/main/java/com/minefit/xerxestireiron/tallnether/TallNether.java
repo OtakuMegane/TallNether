@@ -98,7 +98,7 @@ public class TallNether extends JavaPlugin implements Listener {
             this.checkedWorlds.add(world);
         }
 
-        if (this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)) {
+        //if (this.getConfig().getBoolean("worlds." + worldName + ".enabled", false)) {
             //A bit lazy but should keep things working for 1.12
             if (this.version.equals("v1_12_R1")) {
                 if (!this.legacyWorlds.containsKey(worldName)) {
@@ -109,7 +109,7 @@ public class TallNether extends JavaPlugin implements Listener {
             } else {
                 this.manageHell.overrideGenerator(world);
             }
-        }
+        //}
     }
 
     public boolean isPaper() {

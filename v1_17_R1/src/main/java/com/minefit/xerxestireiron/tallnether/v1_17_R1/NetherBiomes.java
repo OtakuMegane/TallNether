@@ -37,7 +37,6 @@ public class NetherBiomes {
         while (biomeIterator.hasNext()) {
             BiomeBase biomeBase = biomeIterator.next();
             MinecraftKey biomeKey = ((CraftServer) Bukkit.getServer()).getServer().getCustomRegistry().b(IRegistry.aO).getKey(biomeBase);
-            //MinecraftKey biomeKey = getBiomeBaseKey(biomeBase);
 
             if (biomeKey == Biomes.aA.a()) {
                 this.biomes.put("basalt_deltas", biomeBase);
@@ -51,22 +50,5 @@ public class NetherBiomes {
                 this.biomes.put("soul_sand_valley", biomeBase);
             }
         }
-    }
-
-    // Hopefully we can simplify this method or even get rid of it in 1.17+
-    public MinecraftKey getBiomeBaseKey(BiomeBase biomeBase) {
-        DedicatedServer dedicatedServer = ((CraftServer) Bukkit.getServer()).getServer();
-        IRegistryCustom customRegistry = null;
-
-        try {
-            Method getRegistryMethod;
-            getRegistryMethod = MinecraftServer.class.getDeclaredMethod("getCustomRegistry");
-            customRegistry = (IRegistryCustom) getRegistryMethod.invoke(dedicatedServer);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e1) {
-            e1.printStackTrace();
-        }
-
-        return customRegistry.b(IRegistry.aO).getKey(biomeBase);
     }
 }
