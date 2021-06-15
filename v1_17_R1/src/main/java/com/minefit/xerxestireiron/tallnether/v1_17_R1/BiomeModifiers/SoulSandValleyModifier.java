@@ -7,12 +7,8 @@ import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TStructureFeatu
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TWorldGenCarvers;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TWorldGenStage;
 
-import net.minecraft.data.worldgen.BiomeDecoratorGroups;
-import net.minecraft.data.worldgen.StructureFeatures;
-import net.minecraft.data.worldgen.WorldGenCarvers;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.BiomeSettingsGeneration;
-import net.minecraft.world.level.levelgen.WorldGenStage;
 
 public class SoulSandValleyModifier extends BiomeModifier {
     private BiomeBase biomeBase;
@@ -33,7 +29,6 @@ public class SoulSandValleyModifier extends BiomeModifier {
         return injectSettings(this.biomeBase, this.modifiedBiomeSettings);
     }
 
-    @SuppressWarnings("unchecked")
     private BiomeSettingsGeneration createModifiedSettings () {
         BiomeSettingsGeneration.a biomeSettingsGeneration_a = new BiomeSettingsGeneration.a();
 
@@ -61,10 +56,6 @@ public class SoulSandValleyModifier extends BiomeModifier {
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_BLACKSTONE);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_GOLD_NETHER);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_QUARTZ_NETHER);
-
-        // TallNether
-        biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE1);
-        biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE2);
 
         return biomeSettingsGeneration_a.a();
     }

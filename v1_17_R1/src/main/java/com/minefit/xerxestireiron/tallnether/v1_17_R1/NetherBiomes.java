@@ -1,7 +1,5 @@
 package com.minefit.xerxestireiron.tallnether.v1_17_R1;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,13 +8,8 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 
-import com.minefit.xerxestireiron.tallnether.v1_17_R1.WorldInfo;
-
 import net.minecraft.core.IRegistry;
-import net.minecraft.core.IRegistryCustom;
 import net.minecraft.resources.MinecraftKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.Biomes;
 

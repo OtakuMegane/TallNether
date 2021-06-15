@@ -49,8 +49,10 @@ public abstract class TallNether_WorldGenSurfaceNetherAbstract extends WorldGenS
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         IBlockData iblockdata4 = ichunkaccess.getType(blockposition_mutableblockposition.d(l1, 128, i2));
 
-        // TallNether: originally 127, changed to 255
-        for (int l2 = 255; l2 >= i1; --l2) {
+        // A bit hacky but seems to work for now
+        int start = (ichunkaccess.getType(blockposition_mutableblockposition.d(l1, 255, i2)).isAir()) ? 127 : 255;
+
+        for (int l2 = start; l2 >= i1; --l2) {
             blockposition_mutableblockposition.d(l1, l2, i2);
             IBlockData iblockdata5 = ichunkaccess.getType(blockposition_mutableblockposition);
             int i3;

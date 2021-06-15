@@ -7,11 +7,8 @@ import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TStructureFeatu
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TWorldGenCarvers;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TWorldGenStage;
 
-import net.minecraft.data.worldgen.StructureFeatures;
-import net.minecraft.data.worldgen.WorldGenCarvers;
 import net.minecraft.world.level.biome.BiomeBase;
 import net.minecraft.world.level.biome.BiomeSettingsGeneration;
-import net.minecraft.world.level.levelgen.WorldGenStage;
 
 public class CrimsonForestModifier extends BiomeModifier {
     private BiomeBase biomeBase;
@@ -32,7 +29,6 @@ public class CrimsonForestModifier extends BiomeModifier {
         return injectSettings(this.biomeBase, this.modifiedBiomeSettings);
     }
 
-    @SuppressWarnings("unchecked")
     private BiomeSettingsGeneration createModifiedSettings() {
         BiomeSettingsGeneration.a biomeSettingsGeneration_a = new BiomeSettingsGeneration.a();
 
@@ -68,10 +64,6 @@ public class CrimsonForestModifier extends BiomeModifier {
         // BiomeSettings.as(biomesettingsgeneration_a)
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_DEBRIS_LARGE);
         biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.ORE_DEBRIS_SMALL);
-
-        // TallNether
-        biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE1);
-        biomeSettingsGeneration_a.a(TWorldGenStage.Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.TALLNETHER_GLOWSTONE2);
 
         return biomeSettingsGeneration_a.a();
     }

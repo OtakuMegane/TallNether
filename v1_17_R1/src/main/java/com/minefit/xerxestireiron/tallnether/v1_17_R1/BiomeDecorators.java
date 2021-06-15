@@ -1,13 +1,9 @@
 package com.minefit.xerxestireiron.tallnether.v1_17_R1;
 
 import com.google.common.collect.ImmutableSet;
-import com.minefit.xerxestireiron.tallnether.BiomeValues;
-import com.minefit.xerxestireiron.tallnether.ConfigAccessor;
-import com.minefit.xerxestireiron.tallnether.WorldConfig;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenDecoratorCount;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenDecoratorRange;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenFeatureRandomPatch;
-import com.minefit.xerxestireiron.tallnether.v1_17_R1.Decorators.TallNether_WorldGenLightStone1;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TBiomeDecoratorGroups;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TBlocks;
 import com.minefit.xerxestireiron.tallnether.v1_17_R1.Transition.TFluidTypes;
@@ -19,19 +15,15 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.WorldGenFeatureConfigured;
-import net.minecraft.world.level.levelgen.feature.WorldGenFeatureRandomPatch;
 import net.minecraft.world.level.levelgen.feature.blockplacers.WorldGenBlockPlacerSimple;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenDecoratorFrequencyConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureChanceDecoratorRangeConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureEmptyConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureHellFlowingLavaConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureOreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.WorldGenFeatureRandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WorldGenFeatureStateProviderSimpl;
 import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.WorldGenDecoratorConfigured;
-import net.minecraft.world.level.levelgen.placement.WorldGenDecoratorCount;
-import net.minecraft.world.level.levelgen.placement.WorldGenDecoratorRange;
 
 public class BiomeDecorators {
 
@@ -48,7 +40,8 @@ public class BiomeDecorators {
             TFluidTypes.LAVA.h(), false, 4, 1, ImmutableSet.of(TBlocks.NETHERRACK));
     private final WorldGenFeatureHellFlowingLavaConfiguration CLOSED_NETHER_SPRING_CONFIG = new WorldGenFeatureHellFlowingLavaConfiguration(
             TFluidTypes.LAVA.h(), false, 5, 0, ImmutableSet.of(TBlocks.NETHERRACK));
-    private final TallNether_WorldGenFeatureRandomPatch TALLNETHER_RANDOM_PATCH = new TallNether_WorldGenFeatureRandomPatch(WorldGenFeatureRandomPatchConfiguration.a);
+    private final TallNether_WorldGenFeatureRandomPatch TALLNETHER_RANDOM_PATCH = new TallNether_WorldGenFeatureRandomPatch(
+            WorldGenFeatureRandomPatchConfiguration.a);
 
     public final WorldGenFeatureConfigured<?, ?> DELTA = TBiomeDecoratorGroups.DELTA;
     public final WorldGenFeatureConfigured<?, ?> SMALL_BASALT_COLUMNS = TBiomeDecoratorGroups.SMALL_BASALT_COLUMNS;
@@ -89,9 +82,6 @@ public class BiomeDecorators {
     public final WorldGenFeatureConfigured<?, ?> CRIMSON_FUNGI = TBiomeDecoratorGroups.CRIMSON_FUNGI;
     public final WorldGenFeatureConfigured<?, ?> WARPED_FUNGI = TBiomeDecoratorGroups.WARPED_FUNGI;
 
-    public final WorldGenFeatureConfigured<?, ?> TALLNETHER_GLOWSTONE1; // Setting glowstone1
-    public final WorldGenFeatureConfigured<?, ?> TALLNETHER_GLOWSTONE2; // Setting glowstone2
-
     // From BiomeDecoratorGroups.b
     // Of course they made them protected because reasons >:|
     public final WorldGenFeatureChanceDecoratorRangeConfiguration FULL_RANGE = new WorldGenFeatureChanceDecoratorRangeConfiguration(
@@ -106,94 +96,112 @@ public class BiomeDecorators {
     //Note: VerticalAnchor.a(int) is absolute, VerticalAnchor.b(int) is offset from bottom, VerticalAnchor.c(int) is offset from top
     // VerrticalAnchor.a() returns VerticalAnchor.b(0) and VerticalAnchor.b() returns VerticalAnchor.c(0)
 
-    @SuppressWarnings({ "rawtypes" })
     public BiomeDecorators(String biome) {
-System.out.println("HERE");
-        WorldGenFeatureRandomPatchConfiguration wut = (new WorldGenFeatureRandomPatchConfiguration.a(
-                new WorldGenFeatureStateProviderSimpl(TBlocks.FIRE.getBlockData()), WorldGenBlockPlacerSimple.c)).a(64)
-                .a(ImmutableSet.of(TBlocks.NETHERRACK)).b().d();
 
+        WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> glowstone1Count = new TallNether_WorldGenDecoratorCount(
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "glowstone1")
+                        .a(new WorldGenDecoratorFrequencyConfiguration((IntProvider) BiasedToBottomInt.a(0, 9)));
+        this.GLOWSTONE_EXTRA = TWorldGenerator.GLOWSTONE_BLOB.b(TWorldGenFeatureConfiguration.NONE).a(this.RANGE_4_4).a()
+                        .a(glowstone1Count);
 
-        this.GLOWSTONE_EXTRA = (WorldGenFeatureConfigured) ((WorldGenFeatureConfigured) ((WorldGenFeatureConfigured) (new TallNether_WorldGenLightStone1(
-                WorldGenFeatureEmptyConfiguration.a)).b(TWorldGenFeatureConfiguration.NONE).a((this.RANGE_4_4)).a())
-                        .a((IntProvider) BiasedToBottomInt.a(0, 9)));
-        this.GLOWSTONE = (WorldGenFeatureConfigured) ((WorldGenFeatureConfigured) ((WorldGenFeatureConfigured) (new TallNether_WorldGenLightStone1(
-                WorldGenFeatureEmptyConfiguration.a)).b(TWorldGenFeatureConfiguration.NONE).a(this.FULL_RANGE)).a())
-                        .b(10);
+        WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> glowstone2Count = new TallNether_WorldGenDecoratorCount(
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "glowstone2")
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(10)));
+        this.GLOWSTONE = TWorldGenerator.GLOWSTONE_BLOB.b(TWorldGenFeatureConfiguration.NONE).a(this.FULL_RANGE).a()
+                        .a(glowstone2Count); // .a(10)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> lavafallDeltaCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "lavafall")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(16)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "lavafall"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(16)));
         this.SPRING_DELTA = TWorldGenerator.SPRING.b(this.SPRING_DELTA_CONFIG)
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
-                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "lavafall").a(this.RANGE_4_4).a()).a(lavafallDeltaCount); // .b(16)
+                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "lavafall").a(this.RANGE_4_4).a())
+                .a(lavafallDeltaCount); // .b(16)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> hiddenLavaCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "hidden-lava")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(16)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "hidden-lava"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(16)));
         this.SPRING_CLOSED = TWorldGenerator.SPRING.b(this.CLOSED_NETHER_SPRING_CONFIG)
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
                         WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "hidden-lava").a(this.RANGE_10_10)
-                                .a()).a(hiddenLavaCount); // .b(16)
+                                .a())
+                .a(hiddenLavaCount); // .b(16)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> hiddenLavaDoubleCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "hidden-lava")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(32)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "hidden-lava"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(32)));
         this.SPRING_CLOSED_DOUBLE = TWorldGenerator.SPRING.b(this.CLOSED_NETHER_SPRING_CONFIG)
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
                         WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "hidden-lava").a(this.RANGE_10_10)
-                                .a()).a(hiddenLavaDoubleCount); // .b(32)
+                                .a())
+                .a(hiddenLavaDoubleCount); // .b(32)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> lavafallCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "lavafall")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(8)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "lavafall"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(8)));
         this.SPRING_OPEN = TWorldGenerator.SPRING.b(this.SPRING_OPEN_CONFIG)
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
-                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "lavafall").a(this.RANGE_4_4).a()).a(lavafallCount); // .b(8)
+                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "lavafall").a(this.RANGE_4_4).a())
+                .a(lavafallCount); // .b(8)
 
         this.PATCH_FIRE = this.TALLNETHER_RANDOM_PATCH.b(this.PATCH_FIRE_CONFIG).a(
                 new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "fire")
-                        .a(this.RANGE_4_4).a()).c(5);
+                        .a(this.RANGE_4_4).a())
+                .c(5);
 
-        this.PATCH_SOUL_FIRE = this.TALLNETHER_RANDOM_PATCH.b(this.PATCH_SOUL_FIRE_CONFIG).a(
-                new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "soul-fire")
-                        .a(this.RANGE_4_4).a()).c(5);
+        this.PATCH_SOUL_FIRE = this.TALLNETHER_RANDOM_PATCH.b(this.PATCH_SOUL_FIRE_CONFIG)
+                .a(new TallNether_WorldGenDecoratorRange(WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome,
+                        "soul-fire").a(this.RANGE_4_4).a())
+                .c(5);
 
         WorldGenFeatureChanceDecoratorRangeConfiguration magmaHeightProvider = new WorldGenFeatureChanceDecoratorRangeConfiguration(
                 UniformHeight.a(VerticalAnchor.a(27), VerticalAnchor.a(36)));
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> magmaCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "magma-block")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(4)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "magma-block"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(4)));
         this.ORE_MAGMA = TWorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
                         TBlocks.MAGMA_BLOCK.getBlockData(), 33))
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
                         WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "magma-block").a(magmaHeightProvider)
-                                .a()).a(magmaCount); // .b(4)
+                                .a())
+                .a(magmaCount); // .b(4)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> goldDeltaCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "nether-gold")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(20)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "nether-gold"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(20)));
         this.ORE_GOLD_DELTAS = TWorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
                         TBlocks.NETHER_GOLD_ORE.getBlockData(), 10))
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
                         WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "nether-gold").a(this.RANGE_10_10)
-                                .a()).a(goldDeltaCount); // .b(20)
+                                .a())
+                .a(goldDeltaCount); // .b(20)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> quartzDeltaCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "quartz")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(32)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "quartz"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(32)));
         this.ORE_QUARTZ_DELTAS = TWorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
                         TBlocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
-                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "quartz").a(this.RANGE_10_10).a()).a(quartzDeltaCount); // .b(32)
+                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "quartz").a(this.RANGE_10_10).a())
+                .a(quartzDeltaCount); // .b(32)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> goldCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "nether-gold")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(10)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "nether-gold"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(10)));
         this.ORE_GOLD_NETHER = TWorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
                         TBlocks.NETHER_GOLD_ORE.getBlockData(), 10))
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
                         WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "nether-gold").a(this.RANGE_10_10)
-                                .a()).a(goldCount); // .b(10)
+                                .a())
+                .a(goldCount); // .b(10)
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> quartzCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "quartz")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(16)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "quartz"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(16)));
         this.ORE_QUARTZ_NETHER = TWorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
                         TBlocks.NETHER_QUARTZ_ORE.getBlockData(), 14))
@@ -204,31 +212,25 @@ System.out.println("HERE");
         WorldGenFeatureChanceDecoratorRangeConfiguration largeDebrisHeightProvider = new WorldGenFeatureChanceDecoratorRangeConfiguration(
                 UniformHeight.a(VerticalAnchor.a(8), VerticalAnchor.a(24)));
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> debrisLargeCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "ancient-debris1")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(1)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "ancient-debris1"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(1)));
         this.ORE_DEBRIS_LARGE = TWorldGenerator.SCATTERED_ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
                         TBlocks.ANCIENT_DEBRIS.getBlockData(), 3, 1.0F))
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
                         WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "ancient-debris1")
-                                .a(largeDebrisHeightProvider).a()).a(debrisLargeCount);
+                                .a(largeDebrisHeightProvider).a())
+                .a(debrisLargeCount);
 
         WorldGenDecoratorConfigured<WorldGenDecoratorFrequencyConfiguration> debrisSmallCount = (new TallNether_WorldGenDecoratorCount(
-                WorldGenDecoratorFrequencyConfiguration.a, biome, "ancient-debris2")).a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(1)));
+                WorldGenDecoratorFrequencyConfiguration.a, biome, "ancient-debris2"))
+                        .a(new WorldGenDecoratorFrequencyConfiguration(ConstantInt.a(1)));
         this.ORE_DEBRIS_SMALL = TWorldGenerator.SCATTERED_ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.d,
                         TBlocks.ANCIENT_DEBRIS.getBlockData(), 2, 1.0F))
                 .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
                         WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "ancient-debris2").a(this.RANGE_8_8)
-                                .a()).a(debrisSmallCount);
-
-
-        this.TALLNETHER_GLOWSTONE1 = TWorldGenerator.GLOWSTONE_BLOB.b(TWorldGenFeatureConfiguration.NONE)
-                .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
-                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "glowstone1").a(this.RANGE_4_4).a());
-        this.TALLNETHER_GLOWSTONE2 = TWorldGenerator.GLOWSTONE_BLOB.b(TWorldGenFeatureConfiguration.NONE)
-                .a((WorldGenDecoratorConfigured<?>) new TallNether_WorldGenDecoratorRange(
-                        WorldGenFeatureChanceDecoratorRangeConfiguration.a, biome, "glowstone2").a(this.FULL_RANGE)
-                                .a());
-
+                                .a())
+                .a(debrisSmallCount);
     }
 }

@@ -48,4 +48,25 @@ public class ReflectionHelper {
             }
         }
     }
+
+    public static void setFinalInt(Field field, Object instance, int value) throws Exception
+    {
+        try {
+            field.setAccessible(true);
+            Field modifiers = Field.class.getDeclaredField("modifiers");
+            modifiers.setAccessible(true);
+            modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.setInt(instance, value);
+        } catch (Exception e) {
+            try {
+                Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+                theUnsafe.setAccessible(true);
+                Unsafe unsafe = (Unsafe) theUnsafe.get(null);
+                long offset = unsafe.objectFieldOffset(field);
+                unsafe.putInt(instance, offset, value);
+            } catch (Exception e1) {
+                throw e1;
+            }
+        }
+    }
 }
