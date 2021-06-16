@@ -23,10 +23,10 @@ public class BiomeBasaltDeltas extends BiomeValues {
         values.put("glowstone2-min-height", 0);
         values.put("glowstone2-max-height", 128);
         values.put("glowstone2-max-offset", 0);
-        values.put("fire-attempts", 10);
+        values.put("fire-attempts", 5);
         values.put("fire-min-height", 4);
         values.put("fire-max-height", 120);
-        values.put("soul-fire-attempts", 10);
+        values.put("soul-fire-attempts", 5);
         values.put("soul-fire-min-height", 4);
         values.put("soul-fire-max-height", 120);
         values.put("nether-gold-attempts", 20);
@@ -55,14 +55,6 @@ public class BiomeBasaltDeltas extends BiomeValues {
         values.put("ancient-debris2-min-height", 8);
         values.put("ancient-debris2-max-height", 128);
         values.put("ancient-debris2-max-offset", 16);
-        values.put("gravel-patch-attempts", 0);
-        values.put("gravel-patch-min-height", 0);
-        values.put("gravel-patch-max-height", 0);
-        values.put("gravel-patch-max-offset", 0);
-        values.put("blackstone-patch-attempts", 0);
-        values.put("blackstone-patch-min-height", 0);
-        values.put("blackstone-patch-max-height", 0);
-        values.put("blackstone-patch-max-offset", 0);
         this.values = Collections.unmodifiableMap(values);
     }
 
@@ -80,10 +72,10 @@ public class BiomeBasaltDeltas extends BiomeValues {
         values.put("glowstone2-min-height", setDecoration("glowstone2-min-height", 0, true));
         values.put("glowstone2-max-height", setDecoration("glowstone2-max-height", 256, true));
         values.put("glowstone2-max-offset", values.get("glowstone2-min-height"));
-        values.put("fire-attempts", setDecoration("fire-attempts", 20, false));
+        values.put("fire-attempts", setDecoration("fire-attempts", 10, false));
         values.put("fire-min-height", setDecoration("fire-min-height", 4, true));
         values.put("fire-max-height", setDecoration("fire-max-height", 252, true));
-        values.put("soul-fire-attempts", setDecoration("soul-fire-attempts", 20, false));
+        values.put("soul-fire-attempts", setDecoration("soul-fire-attempts", 10, false));
         values.put("soul-fire-min-height", setDecoration("soul-fire-min-height", 4, true));
         values.put("soul-fire-max-height", setDecoration("soul-fire-max-height", 252, true));
         values.put("nether-gold-attempts", setDecoration("nether-gold-attempts", 40, false));
@@ -112,14 +104,6 @@ public class BiomeBasaltDeltas extends BiomeValues {
         values.put("ancient-debris2-min-height", setDecoration("ancient-debris2-min-height", 8, true));
         values.put("ancient-debris2-max-height", setDecoration("ancient-debris2-max-height", 248, true));
         values.put("ancient-debris2-max-offset", values.get("ancient-debris2-min-height"));
-        values.put("gravel-patch-attempts", 0);
-        values.put("gravel-patch-min-height", 0);
-        values.put("gravel-patch-max-height", 0);
-        values.put("gravel-patch-max-offset", values.get("gravel-patch-min-height"));
-        values.put("blackstone-patch-attempts", 0);
-        values.put("blackstone-patch-min-height", 0);
-        values.put("blackstone-patch-max-height", 0);
-        values.put("blackstone-patch-max-offset", values.get("blackstone-patch-min-height"));
         this.values = Collections.unmodifiableMap(values);
     }
 }

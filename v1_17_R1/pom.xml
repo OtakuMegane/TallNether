@@ -11,8 +11,8 @@
 	<name>v1_17_R1</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.16</maven.compiler.target>
+		<maven.compiler.source>1.16</maven.compiler.source>
 	</properties>
 
 	<repositories>

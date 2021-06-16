@@ -74,16 +74,6 @@ public class TallNether_WorldGenDecoratorNetherHeight extends TallNether_WorldGe
             max = biomeConfig.values.get("ancient-debris2-max-height");
             min = biomeConfig.values.get("ancient-debris2-min-height");
             offset = biomeConfig.values.get("ancient-debris2-max-offset");
-        } else if(this.blockType.equals("gravel-patch")) {
-            attempts = biomeConfig.values.get("gravel-patch-attempts");
-            max = biomeConfig.values.get("gravel-patch-max-height");
-            min = biomeConfig.values.get("gravel-patch-min-height");
-            offset = biomeConfig.values.get("gravel-patch-max-offset");
-        } else if(this.blockType.equals("blackstone-patch")) {
-            attempts = biomeConfig.values.get("blackstone-patch-attempts");
-            max = biomeConfig.values.get("blackstone-patch-max-height");
-            min = biomeConfig.values.get("blackstone-patch-min-height");
-            offset = biomeConfig.values.get("blackstone-patch-max-offset");
         } else if (this.blockType.equals("twisting-vines")) {
             attempts = 20;
             max = 256;

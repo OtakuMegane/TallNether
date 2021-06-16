@@ -22,6 +22,8 @@ import net.minecraft.world.level.dimension.DimensionManager;
 import net.minecraft.world.level.levelgen.GeneratorSettingBase;
 import net.minecraft.world.level.levelgen.NoiseSampler;
 import net.minecraft.world.level.levelgen.NoiseSettings;
+import net.minecraft.world.level.levelgen.synth.BlendedNoise;
+import net.minecraft.world.level.levelgen.synth.NoiseGeneratorOctaves;
 
 public class LoadHell {
     private final Messages messages;
@@ -101,41 +103,84 @@ public class LoadHell {
             return;
         }
 
-
         WorldServer nmsWorld = ((CraftWorld) world).getHandle();
         ChunkProviderServer chunkServer = (ChunkProviderServer) nmsWorld.getChunkProvider();
         ChunkGenerator originalGenerator = chunkServer.getChunkGenerator();
         WorldConfig worldConfig = this.configAccessor.getWorldConfig(worldName);
 
         try {
-            Field gField = ReflectionHelper.getField(originalGenerator.getClass(), "g", true);
-            gField.setAccessible(true);
-            Supplier<GeneratorSettingBase> g = (Supplier<GeneratorSettingBase>) gField.get(originalGenerator); // settings -> g
+            Field settingsField = ReflectionHelper.getField(originalGenerator.getClass(), "g", true);
+            settingsField.setAccessible(true);
+            Supplier<GeneratorSettingBase> g = (Supplier<GeneratorSettingBase>) settingsField.get(originalGenerator); // settings -> g
             GeneratorSettingBase generatorsettingbase = (GeneratorSettingBase) g.get();
             NoiseSettings noisesettings = generatorsettingbase.b();
-            Field uField = ReflectionHelper.getField(originalGenerator.getClass(), "u", true);
-            uField.setAccessible(true);
-            NoiseSampler sampler = (NoiseSampler) uField.get(originalGenerator);
+
+            Field samplerField = ReflectionHelper.getField(originalGenerator.getClass(), "u", true);
+            samplerField.setAccessible(true);
+            NoiseSampler sampler = (NoiseSampler) samplerField.get(originalGenerator);
+
             DimensionManager dimensionManager = nmsWorld.getDimensionManager();
             Field dimHeight = ReflectionHelper.getField(dimensionManager.getClass(), "G", true); // height -> G
             ReflectionHelper.setFinalInt(dimHeight, dimensionManager, 256);
+
             Field logicalHeight = ReflectionHelper.getField(dimensionManager.getClass(), "H", true); // logicalHeight -> H
             ReflectionHelper.setFinalInt(logicalHeight, dimensionManager, 256);
+
             Field seaLevel = ReflectionHelper.getField(generatorsettingbase.getClass(), "o", true); // seaLevel -> o
             ReflectionHelper.setFinalInt(seaLevel, generatorsettingbase, worldConfig.getWorldValues().lavaSeaLevel);
+
             Field noiseHeight = ReflectionHelper.getField(noisesettings.getClass(), "c", true); // height -> c
             ReflectionHelper.setFinalInt(noiseHeight, noisesettings, 256);
+
             Field genHeight = ReflectionHelper.getField(originalGenerator.getClass(), "t", true); // height -> t
             ReflectionHelper.setFinalInt(genHeight, originalGenerator, 256);
+
             int cellCountY = 256 / QuartPos.b(noisesettings.g());
             Field genCellCountY = ReflectionHelper.getField(originalGenerator.getClass(), "m", true); // cellCountY -> m
             ReflectionHelper.setFinalInt(genCellCountY, originalGenerator, 256 / QuartPos.b(noisesettings.g()));
+
             Field samplerCellCountY = ReflectionHelper.getField(sampler.getClass(), "f", true); // cellCountY -> f
             ReflectionHelper.setFinalInt(samplerCellCountY, sampler, cellCountY);
+
+            enableFarLands(world, originalGenerator, environment);
+
             this.messages.enableSuccess(worldName);
         } catch (Exception e) {
             e.printStackTrace();
             this.messages.enableFailed(worldName);
+        }
+    }
+
+    // Borrowed from FarLandsAgain
+    private void enableFarLands(World world, ChunkGenerator generator, Environment environment) {
+        int divisor = (environment == Environment.THE_END) ? 8 : 4;
+
+        try {
+            Field uField = ReflectionHelper.getField(generator.getClass(), "u", true);
+            uField.setAccessible(true);
+            NoiseSampler sampler = (NoiseSampler) uField.get(generator);
+
+            Field blendedNoiseField = ReflectionHelper.getField(sampler.getClass(), "h", true);
+            blendedNoiseField.setAccessible(true);
+            BlendedNoise blendedNoise = (BlendedNoise) blendedNoiseField.get(sampler);
+
+            Field aField = ReflectionHelper.getField(blendedNoise.getClass(), "a", true);
+            aField.setAccessible(true);
+            NoiseGeneratorOctaves minLimitNoise = (NoiseGeneratorOctaves) aField.get(blendedNoise);
+
+            Field bField = ReflectionHelper.getField(blendedNoise.getClass(), "b", true);
+            bField.setAccessible(true);
+            NoiseGeneratorOctaves maxLimitNoise = (NoiseGeneratorOctaves) bField.get(blendedNoise);
+
+            Field cField = ReflectionHelper.getField(blendedNoise.getClass(), "c", true);
+            cField.setAccessible(true);
+            NoiseGeneratorOctaves mainNoise = (NoiseGeneratorOctaves) cField.get(blendedNoise);
+
+            TallNether_BlendedNoise newBlendedNoise = new TallNether_BlendedNoise(minLimitNoise, maxLimitNoise, mainNoise,
+                    this.configAccessor.getWorldConfig(world.getName()), divisor);
+            ReflectionHelper.setFinal(blendedNoiseField, sampler, newBlendedNoise);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -145,7 +190,7 @@ public class LoadHell {
 
     private boolean isRecognizedGenerator(Environment environment, String originalGenName) {
         if (environment == Environment.NETHER) {
-            return originalGenName.equals("ChunkGeneratorAbstract") || originalGenName.equals("TimedChunkGenerator");
+            return originalGenName.equals("ChunkGeneratorAbstract");
         }
 
         return false;

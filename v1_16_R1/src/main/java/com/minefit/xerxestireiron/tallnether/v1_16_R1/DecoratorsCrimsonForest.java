@@ -22,6 +22,7 @@ import net.minecraft.server.v1_16_R1.WorldGenDecoratorDungeonConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorFrequencyConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorHeight;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorHeightAverageConfiguration;
+import net.minecraft.server.v1_16_R1.WorldGenDecoratorNetherHeight;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureChanceDecoratorCountConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureComposite;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureConfiguration;
@@ -199,8 +200,8 @@ public class DecoratorsCrimsonForest {
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, fire);
 
         // Glowstone Sparse (glowstone1)
-        WorldGenFeatureConfigured<?, ?> glowStone1 = WorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k)
-                .a(new TallNether_WorldGenDecoratorNetherGlowstone(WorldGenDecoratorFrequencyConfiguration.a, "glowstone1")
+        WorldGenFeatureConfigured<?, ?> glowStone1 = WorldGenerator.GLOWSTONE_BLOB.b(WorldGenFeatureConfiguration.k).a(
+                new TallNether_WorldGenDecoratorNetherGlowstone(WorldGenDecoratorFrequencyConfiguration.a, "glowstone1")
                         .a(new WorldGenDecoratorFrequencyConfiguration(10)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, glowStone1);
 
@@ -212,7 +213,9 @@ public class DecoratorsCrimsonForest {
 
         // Set from BiomeDecoratorGroups.a method
         // Nether Gold Ore (nether-gold)
-        WorldGenFeatureConfigured<?, ?> nether_gold = WorldGenerator.ORE.b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK, Blocks.NETHER_GOLD_ORE.getBlockData(), 10))
+        WorldGenFeatureConfigured<?, ?> nether_gold = WorldGenerator.ORE
+                .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
+                        Blocks.NETHER_GOLD_ORE.getBlockData(), 10))
                 .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
                         "nether-gold").a(new WorldGenFeatureChanceDecoratorCountConfiguration(10, 10, 20, 128)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, nether_gold);
@@ -241,14 +244,15 @@ public class DecoratorsCrimsonForest {
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, hiddenLava);
 
         // Huge Crimson Fungus
-        WorldGenFeatureConfigured<?, ?> hugeWarpedFungus = WorldGenerator.HUGE_FUNGUS.b(WorldGenFeatureHugeFungiConfiguration.c)
+        WorldGenFeatureConfigured<?, ?> hugeWarpedFungus = WorldGenerator.HUGE_FUNGUS
+                .b(WorldGenFeatureHugeFungiConfiguration.c)
                 .a(new WorldGenDecoratorHeight(WorldGenDecoratorFrequencyConfiguration.a)
                         .a(new WorldGenDecoratorFrequencyConfiguration(8)));
         this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, hugeWarpedFungus);
 
         // Crimson Roots
-        WorldGenFeatureConfigured<?, ?> warped_roots = WorldGenerator.NETHER_FOREST_VEGETATION.b(BiomeDecoratorGroups.aY)
-                .a(WorldGenDecorator.b.a(new WorldGenDecoratorFrequencyConfiguration(5)));
+        WorldGenFeatureConfigured<?, ?> warped_roots = WorldGenerator.NETHER_FOREST_VEGETATION
+                .b(BiomeDecoratorGroups.aY).a(WorldGenDecorator.b.a(new WorldGenDecoratorFrequencyConfiguration(5)));
         this.biome.a(WorldGenStage.Decoration.VEGETAL_DECORATION, warped_roots);
 
         // Weeping Vines
@@ -280,8 +284,8 @@ public class DecoratorsCrimsonForest {
         WorldGenFeatureConfigured<?, ?> gravel_patch = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.GRAVEL.getBlockData(), 33))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "gravel-patch").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 0, 37)));
+                .a(new WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a)
+                        .a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 0, 37)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, gravel_patch);
 
         // Set from BiomeDecoratorGroups.a method
@@ -289,15 +293,17 @@ public class DecoratorsCrimsonForest {
         WorldGenFeatureConfigured<?, ?> blackstone_patch = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.BLACKSTONE.getBlockData(), 33))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "blackstone-patch").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 10, 37)));
+                .a(new WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a)
+                        .a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 10, 37)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, blackstone_patch);
     }
 
     private boolean doFixes(boolean restore) {
         // WorldGenSurfaces are hardcoded, I dunno why. All this shit is to change one number
-        TallNether_WorldGenSurfaceNetherForest tnwgs = new TallNether_WorldGenSurfaceNetherForest(WorldGenSurfaceConfigurationBase.a);
-        WorldGenSurface<WorldGenSurfaceConfigurationBase> asdfg = IRegistry.a(IRegistry.SURFACE_BUILDER, "nether_forest", tnwgs);
+        TallNether_WorldGenSurfaceNetherForest tnwgs = new TallNether_WorldGenSurfaceNetherForest(
+                WorldGenSurfaceConfigurationBase.a);
+        WorldGenSurface<WorldGenSurfaceConfigurationBase> asdfg = IRegistry.a(IRegistry.SURFACE_BUILDER,
+                "nether_forest", tnwgs);
         WorldGenSurfaceComposite wgsc = new WorldGenSurfaceComposite<>(asdfg, WorldGenSurface.P);
 
         try {

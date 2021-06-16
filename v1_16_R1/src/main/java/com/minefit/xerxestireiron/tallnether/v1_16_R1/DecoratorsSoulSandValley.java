@@ -20,6 +20,7 @@ import net.minecraft.server.v1_16_R1.WorldGenCarverWrapper;
 import net.minecraft.server.v1_16_R1.WorldGenDecorator;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorFrequencyConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenDecoratorHeightAverageConfiguration;
+import net.minecraft.server.v1_16_R1.WorldGenDecoratorNetherHeight;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureChanceDecoratorCountConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureChanceDecoratorRangeConfiguration;
 import net.minecraft.server.v1_16_R1.WorldGenFeatureComposite;
@@ -289,8 +290,7 @@ public class DecoratorsSoulSandValley {
         WorldGenFeatureConfigured<?, ?> gravel_patch = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.GRAVEL.getBlockData(), 33))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "gravel-patch").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 0, 37)));
+                .a(new WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a).a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 0, 37)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, gravel_patch);
 
         // Set from BiomeDecoratorGroups.a method
@@ -298,8 +298,7 @@ public class DecoratorsSoulSandValley {
         WorldGenFeatureConfigured<?, ?> blackstone_patch = WorldGenerator.ORE
                 .b(new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.Target.NETHERRACK,
                         Blocks.BLACKSTONE.getBlockData(), 33))
-                .a(new TallNether_WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a,
-                        "blackstone-patch").a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 10, 37)));
+                .a(new WorldGenDecoratorNetherHeight(WorldGenFeatureChanceDecoratorCountConfiguration.a).a(new WorldGenFeatureChanceDecoratorCountConfiguration(2, 5, 10, 37)));
         this.biome.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, blackstone_patch);
     }
 
