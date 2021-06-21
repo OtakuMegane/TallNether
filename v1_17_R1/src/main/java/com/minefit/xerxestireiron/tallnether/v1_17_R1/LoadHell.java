@@ -164,21 +164,25 @@ public class LoadHell {
             blendedNoiseField.setAccessible(true);
             BlendedNoise blendedNoise = (BlendedNoise) blendedNoiseField.get(sampler);
 
-            Field aField = ReflectionHelper.getField(blendedNoise.getClass(), "a", true);
-            aField.setAccessible(true);
-            NoiseGeneratorOctaves minLimitNoise = (NoiseGeneratorOctaves) aField.get(blendedNoise);
+            String blendedNoiseName = blendedNoise.getClass().getSimpleName();
 
-            Field bField = ReflectionHelper.getField(blendedNoise.getClass(), "b", true);
-            bField.setAccessible(true);
-            NoiseGeneratorOctaves maxLimitNoise = (NoiseGeneratorOctaves) bField.get(blendedNoise);
+            if (blendedNoiseName.equals("BlendedNoise")) {
+                Field aField = ReflectionHelper.getField(blendedNoise.getClass(), "a", true);
+                aField.setAccessible(true);
+                NoiseGeneratorOctaves minLimitNoise = (NoiseGeneratorOctaves) aField.get(blendedNoise);
 
-            Field cField = ReflectionHelper.getField(blendedNoise.getClass(), "c", true);
-            cField.setAccessible(true);
-            NoiseGeneratorOctaves mainNoise = (NoiseGeneratorOctaves) cField.get(blendedNoise);
+                Field bField = ReflectionHelper.getField(blendedNoise.getClass(), "b", true);
+                bField.setAccessible(true);
+                NoiseGeneratorOctaves maxLimitNoise = (NoiseGeneratorOctaves) bField.get(blendedNoise);
 
-            TallNether_BlendedNoise newBlendedNoise = new TallNether_BlendedNoise(minLimitNoise, maxLimitNoise, mainNoise,
-                    this.configAccessor.getWorldConfig(world.getName()), divisor);
-            ReflectionHelper.setFinal(blendedNoiseField, sampler, newBlendedNoise);
+                Field cField = ReflectionHelper.getField(blendedNoise.getClass(), "c", true);
+                cField.setAccessible(true);
+                NoiseGeneratorOctaves mainNoise = (NoiseGeneratorOctaves) cField.get(blendedNoise);
+
+                TallNether_BlendedNoise newBlendedNoise = new TallNether_BlendedNoise(minLimitNoise, maxLimitNoise,
+                        mainNoise, this.configAccessor.getWorldConfig(world.getName()), divisor);
+                ReflectionHelper.setFinal(blendedNoiseField, sampler, newBlendedNoise);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

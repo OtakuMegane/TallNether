@@ -11,8 +11,7 @@
 	<name>v1_17_R1</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>1.16</maven.compiler.target>
-		<maven.compiler.source>1.16</maven.compiler.source>
+		<maven.compiler.release>16</maven.compiler.release>
 	</properties>
 
 	<repositories>
@@ -20,6 +19,10 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
 	</repositories>
 
 	<dependencies>
@@ -33,7 +36,6 @@
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>1.17-R0.1-SNAPSHOT</version>
-			<!-- classifier>remapped-mojang</classifier -->
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -48,12 +50,12 @@
 			<version>1.4</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-    		<groupId>com.destroystokyo.paper</groupId>
-    		<artifactId>paper</artifactId>
-    		<version>1.16.4-R0.1-SNAPSHOT</version>
-    		<scope>provided</scope>
- 		</dependency>
+ 		<dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper</artifactId>
+            <version>1.17-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
  		<dependency>
 			<groupId>com.minefit.xerxestireiron.tallnether</groupId>
 			<artifactId>utility</artifactId>

@@ -6,10 +6,11 @@ import com.minefit.xerxestireiron.tallnether.WorldConfig;
 
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.level.levelgen.RandomSource;
+import net.minecraft.world.level.levelgen.synth.BlendedNoise;
 import net.minecraft.world.level.levelgen.synth.NoiseGeneratorOctaves;
 import net.minecraft.world.level.levelgen.synth.NoiseGeneratorPerlin;
 
-public class TallNether_BlendedNoise {
+public class TallNether_BlendedNoise extends BlendedNoise {
 
     private final NoiseGeneratorOctaves minLimitNoise;
     private final NoiseGeneratorOctaves maxLimitNoise;
@@ -21,6 +22,7 @@ public class TallNether_BlendedNoise {
     private final int highZ;
 
     public TallNether_BlendedNoise(NoiseGeneratorOctaves noisegeneratoroctaves, NoiseGeneratorOctaves noisegeneratoroctaves1, NoiseGeneratorOctaves noisegeneratoroctaves2, WorldConfig worldConfig, int divisor) {
+        super(noisegeneratoroctaves, noisegeneratoroctaves1, noisegeneratoroctaves2);
         this.minLimitNoise = noisegeneratoroctaves;
         this.maxLimitNoise = noisegeneratoroctaves1;
         this.mainNoise = noisegeneratoroctaves2;
