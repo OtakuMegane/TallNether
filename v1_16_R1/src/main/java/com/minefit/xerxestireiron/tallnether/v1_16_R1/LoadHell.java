@@ -118,7 +118,7 @@ public class LoadHell {
         try {
             Field chunkGenerator = ReflectionHelper.getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
-            ReflectionHelper.setFinal(chunkGenerator, worldInfo.chunkServer, generator);
+            ReflectionHelper.fieldSetter(chunkGenerator, worldInfo.chunkServer, generator);
 
             if (heightValue) {
                 Field logicalHeight = ReflectionHelper.getField(worldInfo.dimensionManager.getClass(), "logicalHeight",
@@ -130,9 +130,9 @@ public class LoadHell {
             Field chunkMapGenerator = ReflectionHelper.getField(worldInfo.chunkServer.playerChunkMap.getClass(),
                     "chunkGenerator", true);
             chunkMapGenerator.setAccessible(true);
-            ReflectionHelper.setFinal(chunkMapGenerator, worldInfo.chunkServer.playerChunkMap, generator);
-        } catch (Exception e) {
-            e.printStackTrace();
+            ReflectionHelper.fieldSetter(chunkMapGenerator, worldInfo.chunkServer.playerChunkMap, generator);
+        } catch (Throwable t) {
+            t.printStackTrace();
             return false;
         }
 

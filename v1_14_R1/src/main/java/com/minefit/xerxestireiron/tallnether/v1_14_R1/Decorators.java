@@ -294,8 +294,8 @@ public class Decorators {
 
         try {
             Field nField = ReflectionHelper.getField(BiomeHell.class, "n", true);
-            ReflectionHelper.setFinal(nField, this.biomeHell, wgsc);
-        } catch (Exception e) {
+            ReflectionHelper.fieldSetter(nField, this.biomeHell, wgsc);
+        } catch (Throwable t) {
             return false;
         }
 

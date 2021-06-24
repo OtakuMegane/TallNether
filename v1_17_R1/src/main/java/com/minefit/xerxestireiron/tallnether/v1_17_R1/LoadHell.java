@@ -121,32 +121,32 @@ public class LoadHell {
 
             DimensionManager dimensionManager = nmsWorld.getDimensionManager();
             Field dimHeight = ReflectionHelper.getField(dimensionManager.getClass(), "G", true); // height -> G
-            ReflectionHelper.setFinalInt(dimHeight, dimensionManager, 256);
+            ReflectionHelper.fieldSetter(dimHeight, dimensionManager, 256);
 
             Field logicalHeight = ReflectionHelper.getField(dimensionManager.getClass(), "H", true); // logicalHeight -> H
-            ReflectionHelper.setFinalInt(logicalHeight, dimensionManager, 256);
+            ReflectionHelper.fieldSetter(logicalHeight, dimensionManager, 256);
 
             Field seaLevel = ReflectionHelper.getField(generatorsettingbase.getClass(), "o", true); // seaLevel -> o
-            ReflectionHelper.setFinalInt(seaLevel, generatorsettingbase, worldConfig.getWorldValues().lavaSeaLevel);
+            ReflectionHelper.fieldSetter(seaLevel, generatorsettingbase, worldConfig.getWorldValues().lavaSeaLevel);
 
             Field noiseHeight = ReflectionHelper.getField(noisesettings.getClass(), "c", true); // height -> c
-            ReflectionHelper.setFinalInt(noiseHeight, noisesettings, 256);
+            ReflectionHelper.fieldSetter(noiseHeight, noisesettings, 256);
 
             Field genHeight = ReflectionHelper.getField(originalGenerator.getClass(), "t", true); // height -> t
-            ReflectionHelper.setFinalInt(genHeight, originalGenerator, 256);
+            ReflectionHelper.fieldSetter(genHeight, originalGenerator, 256);
 
             int cellCountY = 256 / QuartPos.b(noisesettings.g());
             Field genCellCountY = ReflectionHelper.getField(originalGenerator.getClass(), "m", true); // cellCountY -> m
-            ReflectionHelper.setFinalInt(genCellCountY, originalGenerator, 256 / QuartPos.b(noisesettings.g()));
+            ReflectionHelper.fieldSetter(genCellCountY, originalGenerator, 256 / QuartPos.b(noisesettings.g()));
 
             Field samplerCellCountY = ReflectionHelper.getField(sampler.getClass(), "f", true); // cellCountY -> f
-            ReflectionHelper.setFinalInt(samplerCellCountY, sampler, cellCountY);
+            ReflectionHelper.fieldSetter(samplerCellCountY, sampler, cellCountY);
 
             enableFarLands(world, originalGenerator, environment);
 
             this.messages.enableSuccess(worldName);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Throwable t) {
+            t.printStackTrace();
             this.messages.enableFailed(worldName);
         }
     }
@@ -181,10 +181,10 @@ public class LoadHell {
 
                 TallNether_BlendedNoise newBlendedNoise = new TallNether_BlendedNoise(minLimitNoise, maxLimitNoise,
                         mainNoise, this.configAccessor.getWorldConfig(world.getName()), divisor);
-                ReflectionHelper.setFinal(blendedNoiseField, sampler, newBlendedNoise);
+                ReflectionHelper.fieldSetter(blendedNoiseField, sampler, newBlendedNoise);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Throwable t1) {
+            t1.printStackTrace();
         }
     }
 

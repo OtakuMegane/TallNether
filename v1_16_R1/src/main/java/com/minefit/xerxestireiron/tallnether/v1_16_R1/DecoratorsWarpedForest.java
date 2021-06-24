@@ -319,8 +319,8 @@ public class DecoratorsWarpedForest {
 
         try {
             Field mField = ReflectionHelper.getField(BiomeWarpedForest.class, "m", true);
-            ReflectionHelper.setFinal(mField, this.biome, wgsc);
-        } catch (Exception e) {
+            ReflectionHelper.fieldSetter(mField, this.biome, wgsc);
+        } catch (Throwable t) {
             return false;
         }
 

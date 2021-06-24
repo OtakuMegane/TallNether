@@ -95,13 +95,13 @@ public class LoadHell {
         try {
             Field chunkGenerator = ReflectionHelper.getField(this.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
-            ReflectionHelper.setFinal(chunkGenerator, this.chunkServer, generator);
+            ReflectionHelper.fieldSetter(chunkGenerator, this.chunkServer, generator);
 
             Field worldHeight = ReflectionHelper.getField(this.worldProvider.getClass(), "e", true);
             worldHeight.setAccessible(true);
             worldHeight.setBoolean(this.worldProvider, heightValue);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Throwable t) {
+            t.printStackTrace();
             return false;
         }
 

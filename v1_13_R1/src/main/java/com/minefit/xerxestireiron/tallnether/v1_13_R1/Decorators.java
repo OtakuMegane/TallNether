@@ -285,12 +285,12 @@ public class Decorators {
             ah.setAccessible(true);
 
             if (restore) {
-                ReflectionHelper.setFinal(ah, this.biomeHell, new WorldGenMushrooms());
+                ReflectionHelper.fieldSetter(ah, this.biomeHell, new WorldGenMushrooms());
             } else {
-                ReflectionHelper.setFinal(ah, this.biomeHell, new TallNether_WorldGenMushrooms());
+                ReflectionHelper.fieldSetter(ah, this.biomeHell, new TallNether_WorldGenMushrooms());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Throwable t) {
+            t.printStackTrace();
             return false;
         }
 

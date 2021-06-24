@@ -104,7 +104,7 @@ public class LoadHell {
         try {
             Field chunkGenerator = ReflectionHelper.getField(worldInfo.chunkServer.getClass(), "chunkGenerator", true);
             chunkGenerator.setAccessible(true);
-            ReflectionHelper.setFinal(chunkGenerator, worldInfo.chunkServer, generator);
+            ReflectionHelper.fieldSetter(chunkGenerator, worldInfo.chunkServer, generator);
 
             Field worldHeight = ReflectionHelper.getField(worldInfo.worldProvider.getClass(), "d", true);
             worldHeight.setAccessible(true);
@@ -116,9 +116,9 @@ public class LoadHell {
 
             Field schedulerGenerator = ReflectionHelper.getField(taskScheduler.getClass(), "d", true);
             scheduler.setAccessible(true);
-            ReflectionHelper.setFinal(schedulerGenerator, taskScheduler, generator);
-        } catch (Exception e) {
-            e.printStackTrace();
+            ReflectionHelper.fieldSetter(schedulerGenerator, taskScheduler, generator);
+        } catch (Throwable t) {
+            t.printStackTrace();
             return false;
         }
 

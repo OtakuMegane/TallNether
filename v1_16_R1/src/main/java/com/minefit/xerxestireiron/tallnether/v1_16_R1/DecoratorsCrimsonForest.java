@@ -308,8 +308,8 @@ public class DecoratorsCrimsonForest {
 
         try {
             Field mField = ReflectionHelper.getField(BiomeCrimsonForest.class, "m", true);
-            ReflectionHelper.setFinal(mField, this.biome, wgsc);
-        } catch (Exception e) {
+            ReflectionHelper.fieldSetter(mField, this.biome, wgsc);
+        } catch (Throwable t) {
             return false;
         }
 

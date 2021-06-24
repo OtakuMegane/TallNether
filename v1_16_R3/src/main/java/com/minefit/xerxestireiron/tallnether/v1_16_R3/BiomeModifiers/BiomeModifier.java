@@ -13,8 +13,8 @@ public class BiomeModifier {
         try {
             Field f = biomeBase.getClass().getDeclaredField("k");
             f.setAccessible(true);
-            ReflectionHelper.setFinal(f, biomeBase, biomeSettingsGeneration);
-        } catch (Exception e) {
+            ReflectionHelper.fieldSetter(f, biomeBase, biomeSettingsGeneration);
+        } catch (Throwable t) {
             return false;
         }
 

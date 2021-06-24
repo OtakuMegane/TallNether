@@ -302,8 +302,8 @@ public class DecoratorsNetherWastes {
 
         try {
             Field mField = ReflectionHelper.getField(BiomeHell.class, "m", true);
-            ReflectionHelper.setFinal(mField, this.biome, wgsc);
-        } catch (Exception e) {
+            ReflectionHelper.fieldSetter(mField, this.biome, wgsc);
+        } catch (Throwable t) {
             return false;
         }
 

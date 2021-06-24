@@ -1,5 +1,8 @@
 package com.minefit.xerxestireiron.tallnether;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -29,43 +32,36 @@ public class ReflectionHelper {
         return field;
     }
 
-    public static void setFinal(Field field, Object instance, Object obj) throws Exception {
+    public static void fieldSetter(Field field, Object instance, Object obj) throws Throwable {
         try {
             field.setAccessible(true);
-            Field modifiers = Field.class.getDeclaredField("modifiers");
+            Field modifiers = Field.class.getDeclaredField("modifiers"); // This fails in Java 12+
             modifiers.setAccessible(true);
             modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
             field.set(instance, obj);
         } catch (Exception e) {
             try {
-                Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-                theUnsafe.setAccessible(true);
-                Unsafe unsafe = (Unsafe) theUnsafe.get(null);
-                long offset = unsafe.objectFieldOffset(field);
-                unsafe.putObject(instance, offset, obj);
-            } catch (Exception e1) {
-                throw e1;
-            }
-        }
-    }
+                Lookup lookup = MethodHandles.lookup();
+                MethodHandle handle = lookup.unreflectSetter(field);
+                handle.invoke(instance, obj);
+            } catch (Throwable t) {
+                try {
+                    // It's not good using this but sometimes necessary as last resort
+                    Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+                    theUnsafe.setAccessible(true);
+                    Unsafe unsafe = (Unsafe) theUnsafe.get(null);
+                    long offset = 0;
 
-    public static void setFinalInt(Field field, Object instance, int value) throws Exception
-    {
-        try {
-            field.setAccessible(true);
-            Field modifiers = Field.class.getDeclaredField("modifiers");
-            modifiers.setAccessible(true);
-            modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            field.setInt(instance, value);
-        } catch (Exception e) {
-            try {
-                Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-                theUnsafe.setAccessible(true);
-                Unsafe unsafe = (Unsafe) theUnsafe.get(null);
-                long offset = unsafe.objectFieldOffset(field);
-                unsafe.putInt(instance, offset, value);
-            } catch (Exception e1) {
-                throw e1;
+                    if (Modifier.isStatic(field.getModifiers())) {
+                        offset = unsafe.staticFieldOffset(field);
+                    } else {
+                        offset = unsafe.objectFieldOffset(field);
+                    }
+
+                    unsafe.putObject(instance, offset, obj);
+                } catch (Throwable t1) {
+                    throw t1;
+                }
             }
         }
     }

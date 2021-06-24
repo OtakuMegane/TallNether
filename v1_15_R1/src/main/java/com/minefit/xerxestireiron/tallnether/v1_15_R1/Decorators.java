@@ -253,12 +253,12 @@ public class Decorators {
             StructureGenerator<WorldGenFeatureEmptyConfiguration> sGen = IRegistry.a(IRegistry.STRUCTURE_FEATURE,
                     "Fortress".toLowerCase(Locale.ROOT), fortressGen);
             Field c = ReflectionHelper.getField(WorldGenFactory.class, "c", false);
-            ReflectionHelper.setFinal(c, null, sGen);
+            ReflectionHelper.fieldSetter(c, null, sGen);
             Field NETHER_BRIDGE = ReflectionHelper.getField(WorldGenerator.class, "NETHER_BRIDGE", false);
-            ReflectionHelper.setFinal(NETHER_BRIDGE, null, sGen);
+            ReflectionHelper.fieldSetter(NETHER_BRIDGE, null, sGen);
             WorldGenerator.ao.replace("Fortress".toLowerCase(Locale.ROOT), fortressGen);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Throwable t) {
+            t.printStackTrace();
             return false;
         }
 
@@ -275,8 +275,8 @@ public class Decorators {
 
         try {
             Field nField = ReflectionHelper.getField(BiomeHell.class, "n", true);
-            ReflectionHelper.setFinal(nField, this.biomeHell, wgsc);
-        } catch (Exception e) {
+            ReflectionHelper.fieldSetter(nField, this.biomeHell, wgsc);
+        } catch (Throwable t) {
             return false;
         }
 
