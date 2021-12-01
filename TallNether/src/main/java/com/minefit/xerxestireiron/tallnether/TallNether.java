@@ -22,7 +22,7 @@ public class TallNether extends JavaPlugin implements Listener {
     private ManageHell manageHell = new ManageHell(this);
     protected final ServerVersion serverVersion = new ServerVersion(this);
     private final List<String> compatibleVersions = Arrays.asList("v1_12_R1", "v1_13_R1", "v1_13_R2", "v1_14_R1",
-            "v1_15_R1", "v1_16_R1", "v1_16_R2", "v1_16_R3", "v1_17_R1");
+            "v1_15_R1", "v1_16_R1", "v1_16_R2", "v1_16_R3", "v1_17_R1", "v1_18_R1");
     private HashMap<String, ManageHell> legacyWorlds;
     private List<World> checkedWorlds;
 
