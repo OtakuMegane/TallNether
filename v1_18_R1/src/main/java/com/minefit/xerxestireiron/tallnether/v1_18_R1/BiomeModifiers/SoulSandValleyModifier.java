@@ -37,6 +37,7 @@ public class SoulSandValleyModifier extends BiomeModifier {
         //biomeSettingsGeneration_a.a(TStructureFeatures.RUINED_PORTAL_NETHER);
         //biomeSettingsGeneration_a.a(TStructureFeatures.BASTION_REMNANT);
 
+        //biomeGenerationSettings_builder.addCarver(Carving.AIR, this.biomeDecorators.NETHER_CAVE);
         biomeGenerationSettings_builder.addCarver(Carving.AIR, Carvers.NETHER_CAVE);
         biomeGenerationSettings_builder.addFeature(Decoration.VEGETAL_DECORATION, this.biomeDecorators.SPRING_LAVA);
         biomeGenerationSettings_builder.addFeature(Decoration.LOCAL_MODIFICATIONS, this.biomeDecorators.BASALT_PILLAR);

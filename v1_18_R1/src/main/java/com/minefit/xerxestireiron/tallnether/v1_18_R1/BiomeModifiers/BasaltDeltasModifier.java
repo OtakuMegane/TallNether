@@ -38,9 +38,9 @@ public class BasaltDeltasModifier extends BiomeModifier {
         //biomeGenerationSettings_builder.a(this.surfaceComposites.BASALT_DELTAS); // Don't know if we still have to mess with surface
         // May be in data.worldgen.SurfaceRuleData
 
-        biomeGenerationSettings_builder.addCarver(Carving.AIR, Carvers.NETHER_CAVE);
+        biomeGenerationSettings_builder.addCarver(Carving.AIR, this.biomeDecorators.NETHER_CAVE);
+        //biomeGenerationSettings_builder.addCarver(Carving.AIR, Carvers.NETHER_CAVE);
         biomeGenerationSettings_builder.addFeature(Decoration.SURFACE_STRUCTURES, this.biomeDecorators.DELTA);
-        //biomeGenerationSettings_builder.a(Decoration.VEGETAL_DECORATION, this.biomeDecorators.SPRING_LAVA_DOUBLE); // Is this still a thing?
         biomeGenerationSettings_builder.addFeature(Decoration.SURFACE_STRUCTURES, this.biomeDecorators.SMALL_BASALT_COLUMNS);
         biomeGenerationSettings_builder.addFeature(Decoration.SURFACE_STRUCTURES, this.biomeDecorators.LARGE_BASALT_COLUMNS);
         biomeGenerationSettings_builder.addFeature(Decoration.UNDERGROUND_DECORATION, this.biomeDecorators.BASALT_BLOBS);

@@ -36,6 +36,8 @@ public class WarpedForestModifier extends BiomeModifier {
         //biomeSettingsGeneration_a.a(TStructureFeatures.BASTION_REMNANT);
         //biomeSettingsGeneration_a.a(TStructureFeatures.RUINED_PORTAL_NETHER);
 
+        System.out.println("warped1");
+        //biomeGenerationSettings_builder.addCarver(Carving.AIR, this.biomeDecorators.NETHER_CAVE);
         biomeGenerationSettings_builder.addCarver(Carving.AIR, Carvers.NETHER_CAVE);
         biomeGenerationSettings_builder.addFeature(Decoration.VEGETAL_DECORATION, this.biomeDecorators.SPRING_LAVA);
 

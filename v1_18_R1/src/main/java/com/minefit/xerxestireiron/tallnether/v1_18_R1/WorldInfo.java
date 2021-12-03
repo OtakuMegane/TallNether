@@ -41,7 +41,7 @@ public class WorldInfo {
         this.serverChunkCache = this.nmsWorld.getChunkSource();
         this.originalGenerator = this.serverChunkCache.getGenerator();
         this.originalGenName = this.originalGenerator.getClass().getSimpleName();
-        this.dimensionType = this.nmsWorld.getMinecraftWorld().dimensionType();
+        this.dimensionType = this.nmsWorld.dimensionType();
         this.originalBiomeSource = this.originalGenerator.getBiomeSource();
     }
 

@@ -1,7 +1,11 @@
 package com.minefit.xerxestireiron.tallnether.v1_18_R1;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.OptionalLong;
 
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -13,8 +17,11 @@ import com.minefit.xerxestireiron.tallnether.ReflectionHelper;
 import com.minefit.xerxestireiron.tallnether.WorldConfig;
 
 import net.minecraft.data.worldgen.TerrainProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Climate.Sampler;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseSampler;
@@ -44,7 +51,7 @@ public class LoadHell {
         worldInfo.basaltDeltasModifier.modify();
         worldInfo.crimsonForestModifier.modify();
         worldInfo.warpedForestModifier.modify();
-        worldInfo.netherWastesModifier.modify();
+        //worldInfo.netherWastesModifier.modify();
         worldInfo.soulSandValleyModifier.modify();
         return true;
     }
@@ -106,29 +113,75 @@ public class LoadHell {
 
         ChunkGenerator originalGenerator = worldInfo.originalGenerator;
         WorldConfig worldConfig = this.configAccessor.getWorldConfig(worldName);
-        int minY = 0;
-        int height = 128; // When set to 256, we get out of bounds 31 in 17; check what's causing this
+        //int minY = 0;
+        //int height = 128; // When set to 256, we get out of bounds 31 in 17; check what's causing this
+        // noisechunk.updateForY is mismatch
 
         try {
             NoiseBasedChunkGenerator noiseBasedChunkGenerator = (NoiseBasedChunkGenerator) originalGenerator;
             NoiseGeneratorSettings noiseGeneratorSettings = noiseBasedChunkGenerator.settings.get();
             NoiseSettings noiseSettings = noiseGeneratorSettings.noiseSettings();
-            Sampler sampler = noiseBasedChunkGenerator.climateSampler();
+            NoiseSampler sampler = (NoiseSampler) noiseBasedChunkGenerator.climateSampler();
 
-            Field dimHeight = ReflectionHelper.getField(worldInfo.dimensionType.getClass(), "I", true); // height -> I
-            ReflectionHelper.fieldSetter(dimHeight, worldInfo.dimensionType, 256);
+            OptionalLong fixedTime = OptionalLong.of(18000);
+            boolean hasSkylight = false;
+            boolean hasCeiling = true;
+            boolean ultraWarm = true;
+            boolean natural = false;
+            double coordinateScale = 8.0D;
+            boolean createDragonFight = false;
+            boolean piglinSafe = true;
+            boolean bedWorks = false;
+            boolean respawnAnchorWorks = true;
+            boolean hasRaids = false;
+            int minY = 0;
+            int height = 256;
+            int logicalHeight = 256;
+            ResourceLocation infiniburn = new ResourceLocation("minecraft:infiniburn_nether");
+            ResourceLocation effectsLocation = new ResourceLocation("minecraft:the_nether");
+            float ambientLight = 0.1F;
+            DimensionType testDim = DimensionType.create(fixedTime, hasSkylight, hasCeiling, ultraWarm, natural, coordinateScale,
+                    createDragonFight, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, minY, height, logicalHeight, infiniburn,
+                    effectsLocation, ambientLight);
 
-            Field logicalHeight = ReflectionHelper.getField(worldInfo.dimensionType.getClass(), "J", true); // logicalHeight -> J
-            ReflectionHelper.fieldSetter(logicalHeight, worldInfo.dimensionType, 256);
+            Field C = ReflectionHelper.getField(worldInfo.nmsWorld.getClass().getSuperclass(), "C", true); // dimensionType -> C
+            ReflectionHelper.fieldSetter(C, worldInfo.nmsWorld, testDim);
+
+            NoiseSettings newNoiseSettings = new NoiseSettings(minY, height, noiseSettings.noiseSamplingSettings(),
+                    noiseSettings.topSlideSettings(), noiseSettings.bottomSlideSettings(), 1, 2, false, false, false,
+                    TerrainProvider.nether());
+            Field l = ReflectionHelper.getField(noiseGeneratorSettings.getClass(), "l", true); // noiseSettings -> l
+            ReflectionHelper.fieldSetter(l, noiseGeneratorSettings, newNoiseSettings);
+            Field n = ReflectionHelper.getField(sampler.getClass(), "n", true); // noiseSettings -> n
+            ReflectionHelper.fieldSetter(n, sampler, newNoiseSettings);
 
             Field seaLevel = ReflectionHelper.getField(noiseGeneratorSettings.getClass(), "p", true); // seaLevel -> p
             ReflectionHelper.fieldSetter(seaLevel, noiseGeneratorSettings, worldConfig.getWorldValues().lavaSeaLevel);
 
-            NoiseSettings newNoiseSettings = new NoiseSettings(minY, height, new NoiseSamplingSettings(1.0D, 3.0D, 80.0D, 60.0D),
-                    new NoiseSlider(0.9375D, 3, 0), new NoiseSlider(2.5D, 4, -1), 1, 2, false, false, false,
-                    TerrainProvider.nether());
-            Field l = ReflectionHelper.getField(noiseGeneratorSettings.getClass(), "l", true); // noiseSettings -> l
-            ReflectionHelper.fieldSetter(l, noiseGeneratorSettings, newNoiseSettings);
+            System.out.println(worldInfo.nmsWorld.getHeight());
+            System.out.println(worldInfo.nmsWorld.getLogicalHeight());
+            System.out.println(worldInfo.nmsWorld.dimensionType().height());
+            System.out.println(worldInfo.nmsWorld.dimensionType().logicalHeight());
+            System.out.println(noiseSettings.noiseSamplingSettings().yFactor());
+            System.out.println(noiseSettings.noiseSamplingSettings().yScale());
+            NoiseBasedChunkGenerator gen = (NoiseBasedChunkGenerator) worldInfo.nmsWorld.getChunkSource().getGenerator();
+            System.out.println(gen.getMinY());
+            System.out.println(gen.settings.get().noiseSettings().height());
+            System.out.println(gen.settings.get().noiseSettings().getCellCountY());
+            System.out.println(gen.settings.get().noiseSettings().getCellHeight());
+            System.out.println(gen.settings.get().noiseSettings().getMinCellY());
+            System.out.println(gen.getSeaLevel());
+
+            /*Field dimHeight = ReflectionHelper.getField(worldInfo.dimensionType.getClass(), "I", true); // height -> I
+            ReflectionHelper.fieldSetter(dimHeight, worldInfo.dimensionType, 256);
+
+            Field logicalHeight = ReflectionHelper.getField(worldInfo.dimensionType.getClass(), "J", true); // logicalHeight -> J
+            ReflectionHelper.fieldSetter(logicalHeight, worldInfo.dimensionType, 256);*/
+
+
+
+            /*Field n = ReflectionHelper.getField(sampler.getClass(), "n", true); // noiseSettings -> n
+            ReflectionHelper.fieldSetter(n, sampler, newNoiseSettings);*/
 
             /*Field noiseMinY = ReflectionHelper.getField(NoiseSettings.class, "b", true); // minY -> b
             ReflectionHelper.fieldSetter(noiseMinY, noiseSettings, minY);
@@ -147,7 +200,7 @@ public class LoadHell {
             Field samplerCellCountY = ReflectionHelper.getField(sampler.getClass(), "f", true); // cellCountY -> f ???
             ReflectionHelper.fieldSetter(samplerCellCountY, sampler, cellCountY);*/
 
-            enableFarLands(world, originalGenerator, environment);
+            //enableFarLands(world, originalGenerator, environment);
 
             this.messages.enableSuccess(worldName);
         } catch (Throwable t) {

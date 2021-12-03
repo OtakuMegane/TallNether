@@ -36,6 +36,7 @@ public class CrimsonForestModifier extends BiomeModifier {
         //biomeGenerationSettings_builder.a(TStructureFeatures.NETHER_BRIDGE);
         //biomeGenerationSettings_builder.a(TStructureFeatures.BASTION_REMNANT);
 
+        //biomeGenerationSettings_builder.addCarver(Carving.AIR, this.biomeDecorators.NETHER_CAVE);
         biomeGenerationSettings_builder.addCarver(Carving.AIR, Carvers.NETHER_CAVE);
         biomeGenerationSettings_builder.addFeature(Decoration.VEGETAL_DECORATION, this.biomeDecorators.SPRING_LAVA);
 

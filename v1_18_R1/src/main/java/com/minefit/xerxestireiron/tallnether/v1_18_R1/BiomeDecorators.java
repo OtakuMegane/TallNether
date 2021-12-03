@@ -16,15 +16,20 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.util.valueproviders.BiasedToBottomInt;
+import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
+import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SpringConfiguration;
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -49,6 +54,7 @@ public class BiomeDecorators {
     private final TallNether_WorldGenFeatureRandomPatch TALLNETHER_RANDOM_PATCH = new TallNether_WorldGenFeatureRandomPatch(
             WorldGenFeatureRandomPatchConfiguration.a);*/
 
+    public final ConfiguredWorldCarver<CaveCarverConfiguration> NETHER_CAVE;
     public final PlacedFeature DELTA = NetherPlacements.DELTA;
     public final PlacedFeature SMALL_BASALT_COLUMNS = NetherPlacements.SMALL_BASALT_COLUMNS;
     public final PlacedFeature LARGE_BASALT_COLUMNS = NetherPlacements.LARGE_BASALT_COLUMNS;
@@ -89,6 +95,11 @@ public class BiomeDecorators {
 
     public BiomeDecorators(String biome) {
 
+        this.NETHER_CAVE = WorldCarver.NETHER_CAVE.configured(new CaveCarverConfiguration(0.2F,
+                UniformHeight.of(VerticalAnchor.absolute(0), VerticalAnchor.belowTop(1)),
+                ConstantFloat.of(0.5F), VerticalAnchor.aboveBottom(10), false, ConstantFloat.of(1.0F),
+                ConstantFloat.of(1.0F), ConstantFloat.of(-0.7F)));
+
         // NOTES:
         // Range covers the height/location
         // Count covers how many times
@@ -117,9 +128,9 @@ public class BiomeDecorators {
 
 
         // Setting lavafall
-        ConfiguredFeature<SpringConfiguration, ?> springLavaNether = Feature.SPRING.configured(new SpringConfiguration(Fluids.LAVA.defaultFluidState(), true, 4, 1,
+        /*ConfiguredFeature<SpringConfiguration, ?> springLavaNether = Feature.SPRING.configured(new SpringConfiguration(Fluids.LAVA.defaultFluidState(), true, 4, 1,
                         ImmutableSet.of(Blocks.NETHERRACK, Blocks.SOUL_SAND, Blocks.GRAVEL, Blocks.MAGMA_BLOCK,
-                                Blocks.BLACKSTONE)));
+                                Blocks.BLACKSTONE)));*/
         this.SPRING_DELTA = NetherFeatures.SPRING_LAVA_NETHER.placed(new PlacementModifier[]{new TallNether_CountPlacement(ConstantInt.of(16), biome, "lavafall"),
                         new TallNether_InSquarePlacement(biome, "lavafall"), PlacementUtils.RANGE_4_4, BiomeFilter.biome()});
 
@@ -144,8 +155,8 @@ public class BiomeDecorators {
 
 
         // Setting: hidden-lava
-        ConfiguredFeature<SpringConfiguration, ?> springNetherClosed = Feature.SPRING.configured(new SpringConfiguration(Fluids.LAVA.defaultFluidState(), false, 5, 0,
-                        ImmutableSet.of(Blocks.NETHERRACK)));
+        /*ConfiguredFeature<SpringConfiguration, ?> springNetherClosed = Feature.SPRING.configured(new SpringConfiguration(Fluids.LAVA.defaultFluidState(), false, 5, 0,
+                        ImmutableSet.of(Blocks.NETHERRACK)));*/
         this.SPRING_CLOSED = NetherFeatures.SPRING_NETHER_CLOSED.placed(new PlacementModifier[]{new TallNether_CountPlacement(ConstantInt.of(16), biome, "hidden-lava"),
                         new TallNether_InSquarePlacement(biome, "hidden-lava"), PlacementUtils.RANGE_10_10, BiomeFilter.biome()});
 

@@ -11,10 +11,12 @@ public class BiomeModifier {
 
     public boolean injectSettings(Biome biome, BiomeGenerationSettings biomeGenerationSettings) {
         try {
+            System.out.println("injecting");
+            //Field e = biomeGenerationSettings.getClass().getDeclaredField("e");
+            //ReflectionHelper.fieldSetter(e, biomeGenerationSettings, biome.getGenerationSettings().features());
             Field k = biome.getClass().getDeclaredField("k");
             ReflectionHelper.fieldSetter(k, biome, biomeGenerationSettings);
         } catch (Throwable t) {
-            System.out.println("modify wut");
             return false;
         }
 
