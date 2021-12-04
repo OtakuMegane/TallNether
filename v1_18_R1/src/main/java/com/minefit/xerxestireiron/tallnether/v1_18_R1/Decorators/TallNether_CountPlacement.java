@@ -57,7 +57,6 @@ public class TallNether_CountPlacement extends TallNether_RepeatingPlacement {
 
         BiomeValues biomeValues = worldConfig.getBiomeValues(this.biome);
         IntProvider intProvider = ConstantInt.of(biomeValues.values.get(this.block + "-attempts"));
-        System.out.println("here1");
         return intProvider.sample(var1);
     }
 
