@@ -54,8 +54,8 @@
 		</dependency>
  		<dependency>
             <groupId>io.papermc.paper</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.17-R0.1-SNAPSHOT</version>
+            <artifactId>paper-server</artifactId>
+            <version>1.18-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
  		<dependency>
