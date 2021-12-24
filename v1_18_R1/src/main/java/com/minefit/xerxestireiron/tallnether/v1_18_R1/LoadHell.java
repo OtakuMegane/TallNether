@@ -70,7 +70,6 @@ public class LoadHell {
 
     public void addWorld(World world, ConfigurationSection worldConfig) {
         Environment environment = world.getEnvironment();
-
         if (environment != Environment.NETHER) {
             this.messages.unknownEnvironment(world.getName(), environment.toString());
             return;
@@ -83,7 +82,7 @@ public class LoadHell {
 
         if (!this.decoratorsModified) {
             // Disabled for the moment. Vanilla decorators work, but no modified ones do
-            //this.decoratorsModified = overrideDecorators(worldInfo);
+            this.decoratorsModified = overrideDecorators(worldInfo);
         }
     }
 
